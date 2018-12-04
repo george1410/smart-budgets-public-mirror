@@ -1,6 +1,6 @@
 # Smart Budgets
 
-Smart Budgets is a progressive web application that learns about the users' spending habits in order to offer them guidance for making better purchasing decisions.
+Smart Budgets is a progressive web application that learns about the users' spending habits in order to offer them guidance on making better purchasing decisions.
 
 This project is built by:
 
