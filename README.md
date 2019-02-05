@@ -1,5 +1,10 @@
 # Smart Budgets
 
+- [Smart Budgets](#smart-budgets)
+    - [Getting Started](#getting-started)
+    - [`npm start`](#npm-start)
+    - [Documentation](#documentation)
+
 Smart Budgets is a progressive web application that learns about the users' spending habits in order to offer them guidance on making better purchasing decisions.
 
 This project is built by:
@@ -24,15 +29,20 @@ Sponsored by:
 
 - Chris Matthews - christopher.matthews@capitalone.com
 
-## Table of Contents
-
-- [Getting Started](#getting-started)
-
-- [Documentation](#documentation)
-
 ### Getting Started
 
-*Work in progress*
+In the project directory, you can run:
+
+### `npm start`
+
+This command runs concurrently `npm server` and `npm client` in order to start both ends of the application.
+
+Open [http://localhost:3000](http://localhost:3000) to view the front end in the browser.
+The server runs on [http://localhost:8080](http://localhost:8080) followed by some endpoint
+
+The page will reload if you make edits to the React code.
+
+_Work in progress_
 
 ### Documentation
 
