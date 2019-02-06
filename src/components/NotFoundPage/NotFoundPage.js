@@ -58,7 +58,7 @@ const index = () => (
   <Wrapper>
     <Message>This is not the page you are looking for</Message>
     <FourOhFour>404</FourOhFour>
-    <StyledLink to="/">Back Home</StyledLink>
+    <StyledLink to="/social">Back Home</StyledLink>
   </Wrapper>
 );
 

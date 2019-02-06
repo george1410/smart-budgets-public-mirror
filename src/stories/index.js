@@ -7,6 +7,7 @@ import { linkTo } from '@storybook/addon-links';
 import { Button, Welcome } from '@storybook/react/demo';
 import { Provider } from 'react-redux';
 import Counter from '../components/Counter/Counter';
+import LoginPage from '../components/LoginPage/LoginPage';
 import configureStore from '../store/configureStore';
 
 const store = configureStore();
@@ -25,3 +26,6 @@ storiesOf('Button', module)
 
 storiesOf('Counter', module)
   .add('simple counter', () => <Provider store={store}><Counter /></Provider>);
+
+storiesOf('Login', module)
+  .add('default login page', () => <Provider store={store}><LoginPage /></Provider>);
