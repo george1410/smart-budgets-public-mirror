@@ -3,10 +3,11 @@ import { createGlobalStyle } from 'styled-components';
 export const GlobalStyle = createGlobalStyle`
   html {
     font-size: 62.5%;
+    font-family: ${props => props.theme.font};
 
-    @media only screen and (max-width: ${props => props.theme.bpMedium}) {
+    /* @media only screen and (max-width: ${props => props.theme.bpMedium}) {
       font-size: 56.25%;
-    }
+    } */
   }
 `;
 
@@ -17,4 +18,5 @@ export const theme = {
   greyDark: '#222',
   black: '#000',
   white: '#fff',
+  font: 'Montserrat',
 };

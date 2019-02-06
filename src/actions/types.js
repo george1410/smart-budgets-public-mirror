@@ -11,3 +11,7 @@ export const FETCH_ANSWER = 'FETCH_VIDEOS';
 export const HAS_ERRORED = 'HAS_ERRORED';
 
 export const IS_LOADING = 'IS_LOADING';
+
+export const LOGIN = 'LOGIN';
+
+export const LOGOUT = 'LOGOUT';
