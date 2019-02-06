@@ -44,7 +44,7 @@ class App extends React.Component {
   state ={ username: null }
 
   componentDidMount() {
-    fetch('/api/getUsername')
+    fetch('/api/getDatabaseUsername')
       .then(res => res.json())
       .then(user => this.setState({ username: user.username }));
   }

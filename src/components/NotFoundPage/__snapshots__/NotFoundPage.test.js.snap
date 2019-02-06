@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders NotFoundPage correctly 1`] = `
+<styled.div>
+  <styled.p>
+    This is not the page you are looking for
+  </styled.p>
+  <styled.div>
+    404
+  </styled.div>
+  <Styled(Link)
+    to="/"
+  >
+    Back Home
+  </Styled(Link)>
+</styled.div>
+`;
