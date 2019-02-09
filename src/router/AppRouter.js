@@ -1,29 +1,24 @@
 import React from 'react';
 import {
-  Router, Route, Switch,
+  BrowserRouter, Route, Switch,
 } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
-import Login from '../components/LoginPage/LoginPage';
-import NotFound from '../components/NotFoundPage/NotFoundPage';
+import App from '../components/App/App';
+import Overview from '../components/Overview/Overview';
+import Feed from '../components/Feed/Feed';
 import Social from '../components/Social/Social';
 import Settings from '../components/Settings/Settings';
-import Feed from '../components/Feed/Feed';
-import Overview from '../components/Overview/Overview';
-import ConnectedPrivateRoute from './PrivateRoute';
-import ConnectedPublicRoute from './PublicRoute';
-
-const history = createHistory();
+import NotFound from '../components/NotFoundPage/NotFoundPage';
 
 const AppRouter = () => (
-  <Router history={history}>
+  <BrowserRouter basename={process.env.PUBLIC_URL}>
     <Switch>
-      <ConnectedPublicRoute exact path="/" component={Login} />
-      <ConnectedPrivateRoute exact path="/Social" component={Social} />
-      <ConnectedPrivateRoute exact path="/Settings" component={Settings} />
-      <ConnectedPrivateRoute exact path="/Feed" component={Feed} />
-      <ConnectedPrivateRoute exact path="/Overview" component={Overview} />
+      <Route exact path="/" component={App} />
       <Route component={NotFound} />
+      <Route path="/overview" component={Overview} />
+      <Route path="/feed" component={Feed} />
+      <Route path="/social" component={Social} />
+      <Route path="/settings" component={Settings} />
     </Switch>
-  </Router>
+  </BrowserRouter>
 );
 export default AppRouter;
