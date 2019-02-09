@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import logo from './logo.svg';
 import Counter from '../Counter/Counter';
 import YesNoMaybe from '../YesNoMaybe/YesNoMaybe';
+import Navigation from '../Navigation/Navigation';
 
 const AppLogoSpin = keyframes`
   from {
@@ -74,6 +75,7 @@ and save to reload.
           </A>
           <Counter />
           <YesNoMaybe />
+          <Navigation />
         </Header>
       </Wrapper>
     );

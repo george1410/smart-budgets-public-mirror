@@ -1,9 +1,9 @@
 import React from 'react';
 
-const index = () => (
+const Overview = () => (
   <div>
     <p>This will show the overview for the budgets.</p>
   </div>
 );
 
-export default index;
+export default Overview;
