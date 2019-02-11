@@ -12,7 +12,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #000;
+  background-color: #fff;
 `;
 
 const LoginWrapper = styled.div`
@@ -22,9 +22,9 @@ const LoginWrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 500px;
+  min-height: 650px;
   padding: 5rem;
   box-shadow: 10px 10px 0 ${props => props.theme.primaryBlue};
-
   ${media.phone`
     width: 100vw;
     height: 100vh;  
@@ -79,25 +79,28 @@ const InputWrapper = styled.div`
 
   /* this moves the label into the input field */
   input:placeholder-shown + label {
-    transform: translateY(calc(3.5rem + 3px));
+    /* transform: translateY(calc(3.5rem + 3px)); */
+    transform: translateY(calc(4.5rem + 3px));
   }
 
   /* when placeholder should not be shown, move label above */
   input:not(:placeholder-shown) + label,
   input:focus + label {
-    transform: translateY(-1rem);
-    color: black;
+    /* transform: translateY(-1rem); */
+    transform: translateY(0);
+    color: white;
+    background-color: ${props => props.theme.greyLight};
   }
 
   /* add space between pw field and log in button */
   :last-of-type {
-    margin-bottom: 2rem;
+    margin-bottom: 4rem;
   }
 `;
 
 const Label = styled.label`
   font-size: 1.8rem;
-  margin-left: 2.5rem;
+  padding: 1rem 2.5rem;
   color: ${props => props.theme.greyLight};
   transition: all 0.3s ease-in-out;
 `;
@@ -119,16 +122,14 @@ const Input = styled.input`
   color: #000;
 
   ::placeholder {
-    /* vertically centers placeholder on ios */
-    /* line-height: normal; */
-    /* font-size: 1.8rem; */
-    /* color: ${props => props.theme.greyLight}; */
+    /* placeholder needs to be present, for label animations
+       however, we don't want to actually see it */
     opacity: 0;
   }
 
   &:focus {
     border-bottom: 3px solid ${props => props.theme.primaryBlue};
-    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.1); */
   }
 
   &:focus:invalid {
