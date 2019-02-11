@@ -8,7 +8,8 @@ import {
 
 const NavigationBar = styled.nav`
   display: flex;
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.white};
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   align-items: center;
   ${media.tablet`
     position: fixed;
@@ -21,26 +22,31 @@ const NavigationBar = styled.nav`
   `}
 `;
 
+const activeClassName = 'nav-item-active';
+
 // Navigation Link
 const NavItem = styled(NavLink).attrs({
-  activeClassName: 'activeClassName',
+  activeClassName,
 })`
-  color: ${props => props.theme.white};
-  padding: 0.5rem 2rem;
-  font-size: ${props => props.theme.fontSmall};
+  color: ${props => props.theme.grey};
+  margin: 1.5rem 4rem;
+  font-size: 1.6rem;
   font-weight: bold;
   text-decoration: none;
   text-align: center;
   display: flex;
   justify-content: center;
 
-  &.activeClassName {
+  &.${activeClassName} {
     color: ${props => props.theme.primaryBlue};
-    background-color: ${props => props.theme.white};
   }
 
   & > p {
-    height: 100%;
+    margin: 0;
+
+    &:hover {
+      color: ${props => props.theme.primaryBlue};
+    }
   }
 
   & > svg {
@@ -51,6 +57,7 @@ const NavItem = styled(NavLink).attrs({
     flex: 1;
     color: ${props => props.theme.greyLight};
     height: 100%;
+    margin: 0;
 
     & > p {
       display: none;
@@ -60,13 +67,8 @@ const NavItem = styled(NavLink).attrs({
       display: block
     }
 
-    &.activeClassName {
-      color: salmon;
-      background-color: ${props => props.theme.white};
-
-      & > svg > g {
-        fill: ${props => props.theme.primaryBlue};
-      }
+    &.${activeClassName} > svg > g {
+      fill: ${props => props.theme.primaryBlue};
     }
   `}
 `;
@@ -75,7 +77,7 @@ const Logo = styled.div`
   flex: 2;
 
   & > a {
-    color: ${props => props.theme.white};
+    color: ${props => props.theme.primaryBlue};
     text-decoration: none;
     font-weight: bold;
     font-size: ${props => props.theme.fontSmall};
@@ -90,7 +92,9 @@ const Logo = styled.div`
 const Navigation = () => (
   <NavigationBar>
     <Logo>
-      <NavLink to="/overview">Smart Budgets</NavLink>
+      <NavLink to="/overview">
+        Smart Budgets
+      </NavLink>
     </Logo>
     <NavItem to="/overview">
       <p>Overview</p>

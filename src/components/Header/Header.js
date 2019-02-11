@@ -7,7 +7,8 @@ const Wrapper = styled.header`
   height: 5rem;
   position: fixed;
   width: 100vw;
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.white};
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
   display: none;
   justify-content: center;
   align-items: center;
@@ -18,7 +19,7 @@ const Wrapper = styled.header`
 `;
 
 const Title = styled.h1`
-  color: ${props => props.theme.white};
+  color: ${props => props.theme.primaryBlue};
   font-size: ${props => props.theme.fontSmall};
 `;
 
