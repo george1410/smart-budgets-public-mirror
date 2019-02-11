@@ -8,15 +8,19 @@ import media from '../../util/mediaQueries';
 const Wrapper = styled.div`
   width: 100vw;
   height: 100vh;
+  padding: 40rem 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #fff;
+  background-color: ${props => props.theme.white};
+  ${media.phone`
+    padding: 0;
+  `}
 `;
 
 const LoginWrapper = styled.div`
-  background-color: #eee;
+  background-color: ${props => props.theme.offWhite};
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -44,7 +48,7 @@ const Title = styled.h1`
   /* This styles the 2nd line of the title */
   &:last-of-type {
     margin-top: -6rem;
-    border-bottom: 4px solid #000;
+    border-bottom: 4px solid ${props => props.theme.black};
     padding-bottom: 1rem;
     margin-bottom: 0;
     ${media.phone`
@@ -55,18 +59,22 @@ const Title = styled.h1`
 
 const Subtitle = styled.h2`
   text-align: center;
-  font-size: 1.8rem;
+  font-size: ${props => props.theme.fontMedium};
   color: ${props => props.theme.grey};
   font-weight: 300;
-  margin: 4rem 0 2.2rem 0;
+  margin: 4rem 0 0 0;
 `;
 
 const Form = styled.form`
   width: 100%;
+  height: 268px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
+  ${media.tablet`
+    height: 238px;
+  `}
   ${media.phone`
     font-size: 5rem;
   `}
@@ -86,34 +94,43 @@ const InputWrapper = styled.div`
   /* when placeholder should not be shown, move label above */
   input:not(:placeholder-shown) + label,
   input:focus + label {
-    /* transform: translateY(-1rem); */
-    transform: translateY(0);
-    color: white;
-    background-color: ${props => props.theme.greyLight};
+    transform: translateY(calc(3.2rem + 3px));
+    font-size: ${props => props.theme.fontTiny};
+    font-weight: 700;
+    color: ${props => props.theme.grey};
+  }
+
+  /* if input field is filled, keep the new padding */
+  input:not(:placeholder-shown) {
+    padding: 2rem 2.5rem 1rem 1.5rem;
   }
 
   /* add space between pw field and log in button */
   :last-of-type {
-    margin-bottom: 4rem;
+    /* it is set to -2rem in input, this makes it 4 */
+    margin-bottom: 6rem;
   }
 `;
 
 const Label = styled.label`
-  font-size: 1.8rem;
-  padding: 1rem 2.5rem;
+  font-size: ${props => props.theme.fontSmall};
+  padding: 1rem 1.5rem;
   color: ${props => props.theme.greyLight};
   transition: all 0.3s ease-in-out;
+
+  /* needs constant height to counter font-size change on focus */
+  height: 4rem;
 `;
 
 const Input = styled.input`
   display: block;
   width: 100%;
-  margin-bottom: 2rem;
-  padding: 1.5rem 2.5rem;
-  font-size: 1.8rem;
+  margin-bottom: -2rem;
+  padding: 1.5rem 1.5rem;
+  font-size: ${props => props.theme.fontSmall};
   border-radius: 0;
   outline: none;
-  background: #fff;
+  background: ${props => props.theme.white};
   border: none;
   border-bottom: 3px solid transparent;
   border-top: 3px solid transparent;
@@ -128,8 +145,9 @@ const Input = styled.input`
   }
 
   &:focus {
+    padding: 2rem 2.5rem 1rem 1.5rem;
     border-bottom: 3px solid ${props => props.theme.primaryBlue};
-    /* box-shadow: 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.1); */
+    box-shadow: 4px 4px 0 ${props => props.theme.greyLightest};
   }
 
   &:focus:invalid {
@@ -141,13 +159,15 @@ const Button = styled.button`
   width: 100%;
   cursor: pointer;
   padding: 1.5rem;
-  font-size: 1.8rem;
+  font-size: ${props => props.theme.fontSmall};
   font-family: inherit;
-  color: #fff;
+  color: ${props => props.theme.white};
   background-color: ${props => props.theme.primaryBlue};
   border: none;
   outline: none;
   box-shadow: 0 4px 0 ${props => props.theme.primaryBlueDark};
+
+  /* to make button the same height as input fields */
   border-bottom: 3px solid ${props => props.theme.primaryBlue};
   border-top: 3px solid ${props => props.theme.primaryBlue};
 
