@@ -8,6 +8,7 @@ const Navigation = () => (
       <li><Link to="/feed">Feed</Link></li>
       <li><Link to="/social">Social</Link></li>
       <li><Link to="/settings">Settings</Link></li>
+
     </ul>
   </nav>
 );
