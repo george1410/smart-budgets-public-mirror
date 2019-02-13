@@ -1,4 +1,6 @@
 import React from 'react';
+import {Progress} from 'react-sweet-progress';
+import "react-sweet-progress/lib/style.css";
 import Header from '../Header/Header';
 import styled from 'styled-components';
 import media from '../../util/mediaQueries';
@@ -14,6 +16,15 @@ const Overview = () => (
   <Wrapper>
     <Header title="Overview" />
     <p>This will show the overview for the budgets.</p>
+
+    <p>Budget 1</p>
+    <Progress percent={80} />
+
+    <p>Budget 2</p>
+    <Progress percent={30} status="active" />
+
+    <p>Total Budget</p>
+    <Progress type="circle" percent={70} />
   </Wrapper>
 );
 
