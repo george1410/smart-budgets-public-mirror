@@ -1,9 +1,20 @@
 import React from 'react';
 import {Progress} from 'react-sweet-progress';
 import "react-sweet-progress/lib/style.css";
+import Header from '../Header/Header';
+import styled from 'styled-components';
+import media from '../../util/mediaQueries';
+
+const Wrapper = styled.div`
+  ${media.tablet`
+    /* clears Header and bottom Navigation with fixed position */
+    padding: 5rem 0;
+  `};
+`;
 
 const Overview = () => (
-  <div>
+  <Wrapper>
+    <Header title="Overview" />
     <p>This will show the overview for the budgets.</p>
 
     <p>Budget 1</p>
@@ -14,10 +25,7 @@ const Overview = () => (
 
     <p>Total Budget</p>
     <Progress type="circle" percent={70} />
-  </div>
-
-
-
+  </Wrapper>
 );
 
 export default Overview;
