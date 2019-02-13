@@ -4,6 +4,7 @@ import "react-sweet-progress/lib/style.css";
 import Header from '../Header/Header';
 import styled from 'styled-components';
 import media from '../../util/mediaQueries';
+import CategoryProgress from '../CategoryProgress/CategoryProgress';
 
 const Wrapper = styled.div`
   ${media.tablet`
@@ -25,6 +26,9 @@ const Overview = () => (
 
     <p>Total Budget</p>
     <Progress type="circle" percent={70} />
+
+    <p>Category Progress</p>
+    <CategoryProgress budget={100} spend={10} />
   </Wrapper>
 );
 
