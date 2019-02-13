@@ -19,7 +19,15 @@ app.get('/api/getDatabaseUsername', (req, res) => {
 
 app.get('/api/user/:userId/budgets', (req, res) => {
   const { userId } = req.params;
-  conn.query(`SELECT * from budgets WHERE userId = ${userId}`, (err, results) => {
+  conn.query(`SELECT * FROM budgets WHERE userId = ${userId}`, (err, results) => {
+    if (err) throw err;
+    res.json(results);
+  });
+});
+
+app.get('/api/user/:userId/budget/:categoryId', (req, res) => {
+  const { userId, categoryId } = req.params;
+  conn.query(`SELECT cat${categoryId} FROM budgets WHERE userId = ${userId}`, (err, results) => {
     if (err) throw err;
     res.json(results);
   });
