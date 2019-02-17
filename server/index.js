@@ -34,10 +34,12 @@ app.get('/api/getDatabaseUsername', (req, res) => {
  */
 app.get('/api/users/:id/categories', (req, res) => {
   let sql = `
-    SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM transactions
+    SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
     JOIN categories ON transactions.categoryId = categories.categoryId
     WHERE transactions.userId = ${req.params.id} AND 
-      transactions.date BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE()
+      MONTH(transactions.date) = MONTH(CURDATE()) AND
+      YEAR(transactions.date) = YEAR(CURDATE()) AND
+      transactions.date < CURDATE()
     GROUP BY categories.displayName
   `;
 
