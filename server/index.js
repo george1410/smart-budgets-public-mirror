@@ -17,4 +17,33 @@ app.get('/api/getDatabaseUsername', (req, res) => {
   });
 });
 
+app.get('/api/users/:id/categories', (req, res) => {
+  conn.query(`SELECT * from categories JOIN budgets ON categories.userId = budgets.userId WHERE categories.userId = ${req.params.id}`, (err, results) => {
+    if (err) throw err;
+
+    const out = [];
+    results.forEach((cat) => {
+      let found = false;
+      const catIndex = `cat${cat.categoryId}`;
+
+      out.forEach((el, index) => {
+        if (el.displayName === cat.displayName) {
+          out[index].categoryId.push(cat.categoryId);
+          out[index].budget += cat[catIndex];
+          found = true;
+        }
+      });
+      if (!found) {
+        out.push({
+          displayName: cat.displayName,
+          categoryId: [cat.categoryId],
+          budget: cat[catIndex],
+        });
+      }
+    });
+
+    res.json(out);
+  });
+});
+
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
