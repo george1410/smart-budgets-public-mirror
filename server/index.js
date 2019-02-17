@@ -17,4 +17,13 @@ app.get('/api/getDatabaseUsername', (req, res) => {
   });
 });
 
+app.get('/api/getTransactions/:id', (req, res) => {
+  conn.query('SELECT * FROM transactions WHERE userId =' + req.params.id, (error, results) => {
+    if(error) throw error;
+    res.send(results);
+
+  });
+});
+
+
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
