@@ -7,5 +7,8 @@ export const setCategories = categories => ({
 });
 
 export const startSetCategories = () => (dispatch, getState) => {
-  const { uid } = getState.auth;
+  const { uid } = getState().auth;
+  axios.get(`api/users/${uid}/categories`).then((payload) => {
+    dispatch(setCategories(payload.data));
+  });
 };
