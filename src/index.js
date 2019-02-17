@@ -7,6 +7,7 @@ import { GlobalStyle, theme } from './style';
 import AppRouter from './router/AppRouter';
 import 'sanitize.css/sanitize.css';
 import * as serviceWorker from './serviceWorker';
+import { startSetCategories } from './actions/categories';
 
 // creates the store which holds the app's global state.
 const store = configureStore();
@@ -19,6 +20,11 @@ const jsx = (
     </Provider>
   </ThemeProvider>
 );
+
+// TODO remove
+// log store for debugging
+store.dispatch(startSetCategories());
+store.subscribe(() => console.log(store.getState()));
 
 ReactDOM.render(jsx, document.getElementById('root'));
 
