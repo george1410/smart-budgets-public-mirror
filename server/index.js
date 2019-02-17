@@ -17,37 +17,74 @@ app.get('/api/getDatabaseUsername', (req, res) => {
   });
 });
 
+/**
+ * GET route for budget info by category for a user.
+ * Response format:
+ *    [
+ *      {
+ *        "budget": 1708,
+ *        "spend": 320,
+ *        "displayName": "BILLS",
+ *        "id": [
+ *          31,
+ *          52
+ *        ]
+ *      }, ...
+ *    ]
+ */
 app.get('/api/users/:id/categories', (req, res) => {
-  const sql = `
-      SELECT * from categories 
-      JOIN budgets ON categories.userId = budgets.userId 
-      WHERE categories.userId = ${req.params.id}
-    `;
+  let sql = `
+    SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM transactions
+    JOIN categories ON transactions.categoryId = categories.categoryId
+    WHERE transactions.userId = ${req.params.id} AND 
+      transactions.date BETWEEN DATE_ADD(CURDATE(), INTERVAL -30 DAY) AND CURDATE()
+    GROUP BY categories.displayName
+  `;
+
+  let res1;
+  conn.query(sql, (err, results) => {
+    if (err) throw err;
+
+    res1 = results;
+    res1.forEach((result, key) => {
+      res1[key].id = result.id.split(',').map(Number);
+    });
+    res1 = results;
+  });
+
+  sql = `
+    SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
+    JOIN categories ON categories.categoryId = budgets.categoryId
+    WHERE budgets.userId = ${req.params.id}
+    GROUP BY categories.displayName
+  `;
 
   conn.query(sql, (err, results) => {
     if (err) throw err;
 
     const out = [];
-    results.forEach((cat) => {
+    results.forEach((result) => {
       let found = false;
-      const catIndex = `cat${cat.categoryId}`;
-
-      out.forEach((el, index) => {
-        if (el.displayName === cat.displayName) {
-          out[index].categoryId.push(cat.categoryId);
-          out[index].budget += cat[catIndex];
+      res1.forEach((group) => {
+        if (result.displayName === group.displayName) {
           found = true;
+          out.push({
+            budget: result.budget,
+            spend: group.spend,
+            displayName: result.displayName,
+            id: result.id.split(',').map(Number),
+          });
         }
       });
       if (!found) {
         out.push({
-          displayName: cat.displayName,
-          budget: cat[catIndex],
-          categoryId: [cat.categoryId],
+          budget: result.budget,
+          spend: 0,
+          displayName: result.displayName,
+          id: result.id.split(',').map(Number),
         });
       }
     });
-
     res.json(out);
   });
 });
