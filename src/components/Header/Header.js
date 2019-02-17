@@ -18,7 +18,7 @@ const Wrapper = styled.header`
   `}
 `;
 
-const Title = styled.h1`
+const Title = styled.span`
   color: ${props => props.theme.primaryBlue};
   font-size: ${props => props.theme.fontSmall};
 `;
