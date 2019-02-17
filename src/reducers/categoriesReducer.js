@@ -1,6 +1,8 @@
 import { SET_CATEGORIES } from '../actions/types';
 
-export default (state = { categories: [] }, action) => {
+const defaultState = [];
+
+export default (state = defaultState, action) => {
   switch (action.type) {
     case SET_CATEGORIES:
       return action.categories;
