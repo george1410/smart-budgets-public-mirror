@@ -8,9 +8,15 @@ const defaultStatusState = {
 export default (state = defaultStatusState, action) => {
   switch (action.type) {
     case IS_LOADING:
-      return action.status;
+      return {
+        ...state,
+        isLoading: action.status,
+      };
     case HAS_ERRORED:
-      return action.status;
+      return {
+        ...state,
+        hasErrored: action.status,
+      };
     default:
       return state;
   }

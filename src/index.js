@@ -23,8 +23,8 @@ const jsx = (
 
 // TODO remove
 // log store for debugging
-store.dispatch(startSetCategories());
 store.subscribe(() => console.log(store.getState()));
+store.dispatch(startSetCategories());
 
 ReactDOM.render(jsx, document.getElementById('root'));
 
