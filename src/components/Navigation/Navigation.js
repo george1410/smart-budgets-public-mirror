@@ -31,7 +31,7 @@ const NavItem = styled(NavLink).attrs({
   color: ${props => props.theme.grey};
   margin: 1.5rem 4rem;
   font-size: 1.6rem;
-  font-weight: bold;
+  font-weight: 500;
   text-decoration: none;
   text-align: center;
   display: flex;
@@ -41,12 +41,8 @@ const NavItem = styled(NavLink).attrs({
     color: ${props => props.theme.primaryBlue};
   }
 
-  & > p {
-    margin: 0;
-
-    &:hover {
-      color: ${props => props.theme.primaryBlue};
-    }
+  & > span:hover {
+    color: ${props => props.theme.primaryBlue};
   }
 
   & > svg {
@@ -59,7 +55,7 @@ const NavItem = styled(NavLink).attrs({
     height: 100%;
     margin: 0;
 
-    & > p {
+    & > span {
       display: none;
     }
 
@@ -79,7 +75,7 @@ const Logo = styled.div`
   & > a {
     color: ${props => props.theme.primaryBlue};
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 500;
     font-size: ${props => props.theme.fontSmall};
   }
 
@@ -97,19 +93,19 @@ const Navigation = () => (
       </NavLink>
     </Logo>
     <NavItem to="/overview">
-      <p>Overview</p>
+      <span>Overview</span>
       <OverviewIcon />
     </NavItem>
     <NavItem to="/feed">
-      <p>Feed</p>
+      <span>Feed</span>
       <FeedIcon />
     </NavItem>
     <NavItem to="/social">
-      <p>Social</p>
+      <span>Social</span>
       <AchievementIcon />
     </NavItem>
     <NavItem to="/settings">
-      <p>Settings</p>
+      <span>Settings</span>
       <SettingsIcon />
     </NavItem>
   </NavigationBar>

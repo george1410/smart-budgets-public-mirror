@@ -16,6 +16,7 @@ const Wrapper = styled.div`
 const EndLabel = styled.p`
   color: ${props => props.theme.black};
   font-size: ${props => props.theme.fontSmall};
+  font-weight: 500;
   flex: 1;
 
   &:last-of-type {
@@ -34,20 +35,22 @@ const Middle = styled.div`
 const Merchant = styled.div`
   font-size: ${props => props.theme.fontSmall};
   color: ${props => props.theme.black};
+  font-weight: 500;
 `;
 
 const Category = styled.div`
   background-color: ${props => props.theme.primaryBlue};
   color: ${props => props.theme.white};
   font-size: ${props => props.theme.fontSmall};
-  padding: 2px 5px;
+  padding: 2px 7px;
+  font-weight: 500;
 `;
 
 const Transaction = ({
   date, merchant, amount, category,
 }) => (
   <Wrapper>
-    <EndLabel>{moment(date).format('DD/MMM/YYYY')}</EndLabel>
+    <EndLabel>{moment(date).format('DD/MMM/YY')}</EndLabel>
     <Middle>
       <Merchant>{merchant}</Merchant>
       <Category>{category}</Category>
