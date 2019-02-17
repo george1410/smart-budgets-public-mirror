@@ -18,7 +18,13 @@ app.get('/api/getDatabaseUsername', (req, res) => {
 });
 
 app.get('/api/users/:id/categories', (req, res) => {
-  conn.query(`SELECT * from categories JOIN budgets ON categories.userId = budgets.userId WHERE categories.userId = ${req.params.id}`, (err, results) => {
+  const sql = `
+      SELECT * from categories 
+      JOIN budgets ON categories.userId = budgets.userId 
+      WHERE categories.userId = ${req.params.id}
+    `;
+
+  conn.query(sql, (err, results) => {
     if (err) throw err;
 
     const out = [];
@@ -36,8 +42,8 @@ app.get('/api/users/:id/categories', (req, res) => {
       if (!found) {
         out.push({
           displayName: cat.displayName,
-          categoryId: [cat.categoryId],
           budget: cat[catIndex],
+          categoryId: [cat.categoryId],
         });
       }
     });
