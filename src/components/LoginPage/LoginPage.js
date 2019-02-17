@@ -188,8 +188,8 @@ class LoginPage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    // const { logIn } = this.props;
-    // logIn();
+    const { logIn } = this.props;
+    logIn();
   }
 
   render() {
