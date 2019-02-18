@@ -6,10 +6,18 @@ exports[`renders NotFoundPage correctly 1`] = `
     This is not the page you are looking for
   </styled.p>
   <styled.div>
-    404
+    <div>
+      4
+    </div>
+    <div>
+      0
+    </div>
+    <div>
+      4
+    </div>
   </styled.div>
   <Styled(Link)
-    to="/"
+    to="/social"
   >
     Back Home
   </Styled(Link)>

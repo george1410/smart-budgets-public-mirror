@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
+import Transaction from '../Transaction/Transaction';
 
 const Wrapper = styled.div`
   ${media.tablet`
@@ -12,8 +13,13 @@ const Wrapper = styled.div`
 
 const Feed = () => (
   <Wrapper>
-    <Header title="Feed" />
-    <p>This will show the feed of the transactions.</p>
+    <Header title="Transactions" />
+    <Transaction
+      date="2019-01-13T00:00:00.000Z"
+      merchant="MISC DIY"
+      amount={25}
+      category="BILLS"
+    />
   </Wrapper>
 );
 
