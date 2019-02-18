@@ -17,6 +17,22 @@ app.get('/api/getDatabaseUsername', (req, res) => {
   });
 });
 
+/**
+ * GET route for budget info by category for a user.
+ * Response format:
+ *   [
+ *     {
+ *       "transactionId": 1,
+ *       "userId": 1,
+ *       "date": "2019-01-13T00:00:00.000Z",
+ *       "merchant": "MISC DIY",
+ *       "categoryId": 1,
+ *       "amount": 25,
+ *       "originalName": "DIY & FURNITURE",
+ *       "displayName": "SHOPPING"
+ *     }, ...
+ *   ]
+ */
 app.get('/api/users/:id/transactions', (req, res) => {
   const querySelect = 'SELECT * FROM transactions AS t JOIN categories AS c ON c.categoryId = t.categoryId WHERE t.userId =';
   conn.query(querySelect + req.params.id, (error, results) => {
