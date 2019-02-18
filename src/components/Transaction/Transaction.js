@@ -47,13 +47,13 @@ const Category = styled.div`
 `;
 
 const Transaction = ({
-  date, merchant, amount, category,
+  date, merchant, amount, displayName,
 }) => (
   <Wrapper>
     <EndLabel>{moment(date).format('DD/MMM/YY')}</EndLabel>
     <Middle>
       <Merchant>{merchant}</Merchant>
-      <Category>{category}</Category>
+      <Category>{displayName}</Category>
     </Middle>
     <EndLabel>{amount}</EndLabel>
   </Wrapper>
@@ -63,7 +63,7 @@ Transaction.propTypes = {
   date: PropTypes.string.isRequired,
   merchant: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,
-  category: PropTypes.string.isRequired,
+  displayName: PropTypes.string.isRequired,
 };
 
 export default Transaction;
