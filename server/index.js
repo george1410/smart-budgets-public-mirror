@@ -22,28 +22,29 @@ app.use(express.static('build'));
  *   ]
  */
 app.get('/api/users/:id/transactions', (req, res) => {
+  let querySelect;
   if(req.query.period){
     let period = req.query.period;
     if(period === 'week' ){
-      const querySelect = `
+      querySelect = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
         WHERE t.userId = ${req.params.id}
-        AND MONTH(transactions.date) = WEEK(CURDATE()) AND
-        YEAR(transactions.date) = YEAR(CURDATE()) AND
-        transactions.date < CURDATE()
+        AND WEEK(t.date) = WEEK(CURDATE()) AND
+        YEAR(t.date) = YEAR(CURDATE()) AND
+        t.date < CURDATE()
         `;
     }else if(period === 'month'){
-      const querySelect = `
+       querySelect = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
         WHERE t.userId = ${req.params.id}
-        AND MONTH(transactions.date) = MONTH(CURDATE()) AND
-        YEAR(transactions.date) = YEAR(CURDATE()) AND
-        transactions.date < CURDATE()`;
+        AND MONTH(t.date) = MONTH(CURDATE()) AND
+        YEAR(t.date) = YEAR(CURDATE()) AND
+        t.date < CURDATE()`;
     }
   }else{
-    const querySelect = `
+    querySelect = `
       SELECT * FROM transactions AS t 
       JOIN categories AS c ON c.categoryId = t.categoryId 
       WHERE t.userId = ${req.params.id}`;
