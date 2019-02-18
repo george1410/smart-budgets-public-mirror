@@ -5,9 +5,10 @@ import {
   compose,
 } from 'redux';
 import reduxThunk from 'redux-thunk';
-import counterReducer from '../reducers/counterReducer';
-import answerReducer from '../reducers/answerReducer';
 import authReducer from '../reducers/authReducer';
+import categoriesReducer from '../reducers/categoriesReducer';
+import statusReducer from '../reducers/statusReducer';
+
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -15,9 +16,9 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 export default () => createStore(
   combineReducers({
-    counter: counterReducer,
-    answer: answerReducer,
     auth: authReducer,
+    categories: categoriesReducer,
+    status: statusReducer,
   }),
   composeEnhancers(applyMiddleware(reduxThunk)),
 );

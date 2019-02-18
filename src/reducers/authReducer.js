@@ -4,7 +4,7 @@ import { LOGIN, LOGOUT } from '../actions/types';
 // atm by default user is authenticated
 // this is for development until real authentication is set up
 
-export default (state = { uid: 123 }, action) => {
+export default (state = { uid: 1 }, action) => {
 // export default (state = { }, action) => {
   switch (action.type) {
     case LOGIN:
