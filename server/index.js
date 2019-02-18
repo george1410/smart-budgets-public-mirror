@@ -24,24 +24,25 @@ app.use(express.static('build'));
 app.get('/api/users/:id/transactions', (req, res) => {
   let querySelect;
   if (req.query.period) {
-    const { period } = req.query;
-    if (period === 'week') {
+    let { period } = req.query;
+    period = period.toUpperCase();
+    if (period === 'WEEK') {
       querySelect = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
         WHERE t.userId = ${req.params.id}
         AND WEEK(t.date) = WEEK(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date < CURDATE()
+        t.date <= CURDATE()
         `;
-    } else if (period === 'month') {
+    } else if (period === 'MONTH') {
       querySelect = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
         WHERE t.userId = ${req.params.id}
         AND MONTH(t.date) = MONTH(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date < CURDATE()`;
+        t.date <= CURDATE()`;
     }
   } else {
     querySelect = `
@@ -82,7 +83,7 @@ app.get('/api/users/:id/categories', (req, res) => {
     WHERE transactions.userId = ${req.params.id} AND 
       MONTH(transactions.date) = MONTH(CURDATE()) AND
       YEAR(transactions.date) = YEAR(CURDATE()) AND
-      transactions.date < CURDATE()
+      transactions.date <= CURDATE()
     GROUP BY categories.displayName
   `;
 
