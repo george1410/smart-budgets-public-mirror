@@ -77,15 +77,44 @@ app.get('/api/users/:id/transactions', (req, res) => {
  *    ]
  */
 app.get('/api/users/:id/categories', (req, res) => {
-  let sql = `
-    SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-    JOIN categories ON transactions.categoryId = categories.categoryId
-    WHERE transactions.userId = ${req.params.id} AND 
-      MONTH(transactions.date) = MONTH(CURDATE()) AND
-      YEAR(transactions.date) = YEAR(CURDATE()) AND
-      transactions.date <= CURDATE()
-    GROUP BY categories.displayName
+  let sql;
+  if (req.query.period) {
+    let { period } = req.query;
+    period = period.toUpperCase();
+
+    if (period === 'WEEK') {
+      sql = `
+        SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
+        JOIN categories ON transactions.categoryId = categories.categoryId
+        WHERE transactions.userId = ${req.params.id} AND 
+          WEEK(transactions.date) = WEEK(CURDATE()) AND
+          YEAR(transactions.date) = YEAR(CURDATE()) AND
+          transactions.date <= CURDATE()
+        GROUP BY categories.displayName
+      `;
+    } else if (period === 'MONTH') {
+      sql = `
+        SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
+        JOIN categories ON transactions.categoryId = categories.categoryId
+        WHERE transactions.userId = ${req.params.id} AND 
+          MONTH(transactions.date) = MONTH(CURDATE()) AND
+          YEAR(transactions.date) = YEAR(CURDATE()) AND
+          transactions.date <= CURDATE()
+        GROUP BY categories.displayName
+      `;
+    }
+  } else {
+    sql = `
+      SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
+      JOIN categories ON transactions.categoryId = categories.categoryId
+      WHERE transactions.userId = ${req.params.id} AND 
+        MONTH(transactions.date) = MONTH(CURDATE()) AND
+        YEAR(transactions.date) = YEAR(CURDATE()) AND
+        transactions.date <= CURDATE()
+      GROUP BY categories.displayName
   `;
+  }
+
 
   let res1 = [];
   conn.query(sql, (err, results) => {
