@@ -17,9 +17,10 @@ app.get('/api/getDatabaseUsername', (req, res) => {
   });
 });
 
-app.get('/api/getTransactions/:id', (req, res) => {
-  conn.query('SELECT * FROM transactions WHERE userId =' + req.params.id, (error, results) => {
-    if(error) throw error;
+app.get('/api/users/:id/transactions', (req, res) => {
+  const querySelect = 'SELECT transactionId, userId, date, merchant, amount FROM transactions WHERE userId = ';
+  conn.query(querySelect + req.params.id, (error, results) => {
+    if (error) throw error;
     res.send(results);
 
   });
