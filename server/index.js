@@ -24,8 +24,9 @@ app.use(express.static('build'));
 app.get('/api/users/:id/transactions', (req, res) => {
   let querySelect;
   if (req.query.period) {
-    const { period } = req.query;
-    if (period === 'week') {
+    let { period } = req.query;
+    period = period.toUpperCase();
+    if (period === 'WEEK') {
       querySelect = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
@@ -34,7 +35,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
         YEAR(t.date) = YEAR(CURDATE()) AND
         t.date < CURDATE()
         `;
-    } else if (period === 'month') {
+    } else if (period === 'MONTH') {
       querySelect = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
