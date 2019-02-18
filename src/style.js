@@ -32,4 +32,5 @@ export const theme = {
   fontTiny: '1.2rem',
   fontSmall: '1.8rem',
   fontMedium: '2.5rem',
+  vh: window.innerHeight,
 };

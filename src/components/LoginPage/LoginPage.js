@@ -96,7 +96,7 @@ const InputWrapper = styled.div`
   input:focus + label {
     transform: translateY(calc(3.2rem + 3px));
     font-size: ${props => props.theme.fontTiny};
-    font-weight: 700;
+    font-weight: 500;
     color: ${props => props.theme.grey};
   }
 
@@ -188,8 +188,8 @@ class LoginPage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    // const { logIn } = this.props;
-    // logIn();
+    const { logIn } = this.props;
+    logIn();
   }
 
   render() {
