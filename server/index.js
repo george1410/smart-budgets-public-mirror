@@ -33,7 +33,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
         WHERE t.userId = ${req.params.id}
         AND WEEK(t.date) = WEEK(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date < CURDATE()
+        t.date <= CURDATE()
         `;
     } else if (period === 'MONTH') {
       querySelect = `
@@ -42,7 +42,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
         WHERE t.userId = ${req.params.id}
         AND MONTH(t.date) = MONTH(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date < CURDATE()`;
+        t.date <= CURDATE()`;
     }
   } else {
     querySelect = `
@@ -83,7 +83,7 @@ app.get('/api/users/:id/categories', (req, res) => {
     WHERE transactions.userId = ${req.params.id} AND 
       MONTH(transactions.date) = MONTH(CURDATE()) AND
       YEAR(transactions.date) = YEAR(CURDATE()) AND
-      transactions.date < CURDATE()
+      transactions.date <= CURDATE()
     GROUP BY categories.displayName
   `;
 
