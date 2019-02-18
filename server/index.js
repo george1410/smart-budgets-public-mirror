@@ -18,11 +18,10 @@ app.get('/api/getDatabaseUsername', (req, res) => {
 });
 
 app.get('/api/users/:id/transactions', (req, res) => {
-  const querySelect = 'SELECT transactionId, userId, date, merchant, amount FROM transactions WHERE userId = ';
+  const querySelect = 'SELECT * FROM transactions AS t JOIN categories AS c ON c.categoryId = t.categoryId WHERE t.userId =';
   conn.query(querySelect + req.params.id, (error, results) => {
     if (error) throw error;
     res.send(results);
-
   });
 });
 
