@@ -25,7 +25,11 @@ app.get('/api/users/:id/transactions', (req, res) => {
   const querySelect = 'SELECT * FROM transactions AS t JOIN categories AS c ON c.categoryId = t.categoryId WHERE t.userId =';
   conn.query(querySelect + req.params.id, (error, results) => {
     if (error) throw error;
-    res.send(results);
+    if (results.length < 1) {
+      res.status(404).json({ error: 'No results were found.' });
+    } else {
+      res.json(results);
+    }
   });
 });
 
@@ -75,31 +79,34 @@ app.get('/api/users/:id/categories', (req, res) => {
 
   conn.query(sql, (err, results) => {
     if (err) throw err;
-
-    const out = [];
-    results.forEach((result) => {
-      let found = false;
-      res1.forEach((group) => {
-        if (result.displayName === group.displayName) {
-          found = true;
+    if (results.length < 1) {
+      res.status(404).json({ error: 'No results were found.' });
+    } else {
+      const out = [];
+      results.forEach((result) => {
+        let found = false;
+        res1.forEach((group) => {
+          if (result.displayName === group.displayName) {
+            found = true;
+            out.push({
+              budget: result.budget,
+              spend: group.spend,
+              displayName: result.displayName,
+              id: result.id.split(',').map(Number),
+            });
+          }
+        });
+        if (!found) {
           out.push({
             budget: result.budget,
-            spend: group.spend,
+            spend: 0,
             displayName: result.displayName,
             id: result.id.split(',').map(Number),
           });
         }
       });
-      if (!found) {
-        out.push({
-          budget: result.budget,
-          spend: 0,
-          displayName: result.displayName,
-          id: result.id.split(',').map(Number),
-        });
-      }
-    });
-    res.json(out);
+      res.json(out);
+    }
   });
 });
 
