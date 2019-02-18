@@ -64,9 +64,9 @@ const Progress = styled.div`
   transition: width 0.3s ease-in-out;
 `;
 
-const CategoryProgress = ({ title, spend, budget }) => (
+const CategoryProgress = ({ displayName, spend, budget }) => (
   <Wrapper>
-    <CategoryTitle>{title}</CategoryTitle>
+    <CategoryTitle>{displayName}</CategoryTitle>
     <LabelWrapper>
       <LabelEnd>
         {spend}
@@ -88,7 +88,7 @@ const CategoryProgress = ({ title, spend, budget }) => (
 );
 
 CategoryProgress.propTypes = {
-  title: PropTypes.string.isRequired,
+  displayName: PropTypes.string.isRequired,
   spend: PropTypes.number.isRequired,
   budget: PropTypes.number.isRequired,
 };

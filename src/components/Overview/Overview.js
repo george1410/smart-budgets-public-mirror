@@ -1,7 +1,8 @@
 import React from 'react';
-import { Progress } from 'react-sweet-progress';
 import 'react-sweet-progress/lib/style.css';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import CategoryProgress from '../CategoryProgress/CategoryProgress';
@@ -16,22 +17,37 @@ const Wrapper = styled.div`
   `}
 `;
 
-const Overview = () => (
+const Overview = ({ categories }) => (
   <Wrapper>
     <Header title="Overview" />
-    <p>This will show the overview for the budgets.</p>
-
-    <p>Budget 1</p>
-    <Progress percent={80} />
-
-    <p>Budget 2</p>
-    <Progress percent={30} status="active" />
-
-    <p>Total Budget</p>
-    <Progress type="circle" percent={70} />
-
-    <CategoryProgress budget={100} spend={10} title="Groceries" />
+    {
+      categories.length === 0 ? (
+        <p>No categories to show</p>
+      ) : (
+        categories.map(
+          category => (
+            <CategoryProgress
+              key={category.id[0]}
+              {...category}
+            />
+          ),
+        )
+      )
+    }
   </Wrapper>
 );
 
-export default Overview;
+Overview.defaultProps = {
+  categories: [],
+};
+
+Overview.propTypes = {
+  categories: PropTypes.instanceOf(Array),
+};
+
+const mapStateToProps = state => ({
+  categories: state.categories,
+});
+
+
+export default connect(mapStateToProps)(Overview);

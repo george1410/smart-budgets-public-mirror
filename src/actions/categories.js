@@ -10,7 +10,7 @@ export const setCategories = categories => ({
 export const startSetCategories = () => (dispatch, getState) => {
   dispatch(isLoading(true));
   const { uid } = getState().auth;
-  axios.get(`api/users/${uid}/categories`)
+  axios.get(`/api/users/${uid}/categories`)
     .then((payload) => {
       dispatch(setCategories(payload.data));
       dispatch(isLoading(false));
