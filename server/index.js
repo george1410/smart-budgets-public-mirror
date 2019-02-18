@@ -22,8 +22,34 @@ app.use(express.static('build'));
  *   ]
  */
 app.get('/api/users/:id/transactions', (req, res) => {
-  const querySelect = 'SELECT * FROM transactions AS t JOIN categories AS c ON c.categoryId = t.categoryId WHERE t.userId =';
-  conn.query(querySelect + req.params.id, (error, results) => {
+  if(req.query.period){
+    let period = req.query.period;
+    if(period === 'week' ){
+      const querySelect = `
+        SELECT * FROM transactions AS t 
+        JOIN categories AS c ON c.categoryId = t.categoryId 
+        WHERE t.userId = ${req.params.id}
+        AND MONTH(transactions.date) = WEEK(CURDATE()) AND
+        YEAR(transactions.date) = YEAR(CURDATE()) AND
+        transactions.date < CURDATE()
+        `;
+    }else if(period === 'month'){
+      const querySelect = `
+        SELECT * FROM transactions AS t 
+        JOIN categories AS c ON c.categoryId = t.categoryId 
+        WHERE t.userId = ${req.params.id}
+        AND MONTH(transactions.date) = MONTH(CURDATE()) AND
+        YEAR(transactions.date) = YEAR(CURDATE()) AND
+        transactions.date < CURDATE()`;
+    }
+  }else{
+    const querySelect = `
+      SELECT * FROM transactions AS t 
+      JOIN categories AS c ON c.categoryId = t.categoryId 
+      WHERE t.userId = ${req.params.id}`;
+  }
+ 
+  conn.query(querySelect, (error, results) => {
     if (error) throw error;
     if (results.length < 1) {
       res.status(404).json({ error: 'No results were found.' });
