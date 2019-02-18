@@ -85,7 +85,7 @@ app.get('/api/users/:id/categories', (req, res) => {
     GROUP BY categories.displayName
   `;
 
-  let res1;
+  let res1 = [];
   conn.query(sql, (err, results) => {
     if (err) throw err;
 
@@ -94,9 +94,6 @@ app.get('/api/users/:id/categories', (req, res) => {
       res1[key].id = result.id.split(',').map(Number);
     });
     res1 = results;
-    if (results.length < 1) {
-      res1 = [];
-    }
   });
 
   sql = `
