@@ -68,6 +68,9 @@ app.get('/api/users/:id/categories', (req, res) => {
       res1[key].id = result.id.split(',').map(Number);
     });
     res1 = results;
+    if (results.length < 1) {
+      res1 = [];
+    }
   });
 
   sql = `
