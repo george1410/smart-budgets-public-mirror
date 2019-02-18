@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
   display: flex;
@@ -11,16 +12,21 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 0 2rem;
   height: 7rem;
+  width: 50rem;
+  ${media.phone`
+    width: 100%;
+  `}
 `;
 
 const EndLabel = styled.p`
   color: ${props => props.theme.black};
-  font-size: ${props => props.theme.fontSmall};
+  font-size: ${props => props.theme.fontTiny};
   font-weight: 500;
   flex: 1;
 
   &:last-of-type {
     text-align: end;
+    font-size: ${props => props.theme.fontSmall};
   }
 `;
 
@@ -36,14 +42,16 @@ const Merchant = styled.div`
   font-size: ${props => props.theme.fontSmall};
   color: ${props => props.theme.black};
   font-weight: 500;
+  text-transform: capitalize;
 `;
 
 const Category = styled.div`
   background-color: ${props => props.theme.primaryBlue};
   color: ${props => props.theme.white};
-  font-size: ${props => props.theme.fontSmall};
+  font-size: ${props => props.theme.fontTiny};
   padding: 2px 7px;
   font-weight: 500;
+  text-transform: capitalize;
 `;
 
 const Transaction = ({
@@ -52,8 +60,8 @@ const Transaction = ({
   <Wrapper>
     <EndLabel>{moment(date).format('DD/MMM/YY')}</EndLabel>
     <Middle>
-      <Merchant>{merchant}</Merchant>
-      <Category>{displayName}</Category>
+      <Merchant>{merchant.toLowerCase()}</Merchant>
+      <Category>{displayName.toLowerCase()}</Category>
     </Middle>
     <EndLabel>{amount}</EndLabel>
   </Wrapper>

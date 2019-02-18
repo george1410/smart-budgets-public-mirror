@@ -24,14 +24,12 @@ const NavigationBar = styled.nav`
 
 const activeClassName = 'nav-item-active';
 
-// Navigation Link
 const NavItem = styled(NavLink).attrs({
   activeClassName,
 })`
   color: ${props => props.theme.grey};
   margin: 1.5rem 4rem;
   font-size: 1.6rem;
-  font-weight: 500;
   text-decoration: none;
   text-align: center;
   display: flex;

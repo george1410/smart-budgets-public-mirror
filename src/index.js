@@ -25,8 +25,11 @@ const jsx = (
 // TODO remove
 // log store for debugging
 store.subscribe(() => console.log(store.getState()));
-store.dispatch(startSetCategories());
-store.dispatch(startSetTransactions());
+
+if (store.getState().auth.uid) {
+  store.dispatch(startSetCategories());
+  store.dispatch(startSetTransactions());
+}
 
 ReactDOM.render(jsx, document.getElementById('root'));
 

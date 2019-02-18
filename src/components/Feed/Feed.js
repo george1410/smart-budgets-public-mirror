@@ -7,6 +7,9 @@ import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   ${media.tablet`
     /* clears Header and bottom Navigation with fixed position */
     padding: 5rem 0;
@@ -14,23 +17,25 @@ const Wrapper = styled.div`
 `;
 
 const Feed = ({ transactions }) => (
-  <Wrapper>
+  <>
     <Header title="Transactions" />
-    {
-      transactions.length === 0 ? (
-        <p>No categories to show</p>
-      ) : (
-        transactions.map(
-          transaction => (
-            <Transaction
-              key={transaction.transactionId}
-              {...transaction}
-            />
-          ),
+    <Wrapper>
+      {
+        transactions.length === 0 ? (
+          <p>No categories to show</p>
+        ) : (
+          transactions.map(
+            transaction => (
+              <Transaction
+                key={transaction.transactionId}
+                {...transaction}
+              />
+            ),
+          )
         )
-      )
-    }
-  </Wrapper>
+      }
+    </Wrapper>
+  </>
 );
 
 Feed.defaultProps = {

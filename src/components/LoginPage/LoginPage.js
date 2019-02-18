@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { login } from '../../actions/auth';
 import media from '../../util/mediaQueries';
+import Button from '../Button/Button';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -25,44 +26,35 @@ const LoginWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 500px;
-  min-height: 650px;
+  width: 400px;
+  min-height: 550px;
   padding: 5rem;
   box-shadow: 10px 10px 0 ${props => props.theme.primaryBlue};
   ${media.phone`
     width: 100vw;
-    height: 100vh;  
+    height: 100vh;
+    min-height: auto;
+    background-color: ${props => props.theme.white};
     padding: 4rem;
   `}
 `;
 
-const Title = styled.h1`
-  font-weight: 300;
-  font-size: 6rem;
-  padding: 0 1rem;
-  margin-top: 0;
-  ${media.phone`
-    font-size: 5rem;
-  `}
+const Title = styled.div`
+  font-size: 5rem;
 
   /* This styles the 2nd line of the title */
   &:last-of-type {
-    margin-top: -6rem;
+    margin-top: -1.2rem;
     border-bottom: 4px solid ${props => props.theme.black};
     padding-bottom: 1rem;
-    margin-bottom: 0;
-    ${media.phone`
-      margin-top: -5rem;
-    `}
   }
 `;
 
-const Subtitle = styled.h2`
+const Subtitle = styled.span`
   text-align: center;
-  font-size: ${props => props.theme.fontMedium};
+  font-size: ${props => props.theme.fontSmall};
   color: ${props => props.theme.grey};
-  font-weight: 300;
-  margin: 4rem 0 0 0;
+  margin: 3rem 0 0 0;
 `;
 
 const Form = styled.form`
@@ -117,6 +109,9 @@ const Label = styled.label`
   padding: 1rem 1.5rem;
   color: ${props => props.theme.greyLight};
   transition: all 0.3s ease-in-out;
+  ${media.phone`
+    color: ${props => props.theme.grey};
+  `}
 
   /* needs constant height to counter font-size change on focus */
   height: 4rem;
@@ -137,6 +132,9 @@ const Input = styled.input`
   transition: all 0.3s ease-out;
   font-family: inherit;
   color: #000;
+  ${media.phone`
+    background: ${props => props.theme.offWhite};
+`}
 
   ::placeholder {
     /* placeholder needs to be present, for label animations
@@ -155,41 +153,11 @@ const Input = styled.input`
   }
 `;
 
-const Button = styled.button`
-  width: 100%;
-  cursor: pointer;
-  padding: 1.5rem;
-  font-size: ${props => props.theme.fontSmall};
-  font-family: inherit;
-  color: ${props => props.theme.white};
-  background-color: ${props => props.theme.primaryBlue};
-  border: none;
-  outline: none;
-  box-shadow: 0 4px 0 ${props => props.theme.primaryBlueDark};
-
-  /* to make button the same height as input fields */
-  border-bottom: 3px solid ${props => props.theme.primaryBlue};
-  border-top: 3px solid ${props => props.theme.primaryBlue};
-
-  &:active {
-    transform: translateY(4px);
-    box-shadow: none;
-  }
-`;
-
 class LoginPage extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-
-    };
-  }
-
   onSubmit = (e) => {
     e.preventDefault();
     const { logIn } = this.props;
-    logIn();
+    logIn(1);
   }
 
   render() {
@@ -201,12 +169,11 @@ class LoginPage extends React.Component {
           <Subtitle>Please log in to get started.</Subtitle>
           <Form onSubmit={this.onSubmit}>
             <InputWrapper>
-
               <Input
                 id="userId"
                 placeholder="User ID"
                 type="text"
-                required
+                // required
               />
               <Label htmlFor="userId">
                 User ID
@@ -222,9 +189,7 @@ class LoginPage extends React.Component {
                 Password
               </Label>
             </InputWrapper>
-            <Button type="submit">
-          Log In
-            </Button>
+            <Button title="Log In" type="submit" />
           </Form>
         </LoginWrapper>
       </Wrapper>
@@ -233,7 +198,7 @@ class LoginPage extends React.Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  logIn: () => dispatch(login(123)),
+  logIn: uid => dispatch(login(uid)),
 });
 
 LoginPage.propTypes = {

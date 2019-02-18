@@ -6,22 +6,22 @@ import media from '../../util/mediaQueries';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 2rem;
   padding: 0 2rem;
-  width: 70%;
-  ${media.tablet`
-    width: 80%;
-  `}
+  width: 50rem;
   ${media.phone`
     width: 100%;
   `}
 `;
 
-const CategoryTitle = styled.p`
+const CategoryTitle = styled.span`
   text-align: center;
   align-self: stretch;
-  margin-bottom: 0;
-  font-size: ${props => props.theme.fontMedium};
+  font-size: ${props => props.theme.fontSmall};
   color: ${props => props.theme.primaryBlue};
+  font-weight: 500;
+  text-transform: capitalize;
+  margin-bottom: 1rem;
 `;
 
 const LabelWrapper = styled.div`
@@ -32,10 +32,9 @@ const LabelWrapper = styled.div`
   align-items: baseline;
 `;
 
-const LabelEnd = styled.p`
+const LabelEnd = styled.span`
   color: ${props => props.theme.grey};
   font-size: ${props => props.theme.fontSmall};
-  margin: 0 0;
   flex: 1;
 
   &:last-of-type {
@@ -43,11 +42,9 @@ const LabelEnd = styled.p`
   }
 `;
 
-const LabelMain = styled.p`
+const LabelMain = styled.span`
   color: ${props => props.theme.black};
-  font-size: 2.5rem;
-  margin: 0;
-  margin-bottom: 0;
+  font-size: ${props => props.theme.fontMedium};
 `;
 
 const ProgressBar = styled.div`
@@ -66,7 +63,7 @@ const Progress = styled.div`
 
 const CategoryProgress = ({ displayName, spend, budget }) => (
   <Wrapper>
-    <CategoryTitle>{displayName}</CategoryTitle>
+    <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
     <LabelWrapper>
       <LabelEnd>
         {spend}

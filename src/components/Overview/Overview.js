@@ -18,23 +18,25 @@ const Wrapper = styled.div`
 `;
 
 const Overview = ({ categories }) => (
-  <Wrapper>
+  <>
     <Header title="Overview" />
-    {
-      categories.length === 0 ? (
-        <p>No categories to show</p>
-      ) : (
-        categories.map(
-          category => (
-            <CategoryProgress
-              key={category.id[0]}
-              {...category}
-            />
-          ),
+    <Wrapper>
+      {
+        categories.length === 0 ? (
+          <p>No categories to show</p>
+        ) : (
+          categories.map(
+            category => (
+              <CategoryProgress
+                key={category.id[0]}
+                {...category}
+              />
+            ),
+          )
         )
-      )
-    }
-  </Wrapper>
+      }
+    </Wrapper>
+  </>
 );
 
 Overview.defaultProps = {
