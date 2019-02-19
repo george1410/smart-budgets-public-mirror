@@ -7,6 +7,7 @@ import 'react-virtualized/styles.css';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
+import InfoHeader from './InfoHeader';
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,6 +23,7 @@ const Wrapper = styled.div`
 
 const StyledList = styled(VirtualList)`
   height: calc(100vh - 10rem);
+  outline: none;
 `;
 
 const ListWrapper = styled.div`
@@ -30,6 +32,10 @@ const ListWrapper = styled.div`
   ${media.tablet`
     height: calc(100vh - 10rem);
   `}
+
+  & > div > div::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 class Feed extends React.PureComponent {
@@ -53,6 +59,7 @@ class Feed extends React.PureComponent {
       <>
         <Header title="Transactions" />
         <Wrapper>
+          <InfoHeader />
           <ListWrapper>
             <AutoSizer>
               {
@@ -63,6 +70,7 @@ class Feed extends React.PureComponent {
                   rowHeight={70}
                   rowRenderer={this.renderRowVirtual}
                   rowCount={transactions.length}
+                  // style={{ outline: 'none' }}
                 />
               )
               }
