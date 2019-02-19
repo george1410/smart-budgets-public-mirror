@@ -2,7 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import PropTypes from 'prop-types';
+import numeral from 'numeral';
 import media from '../../util/mediaQueries';
+
+numeral.register('locale', 'en-gb', {
+  delimiters: {
+    thousands: '.',
+    decimal: ',',
+  },
+  currency: {
+    symbol: '£',
+  },
+});
+
+numeral.locale('en-gb');
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,9 +34,12 @@ const Wrapper = styled.div`
 
 const EndLabel = styled.p`
   color: ${props => props.theme.black};
-  font-size: ${props => props.theme.fontTiny};
+  font-size: ${props => props.theme.fontSmall};
   font-weight: 500;
   flex: 1;
+  ${media.phone`
+    font-size: ${props => props.theme.fontTiny};
+  `}
 
   &:last-of-type {
     text-align: end;
@@ -59,12 +75,12 @@ const Transaction = ({
   date, merchant, amount, displayName,
 }) => (
   <Wrapper>
-    <EndLabel>{moment(date).format('DD/MMM/YY')}</EndLabel>
+    <EndLabel>{moment(date).format('DD-MM-YYYY')}</EndLabel>
     <Middle>
       <Merchant>{merchant.toLowerCase()}</Merchant>
       <Category>{displayName.toLowerCase()}</Category>
     </Middle>
-    <EndLabel>{amount}</EndLabel>
+    <EndLabel>{numeral(amount).format('$0,0.00')}</EndLabel>
   </Wrapper>
 );
 
