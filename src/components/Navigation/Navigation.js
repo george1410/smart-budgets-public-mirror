@@ -11,6 +11,7 @@ const NavigationBar = styled.nav`
   background-color: ${props => props.theme.white};
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
   align-items: center;
+  z-index: 2;
   ${media.tablet`
     position: fixed;
     background-color: ${props => props.theme.white};

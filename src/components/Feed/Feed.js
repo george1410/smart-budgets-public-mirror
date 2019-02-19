@@ -2,27 +2,42 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { FixedSizeList as List } from 'react-window';
+// import { FixedSizeList as List } from 'react-window';
+import { AutoSizer, List as VirtualList } from 'react-virtualized';
+import 'react-virtualized/styles.css';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
 
 const Wrapper = styled.div`
+  /* margin-top: 5rem; */
   display: flex;
   flex-direction: column;
+  /* background-color: salmon; */
+  /* height: calc(100vh - 10rem); */
+  height: 100vh;
+  width: 100vw;
   align-items: center;
+  /* justify-content: center; */
   ${media.tablet`
     /* clears Header and bottom Navigation with fixed position */
     padding: 5rem 0;
   `}
 `;
 
+const StyledList = styled(VirtualList)`
+  height: calc(100vh - 10rem);
+/* set height to be 100vh minus the headers and navigation */
+`;
+
 class Feed extends React.PureComponent {
-  renderRow2 = transaction => (
-    <Transaction
-      key={transaction.transactionId}
-      {...transaction}
-    />
+  renderRowVirtual = ({ index, key, style }) => (
+    <div key={key} style={style}>
+      <Transaction
+        key={this.props.transactions[index].transactionId}
+        {...this.props.transactions[index]}
+      />
+    </div>
   )
 
   renderRow = ({ index, style }) => {
@@ -51,7 +66,7 @@ class Feed extends React.PureComponent {
               transactions.map(this.renderRow)
             }
           </div> */}
-          <List
+          {/* <List
             height={500}
             width={window.innerWidth}
             itemCount={transactions.length}
@@ -60,7 +75,22 @@ class Feed extends React.PureComponent {
             {
               this.renderRow
             }
-          </List>
+          </List> */}
+          <div style={{ height: 'calc(100vh - 10rem)', width: '100%', position: 'fixed' }}>
+            <AutoSizer>
+              {
+              ({ width, height }) => (
+                <StyledList
+                  width={width}
+                  height={height}
+                  rowHeight={70}
+                  rowRenderer={this.renderRowVirtual}
+                  rowCount={transactions.length}
+                />
+              )
+              }
+            </AutoSizer>
+          </div>
           {/* {
             transactions.length === 0 ? (
               <p>No categories to show</p>
