@@ -1,6 +1,6 @@
 const mysql = require('mysql');
 
-const conn = mysql.createPool({
+const pool = mysql.createPool({
   connectionLimit: 10,
   host: 'smartbudgets.co6kasjhhncd.eu-west-1.rds.amazonaws.com',
   user: 'smartbudgets',
@@ -9,4 +9,4 @@ const conn = mysql.createPool({
   port: 8080,
 });
 
-module.exports = conn;
+module.exports = pool;
