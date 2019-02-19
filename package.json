@@ -26,9 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "server": "node server",
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "storybook": "start-storybook -p 9009 -s public",
-    "build-storybook": "build-storybook -s public"
+    "start": "concurrently \"npm run server\" \"npm run client\""
   },
   "proxy": "http://localhost:8080",
   "eslintConfig": {
@@ -42,11 +40,6 @@
   ],
   "devDependencies": {
     "@babel/core": "^7.2.2",
-    "@storybook/addon-actions": "^4.1.11",
-    "@storybook/addon-links": "^4.1.11",
-    "@storybook/addons": "^4.1.11",
-    "@storybook/react": "^4.1.11",
-    "babel-loader": "8.0.4",
     "concurrently": "^4.1.0",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.0",
