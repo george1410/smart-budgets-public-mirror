@@ -8,6 +8,7 @@ import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
 import InfoHeader from './InfoHeader';
+import selectTransactions from '../../selectors/transactions';
 
 const Wrapper = styled.div`
   display: flex;
@@ -91,7 +92,7 @@ Feed.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  transactions: state.transactions,
+  transactions: selectTransactions(state.transactions, state.filters),
 });
 
 export default connect(mapStateToProps)(Feed);
