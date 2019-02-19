@@ -1,9 +1,10 @@
 const express = require('express');
+const path = require('path');
 const conn = require('./database');
 
 const app = express();
 
-app.use(express.static('build'));
+app.use(express.static(path.join(__dirname, '..', 'build')));
 
 /**
  * GET route for transcation info for a user.
@@ -170,6 +171,10 @@ app.get('/api/users/:id/categories', (req, res) => {
       }
     });
   }
+});
+
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
