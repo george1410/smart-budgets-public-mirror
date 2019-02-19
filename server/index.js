@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const conn = require('./database');
+const pool = require('./database');
 
 const app = express();
 
@@ -52,7 +52,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
       WHERE t.userId = ${req.params.id}`;
   }
 
-  conn.query(querySelect, (error, results) => {
+  pool.query(querySelect, (error, results) => {
     if (error) throw error;
     if (results.length < 1) {
       res.status(404).json({ error: 'No results were found.' });
@@ -122,10 +122,10 @@ app.get('/api/users/:id/categories', (req, res) => {
 
   if (!badRequest) {
     let res1 = [];
-    conn.getConnection((err, connection) => {
+    pool.getConnection((err, conn) => {
       if (err) throw err;
 
-      connection.query(sql, (error, results) => {
+      conn.query(sql, (error, results) => {
         if (error) throw error;
 
         res1 = results;
@@ -142,7 +142,7 @@ app.get('/api/users/:id/categories', (req, res) => {
       GROUP BY categories.displayName
     `;
 
-      connection.query(sql, (error, results) => {
+      conn.query(sql, (error, results) => {
         if (error) throw err;
         if (results.length < 1) {
           res.status(404).json({ error: 'No results were found.' });
@@ -170,7 +170,7 @@ app.get('/api/users/:id/categories', (req, res) => {
               });
             }
           });
-          connection.release();
+          conn.release();
           if (error) throw error;
           res.json(out);
         }
