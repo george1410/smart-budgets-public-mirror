@@ -60,6 +60,13 @@ const Merchant = styled.div`
   color: ${props => props.theme.black};
   font-weight: 500;
   text-transform: capitalize;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: center;
+  ${media.phone`
+    max-width: 130px;
+  `}
 `;
 
 const Category = styled.div`
