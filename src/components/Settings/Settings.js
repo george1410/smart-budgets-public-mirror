@@ -11,6 +11,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 5rem 0 0 0;
 
   & > button {
     max-width: 41rem;

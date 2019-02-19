@@ -8,10 +8,11 @@ const Wrapper = styled.div`
   display: flex;
   background-color: rgba(245, 245, 245, 0.5);
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  height: 7rem;
+  height: 70px;
   width: 50rem;
   ${media.phone`
     width: 100%;

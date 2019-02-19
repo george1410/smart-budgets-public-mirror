@@ -12,6 +12,7 @@ const Wrapper = styled.header`
   display: none;
   justify-content: center;
   align-items: center;
+  z-index: 2;
   ${media.tablet`
     display: flex;
     top: 0;
