@@ -11,7 +11,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
-  height: 7rem;
+  height: 70px;
   width: 50rem;
   ${media.phone`
     width: 100%;
