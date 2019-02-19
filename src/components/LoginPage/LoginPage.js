@@ -136,7 +136,7 @@ const Input = styled.input`
     background: ${props => props.theme.offWhite};
 `}
 
-  ::placeholder {
+  &::placeholder {
     /* placeholder needs to be present, for label animations
        however, we don't want to actually see it */
     opacity: 0;
