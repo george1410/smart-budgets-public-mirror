@@ -24,7 +24,7 @@ const jsx = (
 
 // TODO remove
 // log store for debugging
-store.subscribe(() => console.log(store.getState()));
+// store.subscribe(() => console.log(store.getState()));
 
 if (store.getState().auth.uid) {
   store.dispatch(startSetCategories());

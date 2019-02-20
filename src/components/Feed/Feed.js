@@ -67,10 +67,16 @@ class Feed extends React.Component {
     sortingByDate(sortOrder);
   };
 
+  getSortIndicatorInfo = () => {
+    const { filters } = this.props;
+    return {
+      date: filters.sortByDate,
+      amount: filters.sortByAmount,
+    };
+  }
+
   render() {
-    const {
-      transactions, filters,
-    } = this.props;
+    const { transactions } = this.props;
     return (
       <>
         <Header
@@ -80,7 +86,7 @@ class Feed extends React.Component {
           <InfoHeader
             sortingByAmount={this.sortByAmountOnClick}
             sortingByDate={this.sortByDateOnClick}
-            filters={filters}
+            indicators={this.getSortIndicatorInfo()}
           />
           <ListWrapper>
             <AutoSizer>

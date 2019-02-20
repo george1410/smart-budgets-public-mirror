@@ -23,19 +23,17 @@ const Label = styled.div`
   flex-direction: row;
 `;
 
-const InfoHeader = ({ sortingByDate, sortingByAmount, sortBy }) => (
+const InfoHeader = ({ sortingByDate, sortingByAmount, indicators }) => (
   <Wrapper>
     <Label onClick={sortingByDate}>
       Date
       <SortIcon
-        rotation={0}
-        show={sortBy === 'date'}
+        show={indicators.date}
       />
     </Label>
     <Label onClick={sortingByAmount}>
       <SortIcon
-        show={sortBy === 'amount'}
-        rotation={0}
+        show={indicators.amount}
       />
       Amount
     </Label>
@@ -45,7 +43,10 @@ const InfoHeader = ({ sortingByDate, sortingByAmount, sortBy }) => (
 InfoHeader.propTypes = {
   sortingByDate: PropTypes.func.isRequired,
   sortingByAmount: PropTypes.func.isRequired,
-  // sortBy: PropTypes.string.isRequired,
+  indicators: PropTypes.shape({
+    date: PropTypes.oneOf([undefined, 'greatest', 'smallest']),
+    amount: PropTypes.oneOf([undefined, 'greatest', 'smallest']),
+  }).isRequired,
 };
 
 export default InfoHeader;
