@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  * Optional Query Parameters:
  *   period
  *    values: WEEK, MONTH
- *    default: MONTH
+ *    default: All transactions
  * Response format:
  *   [
  *     {
@@ -28,36 +28,28 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *   ]
  */
 app.get('/api/users/:id/transactions', (req, res) => {
-  let querySelect;
+  let sql;
   if (req.query.period) {
     let { period } = req.query;
     period = period.toUpperCase();
-    if (period === 'WEEK') {
-      querySelect = `
+    if (period === 'WEEK' || period === 'MONTH') {
+      sql = `
         SELECT * FROM transactions AS t 
         JOIN categories AS c ON c.categoryId = t.categoryId 
         WHERE t.userId = ${req.params.id}
-        AND WEEK(t.date) = WEEK(CURDATE()) AND
+        AND ${period}(t.date) = ${period}(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
         t.date <= CURDATE()
         `;
-    } else if (period === 'MONTH') {
-      querySelect = `
-        SELECT * FROM transactions AS t 
-        JOIN categories AS c ON c.categoryId = t.categoryId 
-        WHERE t.userId = ${req.params.id}
-        AND MONTH(t.date) = MONTH(CURDATE()) AND
-        YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date <= CURDATE()`;
     }
   } else {
-    querySelect = `
+    sql = `
       SELECT * FROM transactions AS t 
       JOIN categories AS c ON c.categoryId = t.categoryId 
       WHERE t.userId = ${req.params.id}`;
   }
 
-  pool.query(querySelect, (error, results) => {
+  pool.query(sql, (error, results) => {
     if (error) throw error;
     if (results.length < 1) {
       res.status(404).json({ error: 'No results were found.' });
