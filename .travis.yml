@@ -15,9 +15,9 @@ stages:
 jobs:
   include:
     - stage: test
-      script: npx eslint ./src ./server
-    - 
-      script: npm run build
+      script: 
+        - npx eslint ./src ./server
+        - npm run build
     - stage: deploy
       script: 
         - npm run build
