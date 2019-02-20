@@ -19,6 +19,7 @@ function generateCategoryObjects(results, groups) {
 exports.generateCategoryObjects = generateCategoryObjects;
 
 function generateCategorySpendSql(req, badRequest, res) {
+  let bad = badRequest;
   let sql = `
     SELECT SUM(transactions.amount) AS spend, categories.displayName FROM transactions
     JOIN categories ON transactions.categoryId = categories.categoryId
@@ -28,7 +29,7 @@ function generateCategorySpendSql(req, badRequest, res) {
     ({ period } = req.query);
     period = period.toUpperCase();
     if (period !== 'WEEK' && period !== 'MONTH') {
-      badRequest = true;
+      bad = true;
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
   }
@@ -37,6 +38,6 @@ function generateCategorySpendSql(req, badRequest, res) {
     AND YEAR(transactions.date) = YEAR(CURDATE())  
     AND transactions.date <= CURDATE()
     GROUP BY categories.displayName `;
-  return { sql, badRequest };
+  return { sql, bad };
 }
 exports.generateCategorySpendSql = generateCategorySpendSql;
