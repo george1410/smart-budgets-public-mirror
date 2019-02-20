@@ -28,6 +28,7 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *   ]
  */
 app.get('/api/users/:id/transactions', (req, res) => {
+  let badRequest = false;
   let sql = `
     SELECT * FROM transactions AS t 
     JOIN categories AS c ON c.categoryId = t.categoryId 
@@ -42,18 +43,20 @@ app.get('/api/users/:id/transactions', (req, res) => {
         YEAR(t.date) = YEAR(CURDATE()) AND
         t.date <= CURDATE() `;
     } else {
+      badRequest = true;
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
   }
-
-  pool.query(sql, (error, results) => {
-    if (error) throw error;
-    if (results.length < 1) {
-      res.status(404).json({ error: 'No results were found.' });
-    } else {
-      res.json(results);
-    }
-  });
+  if (!badRequest) {
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.' });
+      } else {
+        res.json(results);
+      }
+    });
+  }
 });
 
 /**
@@ -83,22 +86,12 @@ app.get('/api/users/:id/categories', (req, res) => {
     let { period } = req.query;
     period = period.toUpperCase();
 
-    if (period === 'WEEK') {
+    if (period === 'WEEK' || period === 'MONTH') {
       sql = `
         SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
         JOIN categories ON transactions.categoryId = categories.categoryId
         WHERE transactions.userId = ${req.params.id} AND 
-          WEEK(transactions.date) = WEEK(CURDATE()) AND
-          YEAR(transactions.date) = YEAR(CURDATE()) AND
-          transactions.date <= CURDATE()
-        GROUP BY categories.displayName
-      `;
-    } else if (period === 'MONTH') {
-      sql = `
-        SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-        JOIN categories ON transactions.categoryId = categories.categoryId
-        WHERE transactions.userId = ${req.params.id} AND 
-          MONTH(transactions.date) = MONTH(CURDATE()) AND
+          ${period}(transactions.date) = ${period}(CURDATE()) AND
           YEAR(transactions.date) = YEAR(CURDATE()) AND
           transactions.date <= CURDATE()
         GROUP BY categories.displayName
