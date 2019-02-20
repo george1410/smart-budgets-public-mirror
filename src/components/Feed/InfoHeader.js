@@ -8,8 +8,10 @@ const Wrapper = styled.div`
   display: flex;
   font-size: ${props => props.theme.fontSmall};
   justify-content: space-between;
+  align-items: center;
   width: 50rem;
-  padding: 1rem 2rem;
+  height: 5rem;
+  padding: 0 2rem;
   box-shadow: 0 1px 0 ${props => props.theme.primaryBlue};
   ${media.phone`
     width: 100%;
