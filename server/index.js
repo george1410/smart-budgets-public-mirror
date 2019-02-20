@@ -8,6 +8,11 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
 
 /**
  * GET route for transcation info for a user.
+ * Endpoint: /api/users/{userid}/transactions
+ * Optional Query Parameters:
+ *   period
+ *    values: WEEK, MONTH
+ *    default: MONTH
  * Response format:
  *   [
  *     {
@@ -64,6 +69,11 @@ app.get('/api/users/:id/transactions', (req, res) => {
 
 /**
  * GET route for budget info by category for a user.
+ * Endpoint: /api/users/{userid}/categories
+ * Optional Query Parameters:
+ *   period
+ *    values: WEEK, MONTH
+ *    default: MONTH
  * Response format:
  *    [
  *      {
