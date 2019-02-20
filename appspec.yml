@@ -1,0 +1,21 @@
+version: 0.0
+os: linux
+files:
+  - source: ./
+    destination: /home/ubuntu/smart-budgets
+permissions:
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    type:
+      - directory
+      - file
+hooks:
+  ApplicationStart:
+    - location: ./deploy-scripts/run.sh
+      timeout: 120
+      runas: ubuntu
+  ApplicationStop:
+    - location: ./deploy-scripts/stop.sh
+      timeout: 120
+      runas: ubuntu

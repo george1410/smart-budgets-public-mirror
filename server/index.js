@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-const conn = require('./database');
+const pool = require('./database');
 
 const app = express();
 
@@ -52,7 +52,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
       WHERE t.userId = ${req.params.id}`;
   }
 
-  conn.query(querySelect, (error, results) => {
+  pool.query(querySelect, (error, results) => {
     if (error) throw error;
     if (results.length < 1) {
       res.status(404).json({ error: 'No results were found.' });
@@ -122,53 +122,59 @@ app.get('/api/users/:id/categories', (req, res) => {
 
   if (!badRequest) {
     let res1 = [];
-    conn.query(sql, (err, results) => {
+    pool.getConnection((err, conn) => {
       if (err) throw err;
 
-      res1 = results;
-      res1.forEach((result, key) => {
-        res1[key].id = result.id.split(',').map(Number);
-      });
-      res1 = results;
-    });
+      conn.query(sql, (error, results) => {
+        if (error) throw error;
 
-    sql = `
+        res1 = results;
+        res1.forEach((result, key) => {
+          res1[key].id = result.id.split(',').map(Number);
+        });
+        res1 = results;
+      });
+
+      sql = `
       SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
       JOIN categories ON categories.categoryId = budgets.categoryId
       WHERE budgets.userId = ${req.params.id}
       GROUP BY categories.displayName
     `;
 
-    conn.query(sql, (err, results) => {
-      if (err) throw err;
-      if (results.length < 1) {
-        res.status(404).json({ error: 'No results were found.' });
-      } else {
-        const out = [];
-        results.forEach((result) => {
-          let found = false;
-          res1.forEach((group) => {
-            if (result.displayName === group.displayName) {
-              found = true;
+      conn.query(sql, (error, results) => {
+        if (error) throw err;
+        if (results.length < 1) {
+          res.status(404).json({ error: 'No results were found.' });
+        } else {
+          const out = [];
+          results.forEach((result) => {
+            let found = false;
+            res1.forEach((group) => {
+              if (result.displayName === group.displayName) {
+                found = true;
+                out.push({
+                  budget: result.budget,
+                  spend: group.spend,
+                  displayName: result.displayName,
+                  id: result.id.split(',').map(Number),
+                });
+              }
+            });
+            if (!found) {
               out.push({
                 budget: result.budget,
-                spend: group.spend,
+                spend: 0,
                 displayName: result.displayName,
                 id: result.id.split(',').map(Number),
               });
             }
           });
-          if (!found) {
-            out.push({
-              budget: result.budget,
-              spend: 0,
-              displayName: result.displayName,
-              id: result.id.split(',').map(Number),
-            });
-          }
-        });
-        res.json(out);
-      }
+          conn.release();
+          if (error) throw error;
+          res.json(out);
+        }
+      });
     });
   }
 });
