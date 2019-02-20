@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const pool = require('./database');
+const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
 
 const app = express();
 
@@ -8,6 +9,11 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
 
 /**
  * GET route for transcation info for a user.
+ * Endpoint: /api/users/{userid}/transactions
+ * Optional Query Parameters:
+ *   period
+ *    values: WEEK, MONTH
+ *    default: All transactions
  * Response format:
  *   [
  *     {
@@ -23,47 +29,44 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *   ]
  */
 app.get('/api/users/:id/transactions', (req, res) => {
-  let querySelect;
+  let badRequest = false;
+  let sql = `
+    SELECT * FROM transactions AS t 
+    JOIN categories AS c ON c.categoryId = t.categoryId 
+    WHERE t.userId = ${req.params.id} `;
+
   if (req.query.period) {
     let { period } = req.query;
     period = period.toUpperCase();
-    if (period === 'WEEK') {
-      querySelect = `
-        SELECT * FROM transactions AS t 
-        JOIN categories AS c ON c.categoryId = t.categoryId 
-        WHERE t.userId = ${req.params.id}
-        AND WEEK(t.date) = WEEK(CURDATE()) AND
+    if (period === 'WEEK' || period === 'MONTH') {
+      sql += `
+        AND ${period}(t.date) = ${period}(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date <= CURDATE()
-        `;
-    } else if (period === 'MONTH') {
-      querySelect = `
-        SELECT * FROM transactions AS t 
-        JOIN categories AS c ON c.categoryId = t.categoryId 
-        WHERE t.userId = ${req.params.id}
-        AND MONTH(t.date) = MONTH(CURDATE()) AND
-        YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date <= CURDATE()`;
-    }
-  } else {
-    querySelect = `
-      SELECT * FROM transactions AS t 
-      JOIN categories AS c ON c.categoryId = t.categoryId 
-      WHERE t.userId = ${req.params.id}`;
-  }
-
-  pool.query(querySelect, (error, results) => {
-    if (error) throw error;
-    if (results.length < 1) {
-      res.status(404).json({ error: 'No results were found.' });
+        t.date <= CURDATE() `;
     } else {
-      res.json(results);
+      badRequest = true;
+      res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
-  });
+  }
+  if (!badRequest) {
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.' });
+      } else {
+        res.json(results);
+      }
+    });
+  }
 });
 
 /**
  * GET route for budget info by category for a user.
+ * Endpoint: /api/users/{userid}/categories
+ * Optional Query Parameters:
+ *   period
+ *    values: WEEK, MONTH
+ *    default: MONTH
  * Response format:
  *    [
  *      {
@@ -78,101 +81,34 @@ app.get('/api/users/:id/transactions', (req, res) => {
  *    ]
  */
 app.get('/api/users/:id/categories', (req, res) => {
-  let sql;
   let badRequest = false;
-  if (req.query.period) {
-    let { period } = req.query;
-    period = period.toUpperCase();
-
-    if (period === 'WEEK') {
-      sql = `
-        SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-        JOIN categories ON transactions.categoryId = categories.categoryId
-        WHERE transactions.userId = ${req.params.id} AND 
-          WEEK(transactions.date) = WEEK(CURDATE()) AND
-          YEAR(transactions.date) = YEAR(CURDATE()) AND
-          transactions.date <= CURDATE()
-        GROUP BY categories.displayName
-      `;
-    } else if (period === 'MONTH') {
-      sql = `
-        SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-        JOIN categories ON transactions.categoryId = categories.categoryId
-        WHERE transactions.userId = ${req.params.id} AND 
-          MONTH(transactions.date) = MONTH(CURDATE()) AND
-          YEAR(transactions.date) = YEAR(CURDATE()) AND
-          transactions.date <= CURDATE()
-        GROUP BY categories.displayName
-      `;
-    } else {
-      badRequest = true;
-      res.status(400).json({ error: 'Bad Request. Invalid period.' });
-    }
-  } else {
-    sql = `
-      SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-      JOIN categories ON transactions.categoryId = categories.categoryId
-      WHERE transactions.userId = ${req.params.id} AND 
-        MONTH(transactions.date) = MONTH(CURDATE()) AND
-        YEAR(transactions.date) = YEAR(CURDATE()) AND
-        transactions.date <= CURDATE()
-      GROUP BY categories.displayName
-  `;
-  }
+  let sql;
+  ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
 
   if (!badRequest) {
-    let res1 = [];
+    let groups = [];
     pool.getConnection((err, conn) => {
       if (err) throw err;
 
       conn.query(sql, (error, results) => {
         if (error) throw error;
-
-        res1 = results;
-        res1.forEach((result, key) => {
-          res1[key].id = result.id.split(',').map(Number);
-        });
-        res1 = results;
+        groups = results;
       });
 
       sql = `
-      SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
-      JOIN categories ON categories.categoryId = budgets.categoryId
-      WHERE budgets.userId = ${req.params.id}
-      GROUP BY categories.displayName
-    `;
+        SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
+        JOIN categories ON categories.categoryId = budgets.categoryId
+        WHERE budgets.userId = ${req.params.id}
+        GROUP BY categories.displayName `;
 
       conn.query(sql, (error, results) => {
         if (error) throw err;
         if (results.length < 1) {
           res.status(404).json({ error: 'No results were found.' });
         } else {
-          const out = [];
-          results.forEach((result) => {
-            let found = false;
-            res1.forEach((group) => {
-              if (result.displayName === group.displayName) {
-                found = true;
-                out.push({
-                  budget: result.budget,
-                  spend: group.spend,
-                  displayName: result.displayName,
-                  id: result.id.split(',').map(Number),
-                });
-              }
-            });
-            if (!found) {
-              out.push({
-                budget: result.budget,
-                spend: 0,
-                displayName: result.displayName,
-                id: result.id.split(',').map(Number),
-              });
-            }
-          });
           conn.release();
           if (error) throw error;
-          res.json(out);
+          res.json(generateCategoryObjects(results, groups));
         }
       });
     });
