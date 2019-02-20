@@ -63,12 +63,12 @@ class Feed extends React.Component {
       <>
         <Header
           title="Transactions"
-          sortBy={sortBy}
         />
         <Wrapper>
           <InfoHeader
             sortingByAmount={sortingByAmount}
             sortingByDate={sortingByDate}
+            sortBy={sortBy}
           />
           <ListWrapper>
             <AutoSizer>
