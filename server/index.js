@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const pool = require('./database');
+const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
 
 const app = express();
 
@@ -81,81 +82,33 @@ app.get('/api/users/:id/transactions', (req, res) => {
  */
 app.get('/api/users/:id/categories', (req, res) => {
   let badRequest = false;
-  let sql = `
-    SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-    JOIN categories ON transactions.categoryId = categories.categoryId
-    WHERE transactions.userId = ${req.params.id} `;
-
-  let period = 'MONTH';
-
-  if (req.query.period) {
-    ({ period } = req.query);
-    period = period.toUpperCase();
-    if (period !== 'WEEK' && period !== 'MONTH') {
-      badRequest = true;
-      res.status(400).json({ error: 'Bad Request. Invalid period.' });
-    }
-  }
-
-  sql += `
-    AND ${period}(transactions.date) = ${period}(CURDATE()) 
-    AND YEAR(transactions.date) = YEAR(CURDATE())  
-    AND transactions.date <= CURDATE()
-    GROUP BY categories.displayName `;
+  let sql;
+  ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
 
   if (!badRequest) {
-    let res1 = [];
+    let groups = [];
     pool.getConnection((err, conn) => {
       if (err) throw err;
 
       conn.query(sql, (error, results) => {
         if (error) throw error;
-
-        res1 = results;
-        res1.forEach((result, key) => {
-          res1[key].id = result.id.split(',').map(Number);
-        });
-        res1 = results;
+        groups = results;
       });
 
       sql = `
-      SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
-      JOIN categories ON categories.categoryId = budgets.categoryId
-      WHERE budgets.userId = ${req.params.id}
-      GROUP BY categories.displayName
-    `;
+        SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
+        JOIN categories ON categories.categoryId = budgets.categoryId
+        WHERE budgets.userId = ${req.params.id}
+        GROUP BY categories.displayName `;
 
       conn.query(sql, (error, results) => {
         if (error) throw err;
         if (results.length < 1) {
           res.status(404).json({ error: 'No results were found.' });
         } else {
-          const out = [];
-          results.forEach((result) => {
-            let found = false;
-            res1.forEach((group) => {
-              if (result.displayName === group.displayName) {
-                found = true;
-                out.push({
-                  budget: result.budget,
-                  spend: group.spend,
-                  displayName: result.displayName,
-                  id: result.id.split(',').map(Number),
-                });
-              }
-            });
-            if (!found) {
-              out.push({
-                budget: result.budget,
-                spend: 0,
-                displayName: result.displayName,
-                id: result.id.split(',').map(Number),
-              });
-            }
-          });
           conn.release();
           if (error) throw error;
-          res.json(out);
+          res.json(generateCategoryObjects(results, groups));
         }
       });
     });
