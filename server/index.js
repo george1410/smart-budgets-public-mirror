@@ -28,27 +28,22 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *   ]
  */
 app.get('/api/users/:id/transactions', (req, res) => {
-  let sql;
+  let sql = `
+    SELECT * FROM transactions AS t 
+    JOIN categories AS c ON c.categoryId = t.categoryId 
+    WHERE t.userId = ${req.params.id} `;
+
   if (req.query.period) {
     let { period } = req.query;
     period = period.toUpperCase();
     if (period === 'WEEK' || period === 'MONTH') {
-      sql = `
-        SELECT * FROM transactions AS t 
-        JOIN categories AS c ON c.categoryId = t.categoryId 
-        WHERE t.userId = ${req.params.id}
+      sql += `
         AND ${period}(t.date) = ${period}(CURDATE()) AND
         YEAR(t.date) = YEAR(CURDATE()) AND
-        t.date <= CURDATE()
-        `;
+        t.date <= CURDATE() `;
     } else {
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
-  } else {
-    sql = `
-      SELECT * FROM transactions AS t 
-      JOIN categories AS c ON c.categoryId = t.categoryId 
-      WHERE t.userId = ${req.params.id}`;
   }
 
   pool.query(sql, (error, results) => {
