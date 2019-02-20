@@ -41,6 +41,8 @@ app.get('/api/users/:id/transactions', (req, res) => {
         YEAR(t.date) = YEAR(CURDATE()) AND
         t.date <= CURDATE()
         `;
+    } else {
+      res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
   } else {
     sql = `
