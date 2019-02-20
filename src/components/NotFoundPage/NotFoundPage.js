@@ -56,7 +56,7 @@ const StyledLink = styled(Link)`
   }
 
   &:active {
-    transform: translate(-50%, -35%);
+    transform: translate(-50%, -45%);
   }
 `;
 

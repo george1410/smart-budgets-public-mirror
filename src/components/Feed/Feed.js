@@ -7,6 +7,9 @@ import 'react-virtualized/styles.css';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
+import InfoHeader from './InfoHeader';
+import selectTransactions from '../../selectors/transactions';
+import { sortByDate, sortByAmount } from '../../actions/filters';
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,6 +25,7 @@ const Wrapper = styled.div`
 
 const StyledList = styled(VirtualList)`
   height: calc(100vh - 10rem);
+  outline: none;
 `;
 
 const ListWrapper = styled.div`
@@ -30,9 +34,13 @@ const ListWrapper = styled.div`
   ${media.tablet`
     height: calc(100vh - 10rem);
   `}
+
+  & > div > div::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
-class Feed extends React.PureComponent {
+class Feed extends React.Component {
   renderRowVirtual = ({ index, key, style }) => {
     const { transactions } = this.props;
     const transaction = transactions[index];
@@ -47,12 +55,39 @@ class Feed extends React.PureComponent {
     );
   }
 
+  sortByAmountOnClick = () => {
+    const { filters, sortingByAmount } = this.props;
+    const sortOrder = filters.sortByAmount === 'greatest' ? 'smallest' : 'greatest';
+    sortingByAmount(sortOrder);
+  };
+
+  sortByDateOnClick = () => {
+    const { filters, sortingByDate } = this.props;
+    const sortOrder = filters.sortByDate === 'greatest' ? 'smallest' : 'greatest';
+    sortingByDate(sortOrder);
+  };
+
+  getSortIndicatorInfo = () => {
+    const { filters } = this.props;
+    return {
+      date: filters.sortByDate,
+      amount: filters.sortByAmount,
+    };
+  }
+
   render() {
     const { transactions } = this.props;
     return (
       <>
-        <Header title="Transactions" />
+        <Header
+          title="Transactions"
+        />
         <Wrapper>
+          <InfoHeader
+            sortingByAmount={this.sortByAmountOnClick}
+            sortingByDate={this.sortByDateOnClick}
+            indicators={this.getSortIndicatorInfo()}
+          />
           <ListWrapper>
             <AutoSizer>
               {
@@ -63,6 +98,8 @@ class Feed extends React.PureComponent {
                   rowHeight={70}
                   rowRenderer={this.renderRowVirtual}
                   rowCount={transactions.length}
+                  // forces re-render as the list can see that data has changed
+                  data={transactions}
                 />
               )
               }
@@ -76,14 +113,30 @@ class Feed extends React.PureComponent {
 
 Feed.defaultProps = {
   transactions: [],
+  filters: {
+    sortByDate: 1,
+    sortByAmount: 0,
+  },
 };
 
 Feed.propTypes = {
   transactions: PropTypes.instanceOf(Array),
+  sortingByAmount: PropTypes.func.isRequired,
+  sortingByDate: PropTypes.func.isRequired,
+  filters: PropTypes.shape({
+    sortByDate: PropTypes.string,
+    sortByAmount: PropTypes.string,
+  }),
 };
 
 const mapStateToProps = state => ({
-  transactions: state.transactions,
+  transactions: selectTransactions(state.transactions, state.filters),
+  filters: state.filters,
 });
 
-export default connect(mapStateToProps)(Feed);
+const mapDispatchToProps = dispatch => ({
+  sortingByDate: order => dispatch(sortByDate(order)),
+  sortingByAmount: order => dispatch(sortByAmount(order)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feed);

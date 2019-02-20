@@ -9,6 +9,7 @@ import authReducer from '../reducers/authReducer';
 import categoriesReducer from '../reducers/categoriesReducer';
 import statusReducer from '../reducers/statusReducer';
 import transactionsReducer from '../reducers/transactionsReducer';
+import filtersReducer from '../reducers/filtersReducers';
 
 /* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -20,6 +21,7 @@ export default () => createStore(
     categories: categoriesReducer,
     status: statusReducer,
     transactions: transactionsReducer,
+    filters: filtersReducer,
   }),
   composeEnhancers(applyMiddleware(reduxThunk)),
 );
