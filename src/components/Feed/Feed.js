@@ -9,6 +9,7 @@ import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
 import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
+import { sortByDate, sortByAmount } from '../../actions/filters';
 
 const Wrapper = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const ListWrapper = styled.div`
   }
 `;
 
-class Feed extends React.PureComponent {
+class Feed extends React.Component {
   renderRowVirtual = ({ index, key, style }) => {
     const { transactions } = this.props;
     const transaction = transactions[index];
@@ -55,12 +56,20 @@ class Feed extends React.PureComponent {
   }
 
   render() {
-    const { transactions } = this.props;
+    const {
+      transactions, sortingByAmount, sortingByDate, filters: { sortBy },
+    } = this.props;
     return (
       <>
-        <Header title="Transactions" />
+        <Header
+          title="Transactions"
+          sortBy={sortBy}
+        />
         <Wrapper>
-          <InfoHeader />
+          <InfoHeader
+            sortingByAmount={sortingByAmount}
+            sortingByDate={sortingByDate}
+          />
           <ListWrapper>
             <AutoSizer>
               {
@@ -71,7 +80,8 @@ class Feed extends React.PureComponent {
                   rowHeight={70}
                   rowRenderer={this.renderRowVirtual}
                   rowCount={transactions.length}
-                  // style={{ outline: 'none' }}
+                  // forces re-render as the list can see that data has changed
+                  data={transactions}
                 />
               )
               }
@@ -85,14 +95,26 @@ class Feed extends React.PureComponent {
 
 Feed.defaultProps = {
   transactions: [],
+  filters: { sortBy: 'date' },
 };
 
 Feed.propTypes = {
   transactions: PropTypes.instanceOf(Array),
+  sortingByAmount: PropTypes.func.isRequired,
+  sortingByDate: PropTypes.func.isRequired,
+  filters: PropTypes.shape({
+    sortBy: PropTypes.string,
+  }),
 };
 
 const mapStateToProps = state => ({
   transactions: selectTransactions(state.transactions, state.filters),
+  filters: state.filters,
 });
 
-export default connect(mapStateToProps)(Feed);
+const mapDispatchToProps = dispatch => ({
+  sortingByDate: () => dispatch(sortByDate()),
+  sortingByAmount: () => dispatch(sortByAmount()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Feed);

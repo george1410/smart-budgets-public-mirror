@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
@@ -16,13 +17,19 @@ const Wrapper = styled.div`
 
 const Label = styled.div`
   color: ${props => props.theme.primaryBlue};
+  cursor: pointer;
 `;
 
-const InfoHeader = () => (
+const InfoHeader = ({ sortingByDate, sortingByAmount }) => (
   <Wrapper>
-    <Label>Date</Label>
-    <Label>Amount</Label>
+    <Label onClick={sortingByDate}>Date</Label>
+    <Label onClick={sortingByAmount}>Amount</Label>
   </Wrapper>
 );
+
+InfoHeader.propTypes = {
+  sortingByDate: PropTypes.func.isRequired,
+  sortingByAmount: PropTypes.func.isRequired,
+};
 
 export default InfoHeader;

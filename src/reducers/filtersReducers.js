@@ -1,21 +1,20 @@
 import { SORT_BY_DATE, SORT_BY_AMOUNT } from '../actions/types';
 
 const defaultFilterState = {
-  sortByAmount: false,
-  sortByDate: true,
+  sortBy: 'date',
 };
 
-export default (state = defaultFilterState, action) => {
-  switch (action.type) {
+export default (state = defaultFilterState, { type }) => {
+  switch (type) {
     case SORT_BY_DATE:
       return {
         ...state,
-        sortByDate: !state.filters.sortByDate,
+        sortBy: 'date',
       };
     case SORT_BY_AMOUNT:
       return {
         ...state,
-        sortByAmount: !state.filters.sortByAmount,
+        sortBy: 'amount',
       };
     default:
       return state;
