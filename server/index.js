@@ -80,37 +80,28 @@ app.get('/api/users/:id/transactions', (req, res) => {
  *    ]
  */
 app.get('/api/users/:id/categories', (req, res) => {
-  let sql;
   let badRequest = false;
-  if (req.query.period) {
-    let { period } = req.query;
-    period = period.toUpperCase();
+  let sql = `
+    SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
+    JOIN categories ON transactions.categoryId = categories.categoryId
+    WHERE transactions.userId = ${req.params.id} `;
 
-    if (period === 'WEEK' || period === 'MONTH') {
-      sql = `
-        SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-        JOIN categories ON transactions.categoryId = categories.categoryId
-        WHERE transactions.userId = ${req.params.id} AND 
-          ${period}(transactions.date) = ${period}(CURDATE()) AND
-          YEAR(transactions.date) = YEAR(CURDATE()) AND
-          transactions.date <= CURDATE()
-        GROUP BY categories.displayName
-      `;
-    } else {
+  let period = 'MONTH';
+
+  if (req.query.period) {
+    ({ period } = req.query);
+    period = period.toUpperCase();
+    if (period !== 'WEEK' && period !== 'MONTH') {
       badRequest = true;
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
-  } else {
-    sql = `
-      SELECT SUM(transactions.amount) AS spend, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id, transactions.date FROM transactions
-      JOIN categories ON transactions.categoryId = categories.categoryId
-      WHERE transactions.userId = ${req.params.id} AND 
-        MONTH(transactions.date) = MONTH(CURDATE()) AND
-        YEAR(transactions.date) = YEAR(CURDATE()) AND
-        transactions.date <= CURDATE()
-      GROUP BY categories.displayName
-  `;
   }
+
+  sql += `
+    AND ${period}(transactions.date) = ${period}(CURDATE()) 
+    AND YEAR(transactions.date) = YEAR(CURDATE())  
+    AND transactions.date <= CURDATE()
+    GROUP BY categories.displayName `;
 
   if (!badRequest) {
     let res1 = [];
