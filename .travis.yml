@@ -7,9 +7,9 @@ cache:
     - node_modules
 
 stages:
-  - lint
+  - name: lint
     if: branch = master
-  - build
+  - name: build
     if: branch = master
   - name: deploy
     if: type = push AND branch = master
