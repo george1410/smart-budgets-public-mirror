@@ -45,7 +45,7 @@ const InfoHeader = ({ sortingByDate, sortingByAmount, sortBy }) => (
 InfoHeader.propTypes = {
   sortingByDate: PropTypes.func.isRequired,
   sortingByAmount: PropTypes.func.isRequired,
-  sortBy: PropTypes.string.isRequired,
+  // sortBy: PropTypes.string.isRequired,
 };
 
 export default InfoHeader;

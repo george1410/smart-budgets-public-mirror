@@ -55,9 +55,21 @@ class Feed extends React.Component {
     );
   }
 
+  sortByAmountOnClick = () => {
+    const { filters, sortingByAmount } = this.props;
+    const sortOrder = filters.sortByAmount === 'greatest' ? 'smallest' : 'greatest';
+    sortingByAmount(sortOrder);
+  };
+
+  sortByDateOnClick = () => {
+    const { filters, sortingByDate } = this.props;
+    const sortOrder = filters.sortByDate === 'greatest' ? 'smallest' : 'greatest';
+    sortingByDate(sortOrder);
+  };
+
   render() {
     const {
-      transactions, sortingByAmount, sortingByDate, filters: { sortBy },
+      transactions, filters,
     } = this.props;
     return (
       <>
@@ -66,9 +78,9 @@ class Feed extends React.Component {
         />
         <Wrapper>
           <InfoHeader
-            sortingByAmount={sortingByAmount}
-            sortingByDate={sortingByDate}
-            sortBy={sortBy}
+            sortingByAmount={this.sortByAmountOnClick}
+            sortingByDate={this.sortByDateOnClick}
+            filters={filters}
           />
           <ListWrapper>
             <AutoSizer>
@@ -95,7 +107,10 @@ class Feed extends React.Component {
 
 Feed.defaultProps = {
   transactions: [],
-  filters: { sortBy: 'date' },
+  filters: {
+    sortByDate: 1,
+    sortByAmount: 0,
+  },
 };
 
 Feed.propTypes = {
@@ -103,7 +118,8 @@ Feed.propTypes = {
   sortingByAmount: PropTypes.func.isRequired,
   sortingByDate: PropTypes.func.isRequired,
   filters: PropTypes.shape({
-    sortBy: PropTypes.string,
+    sortByDate: PropTypes.string,
+    sortByAmount: PropTypes.string,
   }),
 };
 
@@ -113,8 +129,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  sortingByDate: () => dispatch(sortByDate()),
-  sortingByAmount: () => dispatch(sortByAmount()),
+  sortingByDate: order => dispatch(sortByDate(order)),
+  sortingByAmount: order => dispatch(sortByAmount(order)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);
