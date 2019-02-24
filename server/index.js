@@ -14,6 +14,9 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *   period
  *    values: WEEK, MONTH
  *    default: All transactions
+ *    category
+ *      values: 1<=value<=61
+ *      default: All transactions
  * Response format:
  *   [
  *     {
@@ -46,6 +49,15 @@ app.get('/api/users/:id/transactions', (req, res) => {
     } else {
       badRequest = true;
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
+    }
+  }
+  if (req.query.category) {
+    const { category } = req.query;
+    if (category >= 1 || category <= 61) {
+      sql += `AND t.categoryId = ${category}`;
+    } else {
+      badRequest = true;
+      res.status(400).json({ error: `Bad Request. Invalid categoryId.${category}` });
     }
   }
   if (!badRequest) {
