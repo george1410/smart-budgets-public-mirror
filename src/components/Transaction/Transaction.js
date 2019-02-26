@@ -20,15 +20,21 @@ numeral.locale('en-gb');
 const Wrapper = styled.div`
   display: flex;
   background-color: rgba(245, 245, 245, 0.5);
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-  margin: 0 auto;
+  box-shadow: 0 1px 0 ${props => props.theme.shadowCol};
+  align-self: center;
+  margin-left: 30vw;
   justify-content: space-between;
   align-items: center;
   padding: 0 2rem;
   height: 70px;
   width: 50rem;
+  ${media.tablet`
+    margin: 0 auto;
+    float: none;
+  `}
   ${media.phone`
     width: 100%;
+    padding: 0 1rem;
   `}
 `;
 
@@ -79,9 +85,9 @@ const Category = styled.div`
 `;
 
 const Transaction = ({
-  date, merchant, amount, displayName,
+  date, merchant, amount, displayName, shouldShift,
 }) => (
-  <Wrapper>
+  <Wrapper shouldShift={shouldShift}>
     <EndLabel>{moment(date).format('DD-MM-YYYY')}</EndLabel>
     <Middle>
       <Merchant>{merchant.toLowerCase()}</Merchant>
@@ -96,6 +102,7 @@ Transaction.propTypes = {
   merchant: PropTypes.string.isRequired,
   amount: PropTypes.number.isRequired,
   displayName: PropTypes.string.isRequired,
+  shouldShift: PropTypes.bool.isRequired,
 };
 
 export default Transaction;

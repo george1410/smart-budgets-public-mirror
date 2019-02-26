@@ -9,10 +9,16 @@ const Wrapper = styled.div`
   font-size: ${props => props.theme.fontSmall};
   justify-content: space-between;
   align-items: center;
+  align-self: flex-start;
+  margin-left: 30vw;
   width: 50rem;
   height: 5rem;
   padding: 0 2rem;
   box-shadow: 0 1px 0 ${props => props.theme.primaryBlue};
+  ${media.tablet`
+    align-self: center;
+    margin-left: 0;
+  `}
   ${media.phone`
     width: 100%;
   `}
@@ -25,8 +31,10 @@ const Label = styled.div`
   flex-direction: row;
 `;
 
-const InfoHeader = ({ sortingByDate, sortingByAmount, indicators }) => (
-  <Wrapper>
+const InfoHeader = ({
+  sortingByDate, sortingByAmount, indicators, shouldShift,
+}) => (
+  <Wrapper shouldShift={shouldShift}>
     <Label onClick={sortingByDate}>
       Date
       <SortingIcon
@@ -49,6 +57,7 @@ InfoHeader.propTypes = {
     date: PropTypes.oneOf([undefined, 'greatest', 'smallest']),
     amount: PropTypes.oneOf([undefined, 'greatest', 'smallest']),
   }).isRequired,
+  shouldShift: PropTypes.bool.isRequired,
 };
 
 export default InfoHeader;

@@ -10,7 +10,7 @@ const NavigationBar = styled.nav`
   display: flex;
   position: fixed;
   background-color: ${props => props.theme.white};
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 1px ${props => props.theme.shadowCol};
   align-items: center;
   width: 100%;
   height: 5rem;
@@ -18,7 +18,7 @@ const NavigationBar = styled.nav`
   ${media.tablet`
     position: fixed;
     background-color: ${props => props.theme.white};
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -1px 0 ${props => props.theme.shadowCol};
     justify-content: space-around;
     width: 100%;
     height: 5rem;

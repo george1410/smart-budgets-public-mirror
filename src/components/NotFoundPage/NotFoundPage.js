@@ -48,12 +48,7 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   border-bottom: 1px solid #000;
   transition: background-color 0.2s ease-in-out;
-
-  &:hover {
-    background-color: ${props => props.theme.primaryBlue};
-    color: #fff;
-    border-bottom: 1px solid ${props => props.theme.primaryBlue};
-  }
+  user-select: none;
 
   &:active {
     transform: translate(-50%, -45%);
@@ -62,7 +57,7 @@ const StyledLink = styled(Link)`
 
 const index = () => (
   <Wrapper>
-    <Message>This is not the page you are looking for</Message>
+    <Message>This is not the page you are looking for.</Message>
     <FourOhFour>
       <div>4</div>
       <div>0</div>
