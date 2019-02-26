@@ -8,6 +8,7 @@
     "history": "^4.7.2",
     "moment": "^2.24.0",
     "mysql": "^2.16.0",
+    "nodemon": "^1.18.10",
     "numeral": "^2.0.6",
     "prop-types": "^15.6.2",
     "react": "^16.7.0",
@@ -27,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "server": "node server",
-    "start": "concurrently \"npm run server\" \"npm run client\""
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server-dev": "nodemon server"
   },
   "proxy": "http://localhost:8080",
   "eslintConfig": {

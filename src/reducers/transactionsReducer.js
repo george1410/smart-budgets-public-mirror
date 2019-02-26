@@ -1,8 +1,8 @@
 import { SET_TRANSACTIONS } from '../actions/types';
 
-const defaultState = [];
+export const defaultTransactionsState = [];
 
-export default (state = defaultState, action) => {
+export default (state = defaultTransactionsState, action) => {
   switch (action.type) {
     case SET_TRANSACTIONS:
       return action.transactions;

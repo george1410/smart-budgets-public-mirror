@@ -56,15 +56,13 @@ class Feed extends React.Component {
   }
 
   sortByAmountOnClick = () => {
-    const { filters, sortingByAmount } = this.props;
-    const sortOrder = filters.sortByAmount === 'greatest' ? 'smallest' : 'greatest';
-    sortingByAmount(sortOrder);
+    const { sortingByAmount } = this.props;
+    sortingByAmount();
   };
 
   sortByDateOnClick = () => {
-    const { filters, sortingByDate } = this.props;
-    const sortOrder = filters.sortByDate === 'greatest' ? 'smallest' : 'greatest';
-    sortingByDate(sortOrder);
+    const { sortingByDate } = this.props;
+    sortingByDate();
   };
 
   getSortIndicatorInfo = () => {
@@ -135,8 +133,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  sortingByDate: order => dispatch(sortByDate(order)),
-  sortingByAmount: order => dispatch(sortByAmount(order)),
+  sortingByDate: () => dispatch(sortByDate()),
+  sortingByAmount: () => dispatch(sortByAmount()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

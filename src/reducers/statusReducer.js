@@ -1,6 +1,6 @@
 import { IS_LOADING, HAS_ERRORED } from '../actions/types';
 
-const defaultStatusState = {
+export const defaultStatusState = {
   isLoading: false,
   hasErrored: false,
 };

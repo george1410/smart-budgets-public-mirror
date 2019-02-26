@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import media from '../../util/mediaQueries';
-import SortIcon from './SortingIcon';
+import SortingIcon from './SortingIcon';
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,12 +29,12 @@ const InfoHeader = ({ sortingByDate, sortingByAmount, indicators }) => (
   <Wrapper>
     <Label onClick={sortingByDate}>
       Date
-      <SortIcon
+      <SortingIcon
         show={indicators.date}
       />
     </Label>
     <Label onClick={sortingByAmount}>
-      <SortIcon
+      <SortingIcon
         show={indicators.amount}
       />
       Amount

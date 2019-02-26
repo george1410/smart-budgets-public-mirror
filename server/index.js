@@ -8,7 +8,34 @@ const app = express();
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
 /**
- * GET route for transcation info for a user.
+ * GET route for various user info.
+ * Endpoint: /api/users/{userid}
+ * Response format:
+ *   [
+ *     {
+ *       "firstName": "John",
+ *       "lastName": "Doe",
+ *       "email": "example@email.com",
+ *       "period": "MONTH"
+ *    }
+ *  ]
+ */
+
+app.get('/api/users/:id', (req, res) => {
+  const sql = `
+    SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
+  pool.query(sql, (error, results) => {
+    if (error) throw error;
+    if (results.length < 1) {
+      res.status(404).json({ error: 'No results were found.' });
+    } else {
+      res.json(results[0]);
+    }
+  });
+});
+
+/**
+ * GET route for transaction info for a user.
  * Endpoint: /api/users/{userid}/transactions
  * Optional Query Parameters:
  *   period
@@ -28,6 +55,7 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *     }, ...
  *   ]
  */
+
 app.get('/api/users/:id/transactions', (req, res) => {
   let badRequest = false;
   let sql = `
@@ -80,6 +108,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
  *      }, ...
  *    ]
  */
+
 app.get('/api/users/:id/categories', (req, res) => {
   let badRequest = false;
   let sql;
