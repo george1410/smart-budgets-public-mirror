@@ -6,28 +6,50 @@ import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
 import { setFilterCategory } from '../../actions/filters';
 
+/*
+Calculations for CSS:
+  Transaction has width of 50rem;
+  gutter between the filter component and the list is 2 rem
+  on screens > 992px the list will be centered, otherwise:
+    the half of (100vw - filter - gutter - list) will be
+    left and right margins. i.e.:
+    vw > 992px:
+    max:30rem-2rem-centered Transactions list
+    Desktop:
+    marginLeft-20rem-2rem-50rem-marginRight
+    Tablet:
+    Filter component occupies "full screen"
+ */
+
 const Wrapper = styled.div`
   display: flex;
-  left: 5vw;
+  right: calc((100vw - 50rem) / 2 + 52rem);
+  margin-left: 2rem;
   top: 10rem;
   position: absolute;
-  width: 20vw;
+  max-width: 30rem;
   flex-direction: column;
   background-color: ${props => props.theme.primaryBlue};
-  padding: 1rem 0;
+  padding: 1rem 1rem;
   align-items: center;
   justify-content: flex-end;
   height: auto;
+  ${media.desktop`
+    right: calc((100vw - 72rem) / 2 + 52rem);
+    margin-left: calc((100vw - 72rem) / 2);
+  `}
   ${media.tablet`
+    right: auto;
+    margin-left: auto;
+    max-width: 100%;
+    padding: 1rem 5rem;
     visibility: ${props => (props.visible ? 'visible' : 'hidden')};
     opacity: ${props => (props.visible ? '100' : '0')};
     background-color: ${props => props.theme.white};
-    transition: all 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out;
     position: fixed;
-    width: 100%;
     height: calc(100vh - 10rem);
     top: auto;
-    left: auto;
     bottom: 5rem;
   `}
 `;
@@ -43,6 +65,7 @@ const Title = styled.div`
   font-size: ${props => props.theme.fontMedium};
   color: ${props => props.theme.white};
   margin-bottom: 1rem;
+  user-select: none;
   ${media.tablet`
     color: ${props => props.theme.black};
   `}
@@ -50,17 +73,22 @@ const Title = styled.div`
 
 const GroupName = styled.div`
   font-size: ${props => props.theme.fontSmall};
+  width: 100%;
+  padding-bottom: 2px;
+  text-align: center;
   border-bottom: 1px solid ${props => props.theme.white};
   color: ${props => props.theme.white};
+  user-select: none;
   ${media.tablet`
+    border-bottom: 1px solid ${props => props.theme.greyLightest};
     color: ${props => props.theme.black};
-    border-bottom: 1px solid ${props => props.theme.black};
   `}
 `;
 
 const Apply = styled.button`
   outline: none;
   font-size: ${props => props.theme.fontSmall};
+  font-weight: 500;
   border: 1px solid ${props => props.theme.primaryBlue};
   background-color: ${props => props.theme.primaryBlue};
   color: ${props => props.theme.white};

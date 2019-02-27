@@ -23,6 +23,7 @@ const Wrapper = styled.header`
 const Title = styled.span`
   color: ${props => props.theme.primaryBlue};
   font-size: ${props => props.theme.fontSmall};
+  user-select: none;
 `;
 
 const Search = styled.div`

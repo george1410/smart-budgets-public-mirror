@@ -4,20 +4,25 @@ import PropTypes from 'prop-types';
 import media from '../../util/mediaQueries';
 import SortingIcon from './SortingIcon';
 
+// for margin-rigth calcs look at FilterDrawer
+
 const Wrapper = styled.div`
   display: flex;
   font-size: ${props => props.theme.fontSmall};
   justify-content: space-between;
   align-items: center;
-  align-self: flex-start;
-  margin-left: 30vw;
+  align-self: flex-end;
+  margin-right: calc((100vw - 50rem) / 2);
   width: 50rem;
   height: 5rem;
   padding: 0 2rem;
   box-shadow: 0 1px 0 ${props => props.theme.primaryBlue};
+  ${media.desktop`
+    margin-right: calc((100vw - 72rem) / 2);
+  `}
   ${media.tablet`
     align-self: center;
-    margin-left: 0;
+    margin-right: 0;
   `}
   ${media.phone`
     width: 100%;
@@ -29,6 +34,7 @@ const Label = styled.div`
   cursor: pointer;
   display: flex;
   flex-direction: row;
+  user-select: none;
 `;
 
 const InfoHeader = ({

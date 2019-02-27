@@ -1,8 +1,15 @@
 import {
+  SET_FILTER_CATEGORY,
   SORT_BY_AMOUNT,
   SORT_BY_DATE,
+  TOGGLE_FILTER_DRAWER,
 } from '../types';
-import { sortByDate, sortByAmount } from '../filters';
+import {
+  setFilterCategory,
+  sortByAmount,
+  sortByDate,
+  toggleFilterDrawer,
+} from '../filters';
 
 describe('filter actions', () => {
   it('should generate sortByDate action object', () => {
@@ -20,6 +27,20 @@ describe('filter actions', () => {
     expect(action).toEqual({
       type: SORT_BY_AMOUNT,
       sortByAmountOrder: order,
+    });
+  });
+  it('should generate toggleFilterDrawer action object', () => {
+    const action = toggleFilterDrawer();
+    expect(action).toEqual({
+      type: TOGGLE_FILTER_DRAWER,
+    });
+  });
+  it('should generate setFilterCategory action object', () => {
+    const shownCategories = [1, 2, 3];
+    const action = setFilterCategory(shownCategories);
+    expect(action).toEqual({
+      type: SET_FILTER_CATEGORY,
+      shownCategories,
     });
   });
 });
