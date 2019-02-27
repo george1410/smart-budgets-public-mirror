@@ -8,7 +8,6 @@ import AppRouter from './router/AppRouter';
 import 'sanitize.css/sanitize.css';
 import * as serviceWorker from './serviceWorker';
 import { startSetCategories } from './actions/categories';
-import { startSetTransactions } from './actions/transactions';
 import { startSetUserInfo } from './actions/user';
 
 // creates the store which holds the app's global state.
@@ -23,13 +22,8 @@ const jsx = (
   </ThemeProvider>
 );
 
-// TODO remove
-// log store for debugging
-// store.subscribe(() => console.log(store.getState()));
-
 if (store.getState().auth.uid) {
   store.dispatch(startSetCategories());
-  store.dispatch(startSetTransactions());
   store.dispatch(startSetUserInfo());
 }
 

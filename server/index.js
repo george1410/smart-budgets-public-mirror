@@ -7,6 +7,12 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
+// middleware to log requests
+app.use((req, res, next) => {
+  console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
+  next();
+});
+
 /**
  * GET route for various user info.
  * Endpoint: /api/users/{userid}
@@ -76,13 +82,16 @@ app.get('/api/users/:id/transactions', (req, res) => {
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
   }
+  sql += ` LIMIT ${req.query.start}, ${req.query.count}`;
   if (!badRequest) {
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {
-        res.status(404).json({ error: 'No results were found.' });
+        res.status(404).json({ error: 'No results were found.', hasMore: false });
+      } else if (results.length < req.query.count) {
+        res.json({ transactions: results, hasMore: false });
       } else {
-        res.json(results);
+        res.json({ transactions: results, hasMore: true });
       }
     });
   }

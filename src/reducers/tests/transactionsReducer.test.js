@@ -14,6 +14,6 @@ describe('transactionsReducer tests', () => {
       transactions,
     };
     const state = transactionReducer(undefined, action);
-    expect(state).toEqual(transactions);
+    expect(state.transactions).toEqual(transactions);
   });
 });

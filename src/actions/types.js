@@ -2,6 +2,8 @@ export const HAS_ERRORED = 'HAS_ERRORED';
 
 export const IS_LOADING = 'IS_LOADING';
 
+export const SET_MSG = 'SET_MSG';
+
 export const LOGIN = 'LOGIN';
 
 export const LOGOUT = 'LOGOUT';
@@ -11,6 +13,14 @@ export const SET_USER_INFO = 'SET_USER_INFO';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 
 export const SET_TRANSACTIONS = 'SET_TRANSACTIONS';
+
+export const SET_TRANSACTION_START = 'SET_TRANSACTION_START';
+
+export const TRANSACTION_ERROR = 'TRANSACTION_ERROR';
+
+export const TRANSACTION_LOADING = 'TRANSACTION_LOADING';
+
+export const TRANSACTIONS_HAS_MORE = 'TRANSACTIONS_HAS_MORE';
 
 export const SORT_BY_DATE = 'SORT_BY_DATE';
 
