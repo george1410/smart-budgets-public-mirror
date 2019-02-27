@@ -20,7 +20,7 @@ const Wrapper = styled.div`
 
 const Overview = ({ categories }) => (
   <>
-    <Header title="Overview" />
+    <Header title="Budgets" />
     <Wrapper>
       {
         categories.length === 0 ? (

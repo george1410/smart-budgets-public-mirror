@@ -63,7 +63,7 @@ const index = () => (
       <div>0</div>
       <div>4</div>
     </FourOhFour>
-    <StyledLink to="/social">Back Home</StyledLink>
+    <StyledLink to="/home">Back Home</StyledLink>
   </Wrapper>
 );
 
