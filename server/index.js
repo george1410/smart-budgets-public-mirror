@@ -82,7 +82,8 @@ app.get('/api/users/:id/transactions', (req, res) => {
       res.status(400).json({ error: 'Bad Request. Invalid period.' });
     }
   }
-  sql += ` LIMIT ${req.query.start}, ${req.query.count}`;
+  // if query params not present, for some reason, then default to first 50
+  sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
   if (!badRequest) {
     pool.query(sql, (error, results) => {
       if (error) throw error;
