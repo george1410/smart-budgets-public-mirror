@@ -49,7 +49,7 @@ Overview.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: state.categories,
+  categories: state.categories.categories,
 });
 
 

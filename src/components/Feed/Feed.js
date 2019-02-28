@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AutoSizer, InfiniteLoader, List as VirtualList } from 'react-virtualized';
 import 'react-virtualized/styles.css';
+import { Offline } from 'react-detect-offline';
 import FeedHeader from './FeedHeader';
 import FilterDrawer from './FilterDrawer';
 import media from '../../util/mediaQueries';
@@ -11,7 +12,8 @@ import Transaction from '../Transaction/Transaction';
 import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount, toggleFilterDrawer } from '../../actions/filters';
-import { startSetTransactions } from '../../actions/transactions';
+import { startSetTransactions, setTransactionError } from '../../actions/transactions';
+import OfflineMsg from './OfflineMsg';
 
 const Wrapper = styled.div`
   display: flex;
@@ -40,6 +42,24 @@ const ListWrapper = styled.div`
   }
 `;
 
+const OfflineWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-self: flex-end;
+  margin-right: calc((100vw - 50rem) / 2);
+  ${media.desktop`
+    margin-right: calc((100vw - 72rem) / 2);
+  `}
+  ${media.tablet`
+    align-self: center;
+    margin-right: 0;
+  `}
+  ${media.phone`
+    width: 100%;
+  `}
+`;
+
 class Feed extends React.Component {
   renderRowVirtual = ({ index, key, style }) => {
     const { transactions, filters: { drawerOpen } } = this.props;
@@ -56,7 +76,10 @@ class Feed extends React.Component {
   }
 
   componentWillMount = () => {
-    this.fetchMore();
+    const { transactions } = this.props;
+    if (transactions.length === 0) {
+      this.fetchMore();
+    }
   }
 
   sortByAmountOnClick = () => {
@@ -84,7 +107,9 @@ class Feed extends React.Component {
 
   fetchMore = () => {
     const { fetchTransactions } = this.props;
-    fetchTransactions();
+    if (navigator.onLine) {
+      fetchTransactions();
+    }
   }
 
   isRowLoaded = ({ index }) => {
@@ -93,7 +118,9 @@ class Feed extends React.Component {
   }
 
   render() {
-    const { transactions, filters: { drawerOpen } } = this.props;
+    const {
+      transactions, filters: { drawerOpen },
+    } = this.props;
     return (
       <>
         <FeedHeader
@@ -137,6 +164,11 @@ class Feed extends React.Component {
               }
             </AutoSizer>
           </ListWrapper>
+          <OfflineWrapper>
+            <Offline>
+              <OfflineMsg message="You seem to be offline. Please check your connection." />
+            </Offline>
+          </OfflineWrapper>
         </Wrapper>
         <FilterDrawer />
       </>
@@ -151,6 +183,7 @@ Feed.defaultProps = {
     sortByAmount: 0,
     drawerOpen: false,
   },
+  error: '',
 };
 
 Feed.propTypes = {
@@ -165,12 +198,16 @@ Feed.propTypes = {
   }),
   fetchTransactions: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  dismissError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   transactions: selectTransactions(state.transactions.transactions, state.filters),
   filters: state.filters,
   hasMore: state.transactions.hasMore,
+  isLoading: state.transactions.isLoading,
+  error: state.transactions.error,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -178,6 +215,7 @@ const mapDispatchToProps = dispatch => ({
   sortingByAmount: () => dispatch(sortByAmount()),
   toggleDrawer: () => dispatch(toggleFilterDrawer()),
   fetchTransactions: () => dispatch(startSetTransactions()),
+  dismissError: () => dispatch(setTransactionError(undefined)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);

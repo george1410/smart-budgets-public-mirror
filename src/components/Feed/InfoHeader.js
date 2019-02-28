@@ -14,7 +14,7 @@ const Wrapper = styled.div`
   align-self: flex-end;
   margin-right: calc((100vw - 50rem) / 2);
   width: 50rem;
-  height: 5rem;
+  min-height: 5rem;
   padding: 0 2rem;
   box-shadow: 0 1px 0 ${props => props.theme.primaryBlue};
   ${media.desktop`
