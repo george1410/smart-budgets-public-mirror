@@ -8,10 +8,10 @@ import {
 
 export const defaultTransactionsState = {
   transactions: [],
-  start: 0,
-  count: 50,
-  error: false,
-  loading: false,
+  start: 600,
+  count: 12,
+  error: '',
+  isLoading: false,
   hasMore: true,
 };
 
@@ -37,7 +37,7 @@ export default (state = defaultTransactionsState, action) => {
     case TRANSACTION_LOADING:
       return {
         ...state,
-        loading: action.status,
+        isLoading: action.status,
       };
     case SET_TRANSACTIONS:
       if (state.start === 0) {
