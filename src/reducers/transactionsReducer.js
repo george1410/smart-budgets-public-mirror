@@ -8,14 +8,12 @@ import {
 
 export const defaultTransactionsState = {
   transactions: [],
-  start: 600,
-  count: 12,
+  start: 0,
+  count: 50,
   error: '',
   isLoading: false,
   hasMore: true,
 };
-
-// TODO Support setting messages
 
 export default (state = defaultTransactionsState, action) => {
   switch (action.type) {
