@@ -5,7 +5,6 @@ import {
   TRANSACTION_ERROR,
   TRANSACTION_LOADING,
   TRANSACTIONS_HAS_MORE,
-  SET_MSG,
 } from './types';
 
 export const setTransactions = transactions => ({
@@ -33,31 +32,34 @@ export const setHasMore = status => ({
   status,
 });
 
-export const setTransactionMsg = msg => ({
-  type: SET_MSG,
-  msg,
-});
-
+// fetches transactions from the server, updating all the necessary
+// state variables along the way.
 export const startSetTransactions = () => (dispatch, getState) => {
-  dispatch(setTransactionLoading(true));
   const {
     auth: { uid }, transactions: {
-      start, count, error, hasMore,
+      start, count, hasMore, error,
     },
   } = getState();
-  dispatch(setTransactionStart(start + count));
-  if (!error && hasMore) {
+  if (hasMore && !error) {
+    dispatch(setTransactionLoading(true));
+    // increment the starting point for the next fetch;
+    dispatch(setTransactionStart(start + count));
     axios.get(`api/users/${uid}/transactions`, { params: { start, count } })
       .then((payload) => {
         dispatch(setTransactions(payload.data.transactions));
         dispatch(setTransactionLoading(false));
+        // if less transactions are returned then hasMore will be false
         dispatch(setHasMore(payload.data.hasMore));
       })
-      .catch(({ response }) => {
-        // error object with a message is also returned
+      .catch((err) => {
+        // fetch unsuccessul, set the start back to original value
+        dispatch(setTransactionStart(start));
         dispatch(setTransactionLoading(false));
-        dispatch(setTransactionError(true));
-        dispatch(setHasMore(response.data.hasMore));
+        dispatch(setTransactionError('Could not fetch any transactions. Check your connection.'));
+        if (err.response) {
+          dispatch(setHasMore(err.response.data.hasMore));
+        }
+        // error object with a message is also returned: response.data.message
       });
   }
 };

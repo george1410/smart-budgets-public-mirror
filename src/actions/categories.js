@@ -1,22 +1,31 @@
 import axios from 'axios';
-import { SET_CATEGORIES } from './types';
-import { isLoading, hasErrored } from './status';
+import { SET_CATEGORIES, CATEGORIES_ERROR, CATEGORIES_LOADING } from './types';
 
 export const setCategories = categories => ({
   type: SET_CATEGORIES,
   categories,
 });
 
+export const setCategoriesError = status => ({
+  type: CATEGORIES_ERROR,
+  status,
+});
+export const setCategoriesLoading = status => ({
+  type: CATEGORIES_LOADING,
+  status,
+});
+
+
 export const startSetCategories = () => (dispatch, getState) => {
-  dispatch(isLoading(true));
+  dispatch(setCategoriesLoading(true));
   const { uid } = getState().auth;
   axios.get(`/api/users/${uid}/categories`)
     .then((payload) => {
       dispatch(setCategories(payload.data));
-      dispatch(isLoading(false));
+      dispatch(setCategoriesLoading(false));
     })
     .catch(() => {
-      dispatch(isLoading(false));
-      dispatch(hasErrored(true));
+      dispatch(setCategoriesLoading(false));
+      dispatch(setCategoriesError(true));
     });
 };
