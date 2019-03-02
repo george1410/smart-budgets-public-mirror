@@ -41,6 +41,8 @@ app.get('/api/users/:id', (req, res) => {
  *   period
  *    values: WEEK, MONTH
  *    default: All transactions
+ *   searchTerm
+ *    values: string
  * Response format:
  *   [
  *     {
