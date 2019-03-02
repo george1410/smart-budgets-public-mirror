@@ -6,5 +6,5 @@ require('./services/passport');
 const requireSignin = passport.authenticate('local', { session: false });
 
 module.exports = (app) => {
-  app.post('/auth/signin', requireSignin, Authentication.requireSignin);
+  app.post('/auth/signin', requireSignin, Authentication.signin);
 };
