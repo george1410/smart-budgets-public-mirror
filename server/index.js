@@ -3,9 +3,13 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const apiRouter = require('./apiRouter');
 const authRouter = require('./authRouter');
+const idMatcher = require('./middleware/idMatcher');
+
 
 const app = express();
 app.use(bodyParser.json({ type: '*/*' }));
+
+app.use('/api/users/:id', idMatcher);
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
