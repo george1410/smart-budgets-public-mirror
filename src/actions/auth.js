@@ -2,7 +2,7 @@ import { AUTHENTICATE, AUTH_ERROR, DEAUTHENTICATE } from './types';
 import { startSetTransactions } from './transactions';
 import { startSetCategories } from './categories';
 import { startSetUserInfo } from './user';
-import api from '../api/api';
+import api, { logout, login } from '../api/api';
 
 export const authenticate = payload => ({
   type: AUTHENTICATE,
@@ -13,7 +13,7 @@ export const startSignin = (formProps, cb) => async (dispatch) => {
   try {
     const response = await api.post('/auth/signin', formProps);
     dispatch(authenticate(response.data));
-    localStorage.setItem('token', response.data.token);
+    login(response.data.token);
     localStorage.setItem('uid', response.data.uid);
     dispatch(startSetTransactions());
     dispatch(startSetCategories());
@@ -25,8 +25,7 @@ export const startSignin = (formProps, cb) => async (dispatch) => {
 };
 
 export const signout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('uid');
+  logout();
   return {
     type: DEAUTHENTICATE,
   };

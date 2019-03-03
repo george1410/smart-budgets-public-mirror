@@ -1,5 +1,5 @@
-// Hold application secrets and config
-// the jwt get encoded with this secret
+// Holds application secrets and config
+// the jwt gets encoded with this secret
 module.exports = {
   secret: 'asdakjshdkajshd',
 };

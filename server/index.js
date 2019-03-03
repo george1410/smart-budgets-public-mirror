@@ -1,15 +1,20 @@
 const express = require('express');
+require('dotenv').config();
 const path = require('path');
 const bodyParser = require('body-parser');
 const apiRouter = require('./apiRouter');
 const authRouter = require('./authRouter');
 const idMatcher = require('./middleware/idMatcher');
 
-
 const app = express();
 app.use(bodyParser.json({ type: '*/*' }));
 
-app.use('/api/users/:id', idMatcher);
+// 'server-dev' command sets this env var
+// this makes writing and testing endpoints easier as you
+// dont need to have a jwt set.
+if (!process.env.NO_JWT) {
+  app.use('/api/users/:id', idMatcher);
+}
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 

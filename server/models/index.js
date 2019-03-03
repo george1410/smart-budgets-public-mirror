@@ -2,11 +2,16 @@ const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('smartbudgets', 'smartbudgets', 'capitalone', {
-  host: 'smartbudgets.co6kasjhhncd.eu-west-1.rds.amazonaws.com',
-  dialect: 'mysql',
-  port: 8080,
-});
+const sequelize = new Sequelize(
+  process.env.DB_DATABASE,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+    host: process.env.DB_HOST,
+    dialect: 'mysql',
+    port: process.env.DB_PORT,
+  },
+);
 
 const db = {};
 

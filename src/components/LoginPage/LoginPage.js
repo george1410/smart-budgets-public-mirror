@@ -162,15 +162,15 @@ const Input = styled(Field)`
 
 class LoginPage extends React.Component {
   onSubmit = (formProps) => {
-    const { startSignin, history } = this.props;
-    startSignin(formProps, () => history.push('/home'));
+    const { startSignin: signIn, history } = this.props;
+    signIn(formProps, () => history.push('/home'));
   };
 
   // button to fill with data for development
   onFillFakeLogins = () => {
-    const { change } = this.props;
-    change('email', 'hello@georgemccarron.com');
-    change('password', 'password');
+    const { change: setField } = this.props;
+    setField('email', 'hello@georgemccarron.com');
+    setField('password', 'password');
   }
 
   render() {
@@ -219,9 +219,15 @@ class LoginPage extends React.Component {
   }
 }
 
-// LoginPage.propTypes = {
-//   logIn: PropTypes.func.isRequired,
-// };
+LoginPage.propTypes = {
+  handleSubmit: PropTypes.func.isRequired,
+  change: PropTypes.func.isRequired,
+  errorMsg: PropTypes.string.isRequired,
+  startSignin: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func,
+  }).isRequired,
+};
 
 const mapStateToProps = ({ auth: { error } }) => ({
   errorMsg: error,
