@@ -71,6 +71,14 @@ module.exports = (app) => {
         res.status(400).json({ error: 'Bad Request. Invalid period.' });
       }
     }
+
+    if (req.query.searchTerm) {
+      let { searchTerm } = req.query;
+      searchTerm = searchTerm.toUpperCase();
+      sql += `
+      AND t.merchant LIKE '%${searchTerm}%'`;
+    }
+
     if (!badRequest) {
       pool.query(sql, (error, results) => {
         if (error) throw error;
