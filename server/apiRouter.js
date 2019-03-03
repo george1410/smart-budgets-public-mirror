@@ -1,6 +1,9 @@
+const passport = require('passport');
 const pool = require('./database');
 const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
+require('./services/passport');
 
+const requireAuth = passport.authenticate('jwt', { session: false });
 
 /**
  * GET route for various user info.
@@ -17,7 +20,7 @@ const { generateCategorySpendSql, generateCategoryObjects } = require('./categor
  */
 
 module.exports = (app) => {
-  app.get('/api/users/:id', (req, res) => {
+  app.get('/api/users/:id', requireAuth, (req, res) => {
     const sql = `
         SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
     pool.query(sql, (error, results) => {
@@ -55,8 +58,8 @@ module.exports = (app) => {
   app.get('/api/users/:id/transactions', (req, res) => {
     let badRequest = false;
     let sql = `
-        SELECT * FROM transactions AS t 
-        JOIN categories AS c ON c.categoryId = t.categoryId 
+        SELECT * FROM transactions AS t
+        JOIN categories AS c ON c.categoryId = t.categoryId
         WHERE t.userId = ${req.params.id} `;
 
     if (req.query.period) {
@@ -121,7 +124,7 @@ module.exports = (app) => {
         });
 
         sql = `
-            SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
+            SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets
             JOIN categories ON categories.categoryId = budgets.categoryId
             WHERE budgets.userId = ${req.params.id}
             GROUP BY categories.displayName `;

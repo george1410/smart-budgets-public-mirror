@@ -3,6 +3,7 @@ import { AUTHENTICATE, AUTH_ERROR, DEAUTHENTICATE } from './types';
 import { startSetTransactions } from './transactions';
 import { startSetCategories } from './categories';
 import { startSetUserInfo } from './user';
+import api from '../api/api';
 
 export const authenticate = payload => ({
   type: AUTHENTICATE,
@@ -11,7 +12,7 @@ export const authenticate = payload => ({
 
 export const startSignin = (formProps, cb) => async (dispatch) => {
   try {
-    const response = await axios.post('/auth/signin', formProps);
+    const response = await api.post('/auth/signin', formProps);
     dispatch(authenticate(response.data));
     localStorage.setItem('token', response.data.token);
     localStorage.setItem('uid', response.data.uid);

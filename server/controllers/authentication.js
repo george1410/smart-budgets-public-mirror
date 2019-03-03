@@ -3,7 +3,7 @@ const config = require('../config');
 
 const tokenForUser = (user) => {
   const iat = new Date().getTime();
-  return jwt.sign({ sub: user.id, iat }, config.secret);
+  return jwt.sign({ sub: user.userId, iat }, config.secret);
 };
 
 exports.signin = (req, res) => {
