@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/api';
 import { SET_USER_INFO } from './types';
 import { isLoading, hasErrored } from './status';
 
@@ -10,7 +10,7 @@ export const setUserInfo = userInfo => ({
 export const startSetUserInfo = () => (dispatch, getState) => {
   dispatch(isLoading(true));
   const { uid } = getState().auth;
-  axios.get(`api/users/${uid}`)
+  api.get(`api/users/${uid}`)
     .then((payload) => {
       dispatch(setUserInfo(payload.data));
       dispatch(isLoading(false));

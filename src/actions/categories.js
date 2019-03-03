@@ -1,7 +1,6 @@
-import axios from 'axios';
+import api from '../api/api';
 import { SET_CATEGORIES } from './types';
 import { isLoading, hasErrored } from './status';
-import api from '../api/api';
 
 export const setCategories = categories => ({
   type: SET_CATEGORIES,

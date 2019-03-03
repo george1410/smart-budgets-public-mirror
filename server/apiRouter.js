@@ -1,9 +1,5 @@
-const passport = require('passport');
 const pool = require('./database');
 const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
-require('./services/passport');
-
-const requireAuth = passport.authenticate('jwt', { session: false });
 
 /**
  * GET route for various user info.
@@ -20,7 +16,7 @@ const requireAuth = passport.authenticate('jwt', { session: false });
  */
 
 module.exports = (app) => {
-  app.get('/api/users/:id', requireAuth, (req, res) => {
+  app.get('/api/users/:id', (req, res) => {
     const sql = `
         SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
     pool.query(sql, (error, results) => {

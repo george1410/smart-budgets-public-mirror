@@ -54,17 +54,21 @@ const jwtLogin = new Strategy(jwtOptions, (payload, done) => {
   // see if the user id in the payload exists in our database.
   // if it does, call done with that object.
   // else, call done without a user object.
-  User.findByPk(payload.sub, (err, user) => {
-    // search fails:
-    if (err) { return done(err, false); }
-
-    if (user) {
-      // user found in database
-      return done(null, user);
-    }
-    // did search, but user not found
-    return done(null, false);
-  });
+  try {
+    User.findOne({
+      where: {
+        userId: payload.sub,
+      },
+    }).then((user) => {
+      if (user) {
+        done(null, user);
+      } else {
+        done(null, false);
+      }
+    });
+  } catch (err) {
+    done(err);
+  }
 });
 
 // tell passport to use these strategies

@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { AUTHENTICATE, AUTH_ERROR, DEAUTHENTICATE } from './types';
 import { startSetTransactions } from './transactions';
 import { startSetCategories } from './categories';
