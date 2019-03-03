@@ -23,10 +23,8 @@ const jsx = (
   </ThemeProvider>
 );
 
-// TODO remove
-// log store for debugging
-// store.subscribe(() => console.log(store.getState()));
-
+// if the user has their uid and jwt set from the last session,
+// then just fetch their data.
 if (store.getState().auth.uid) {
   store.dispatch(startSetCategories());
   store.dispatch(startSetTransactions());

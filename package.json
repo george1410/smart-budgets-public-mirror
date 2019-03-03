@@ -26,6 +26,7 @@
     "react-sweet-progress": "^1.1.2",
     "react-virtualized": "^9.21.0",
     "redux": "^4.0.1",
+    "redux-form": "^8.1.0",
     "redux-thunk": "^2.3.0",
     "sanitize.css": "^8.0.0",
     "sequelize": "^4.42.1",

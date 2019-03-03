@@ -2,9 +2,11 @@ export const HAS_ERRORED = 'HAS_ERRORED';
 
 export const IS_LOADING = 'IS_LOADING';
 
-export const LOGIN = 'LOGIN';
+export const AUTHENTICATE = 'AUTHENTICATE';
 
-export const LOGOUT = 'LOGOUT';
+export const DEAUTHENTICATE = 'DEAUTHENTICATE';
+
+export const AUTH_ERROR = 'AUTH_ERROR';
 
 export const SET_USER_INFO = 'SET_USER_INFO';
 

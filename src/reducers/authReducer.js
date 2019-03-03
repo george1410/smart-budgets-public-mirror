@@ -1,18 +1,30 @@
-import { LOGIN, LOGOUT } from '../actions/types';
+import { AUTHENTICATE, AUTH_ERROR, DEAUTHENTICATE } from '../actions/types';
 
-// TODO get rid of the initial state
-// atm by default user is authenticated
-// this is for development until real authentication is set up
+const defaultState = {
+  authenticated: localStorage.getItem('token') || '',
+  uid: localStorage.getItem('uid') || '',
+  error: '',
+};
 
-export default (state = { uid: 1 }, action) => {
-// export default (state = { }, action) => {
+export default (state = defaultState, action) => {
   switch (action.type) {
-    case LOGIN:
+    case AUTHENTICATE:
       return {
-        uid: action.uid,
+        ...state,
+        uid: action.payload.uid,
+        authenticated: action.payload.token,
       };
-    case LOGOUT:
-      return {};
+    case DEAUTHENTICATE:
+      return {
+        authenticated: '',
+        uid: '',
+        error: '',
+      };
+    case AUTH_ERROR:
+      return {
+        ...state,
+        error: action.payload.err,
+      };
     default:
       return state;
   }

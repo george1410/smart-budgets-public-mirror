@@ -1,10 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { reduxForm, Field, change } from 'redux-form';
+import { compose } from 'redux';
 import { connect } from 'react-redux';
-import { login } from '../../actions/auth';
+import * as actions from '../../actions/auth';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
+import AltButton from '../Button/AltButton';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -26,8 +29,8 @@ const LoginWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 400px;
-  min-height: 550px;
+  width: 40rem;
+  min-height: 60rem;
   padding: 5rem;
   box-shadow: 10px 10px 0 ${props => props.theme.primaryBlue};
   ${media.phone`
@@ -53,7 +56,7 @@ const Title = styled.div`
 const Subtitle = styled.span`
   text-align: center;
   font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme.grey};
+  color: ${props => (props.err ? props.theme.error : props.theme.grey)};
   margin: 3rem 0 0 0;
 `;
 
@@ -76,6 +79,7 @@ const InputWrapper = styled.div`
   width: 100%;
   display: flex;
   flex-flow: column-reverse;
+  cursor: text;
 
   /* this moves the label into the input field */
   input:placeholder-shown + label {
@@ -108,6 +112,9 @@ const Label = styled.label`
   font-size: ${props => props.theme.fontSmall};
   padding: 1rem 1.5rem;
   color: ${props => props.theme.greyLight};
+  cursor: text;
+  user-select: none;
+  pointer-events: none;
   transition: all 0.3s ease-in-out;
   ${media.phone`
     color: ${props => props.theme.grey};
@@ -117,7 +124,7 @@ const Label = styled.label`
   height: 4rem;
 `;
 
-const Input = styled.input`
+const Input = styled(Field)`
   display: block;
   width: 100%;
   margin-bottom: -2rem;
@@ -154,35 +161,49 @@ const Input = styled.input`
 `;
 
 class LoginPage extends React.Component {
-  onSubmit = (e) => {
-    e.preventDefault();
-    const { logIn } = this.props;
-    logIn(1);
+  onSubmit = (formProps) => {
+    const { startSignin, history } = this.props;
+    startSignin(formProps, () => history.push('/home'));
+  };
+
+  // button to fill with data for development
+  onFillFakeLogins = () => {
+    const { change } = this.props;
+    change('email', 'hello@georgemccarron.com');
+    change('password', 'password');
   }
 
   render() {
+    const { handleSubmit, errorMsg } = this.props;
     return (
       <Wrapper>
         <LoginWrapper>
           <Title>Smart</Title>
           <Title>Budgets</Title>
-          <Subtitle>Please log in to get started.</Subtitle>
-          <Form onSubmit={this.onSubmit}>
+          <Subtitle err={!!errorMsg}>
+            {
+              errorMsg || 'Please log in to get started.'
+            }
+          </Subtitle>
+          <Form onSubmit={handleSubmit(this.onSubmit)}>
             <InputWrapper>
               <Input
-                id="userId"
-                placeholder="User ID"
+                id="email"
+                name="email"
                 type="text"
-                // required
+                component="input"
+                placeholder="Email"
               />
-              <Label htmlFor="userId">
-                User ID
+              <Label htmlFor="email">
+                Email
               </Label>
             </InputWrapper>
             <InputWrapper>
               <Input
                 id="password"
+                name="password"
                 type="password"
+                component="input"
                 placeholder="password"
               />
               <Label htmlFor="password">
@@ -191,18 +212,22 @@ class LoginPage extends React.Component {
             </InputWrapper>
             <Button title="Log In" type="submit" />
           </Form>
+          <AltButton onClick={this.onFillFakeLogins} title="Fill with demo logins" type="button" />
         </LoginWrapper>
       </Wrapper>
     );
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  logIn: uid => dispatch(login(uid)),
+// LoginPage.propTypes = {
+//   logIn: PropTypes.func.isRequired,
+// };
+
+const mapStateToProps = ({ auth: { error } }) => ({
+  errorMsg: error,
 });
 
-LoginPage.propTypes = {
-  logIn: PropTypes.func.isRequired,
-};
-
-export default connect(undefined, mapDispatchToProps)(LoginPage);
+export default compose(
+  connect(mapStateToProps, { ...actions, change }),
+  reduxForm({ form: 'signup' }),
+)(LoginPage);
