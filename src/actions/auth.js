@@ -8,3 +8,4 @@ export const login = uid => ({
 export const logout = () => ({
   type: LOGOUT,
 });
+

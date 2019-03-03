@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, '..', 'build')));
  *     }, ...
  *   ]
  */
-app.get('/api/users/:id/transactions', (req, res) => {
+app.get('public/api/users/:id/transactions', (req, res) => {
   let badRequest = false;
   let sql = `
     SELECT * FROM transactions AS t 
@@ -59,6 +59,19 @@ app.get('/api/users/:id/transactions', (req, res) => {
     });
   }
 });
+
+
+// let sql = `
+// SELECT period FROM users 
+//   WHERE t.userId = ${req.params.id} `;
+//   if (sql === 'WEEK') {
+//    sql += `
+//     UPDATE period SET users = 'MONTH' WHERE userId = ${req.params.id}`;
+//   } else if(sql === 'MONTH'){
+//      sql += `
+//     UPDATE period SET users = 'WEEK' WHERE userId = ${req.params.id}`;
+
+
 
 /**
  * GET route for budget info by category for a user.

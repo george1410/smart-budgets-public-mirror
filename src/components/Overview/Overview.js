@@ -5,7 +5,9 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
+import Button from '../Button/Button';
 import CategoryProgress from '../CategoryProgress/CategoryProgress';
+import { sortByPeriod } from '../../actions/filters';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,10 +20,16 @@ const Wrapper = styled.div`
   `}
 `;
 
+sortByPeriod = () => {
+  const { startSwitch } = this.props;
+  startSwitch();
+}
+
 const Overview = ({ categories }) => (
   <>
     <Header title="Overview" />
     <Wrapper>
+    <Button title="Change Filter" onClick={this.sortByPeriod} />
       {
         categories.length === 0 ? (
           <p>No categories to show</p>

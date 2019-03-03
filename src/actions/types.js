@@ -13,3 +13,5 @@ export const SET_TRANSACTIONS = 'SET_TRANSACTIONS';
 export const SORT_BY_DATE = 'SORT_BY_DATE';
 
 export const SORT_BY_AMOUNT = 'SORT_BY_AMOUNT';
+
+export const PERIOD = 'PERIOD';
