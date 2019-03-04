@@ -22,6 +22,8 @@ const jsx = (
   </ThemeProvider>
 );
 
+// if the user has their uid and jwt set from the last session,
+// then just fetch their data.
 if (store.getState().auth.uid) {
   store.dispatch(startSetCategories());
   store.dispatch(startSetUserInfo());

@@ -25,7 +25,7 @@ export const theme = {
   primaryBlue: '#0056FF',
   primaryBlueDark: '#052B80',
   primaryBlueShadow: 'rgba(00, 86, 255, 0.1)',
-  error: '#E41317',
+  error: '#E01967',
   greyLightest: '#ddd',
   greyLight: '#888',
   grey: '#555',

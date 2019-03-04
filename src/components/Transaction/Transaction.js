@@ -7,8 +7,8 @@ import media from '../../util/mediaQueries';
 
 numeral.register('locale', 'en-gb', {
   delimiters: {
-    thousands: '.',
-    decimal: ',',
+    thousands: ',',
+    decimal: '.',
   },
   currency: {
     symbol: '£',

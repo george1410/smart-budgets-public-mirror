@@ -3,7 +3,7 @@
 exports[`renders NotFoundPage correctly 1`] = `
 <styled.div>
   <styled.p>
-    This is not the page you are looking for
+    This is not the page you are looking for.
   </styled.p>
   <styled.div>
     <div>
@@ -17,7 +17,7 @@ exports[`renders NotFoundPage correctly 1`] = `
     </div>
   </styled.div>
   <Styled(Link)
-    to="/social"
+    to="/home"
   >
     Back Home
   </Styled(Link)>

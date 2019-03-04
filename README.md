@@ -5,6 +5,12 @@
 <h2 align="center"><strong>Smart Budgets</strong></h2>
 
 <p align="center">
+  <a href="https://travis-ci.com/rudotriton/smart-budgets">
+    <img src ="https://travis-ci.com/rudotriton/smart-budgets.svg?token=PJMxKULJiyzPDCea6SwE&branch=master">
+    <a>
+</p>
+
+<p align="center">
   <a target="_blank" href="http://ec2-34-245-19-126.eu-west-1.compute.amazonaws.com">Live Demo</a> • <a href="#start">Getting Started</a> • <a href="#documentation">Documentation</a>
 </p>
 

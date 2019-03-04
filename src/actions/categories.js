@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/api';
 import { SET_CATEGORIES, CATEGORIES_ERROR, CATEGORIES_LOADING } from './types';
 
 export const setCategories = categories => ({
@@ -19,7 +19,7 @@ export const setCategoriesLoading = status => ({
 export const startSetCategories = () => (dispatch, getState) => {
   dispatch(setCategoriesLoading(true));
   const { uid } = getState().auth;
-  axios.get(`/api/users/${uid}/categories`)
+  api.get(`/api/users/${uid}/categories`)
     .then((payload) => {
       dispatch(setCategories(payload.data));
       dispatch(setCategoriesLoading(false));

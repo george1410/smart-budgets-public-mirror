@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/api';
 import {
   SET_TRANSACTIONS,
   SET_TRANSACTION_START,
@@ -44,7 +44,7 @@ export const startSetTransactions = () => (dispatch, getState) => {
     dispatch(setTransactionLoading(true));
     // increment the starting point for the next fetch;
     dispatch(setTransactionStart(start + count));
-    axios.get(`api/users/${uid}/transactions`, { params: { start, count } })
+    api.get(`api/users/${uid}/transactions`, { params: { start, count } })
       .then((payload) => {
         dispatch(setTransactions(payload.data.transactions));
         dispatch(setTransactionLoading(false));
@@ -52,7 +52,8 @@ export const startSetTransactions = () => (dispatch, getState) => {
         dispatch(setHasMore(payload.data.hasMore));
       })
       .catch((err) => {
-        // fetch unsuccessul, set the start back to original value
+        // fetch unsuccessul, set the start back to original value at
+        // the start of this fetch cycle
         dispatch(setTransactionStart(start));
         dispatch(setTransactionLoading(false));
         dispatch(setTransactionError('Could not fetch any transactions. Check your connection.'));

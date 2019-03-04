@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { SET_USER_INFO, USER_INFO_ERROR, USER_INFO_LOADING } from './types';
+import api from '../api/api';
 
 export const setUserInfo = userInfo => ({
   type: SET_USER_INFO,
@@ -19,7 +19,7 @@ export const setUserInfoLoading = status => ({
 export const startSetUserInfo = () => (dispatch, getState) => {
   dispatch(setUserInfoLoading(true));
   const { uid } = getState().auth;
-  axios.get(`api/users/${uid}`)
+  api.get(`api/users/${uid}`)
     .then((payload) => {
       dispatch(setUserInfo(payload.data));
       dispatch(setUserInfoLoading(false));
