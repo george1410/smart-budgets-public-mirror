@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { NavLink } from 'react-router-dom';
 import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
@@ -61,27 +62,31 @@ const Progress = styled.div`
   transition: width 0.3s ease-in-out;
 `;
 
+const link = '/feed?displayName=';
+
 const CategoryProgress = ({ displayName, spend, budget }) => (
-  <Wrapper>
-    <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
-    <LabelWrapper>
-      <LabelEnd>
-        {spend}
-        {' spent'}
-      </LabelEnd>
-      <LabelMain>
-        {budget - spend}
-        {' left'}
-      </LabelMain>
-      <LabelEnd>
-        {'of '}
-        {budget}
-      </LabelEnd>
-    </LabelWrapper>
-    <ProgressBar>
-      <Progress spend={spend} budget={budget} />
-    </ProgressBar>
-  </Wrapper>
+  <NavLink to={link + displayName}>
+    <Wrapper>
+      <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
+      <LabelWrapper>
+        <LabelEnd>
+          {spend}
+          {' spent'}
+        </LabelEnd>
+        <LabelMain>
+          {budget - spend}
+          {' left'}
+        </LabelMain>
+        <LabelEnd>
+          {'of '}
+          {budget}
+        </LabelEnd>
+      </LabelWrapper>
+      <ProgressBar>
+        <Progress spend={spend} budget={budget} />
+      </ProgressBar>
+    </Wrapper>
+  </NavLink>
 );
 
 CategoryProgress.propTypes = {
