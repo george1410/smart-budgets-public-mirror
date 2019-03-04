@@ -20,7 +20,7 @@ export const GlobalStyle = createGlobalStyle`
 export const theme = {
   primaryBlue: '#0056FF',
   primaryBlueDark: '#052B80',
-  error: '#E41317',
+  error: '#E01967',
   greyLightest: '#ddd',
   greyLight: '#888',
   grey: '#555',

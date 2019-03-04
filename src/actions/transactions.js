@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from '../api/api';
 import { SET_TRANSACTIONS } from './types';
 import { isLoading, hasErrored } from './status';
 
@@ -10,7 +10,7 @@ export const setTransactions = transactions => ({
 export const startSetTransactions = () => (dispatch, getState) => {
   dispatch(isLoading(true));
   const { uid } = getState().auth;
-  axios.get(`api/users/${uid}/transactions`)
+  api.get(`api/users/${uid}/transactions`)
     .then((payload) => {
       dispatch(setTransactions(payload.data));
       dispatch(isLoading(false));
