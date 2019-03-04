@@ -8,7 +8,6 @@ import reduxThunk from 'redux-thunk';
 import { reducer as formReducer } from 'redux-form';
 import authReducer from '../reducers/authReducer';
 import categoriesReducer from '../reducers/categoriesReducer';
-import statusReducer from '../reducers/statusReducer';
 import transactionsReducer from '../reducers/transactionsReducer';
 import filtersReducer from '../reducers/filtersReducer';
 import userReducer from '../reducers/userReducer';
@@ -22,7 +21,6 @@ const appReducer = combineReducers({
   auth: authReducer,
   form: formReducer,
   categories: categoriesReducer,
-  status: statusReducer,
   transactions: transactionsReducer,
   filters: filtersReducer,
   user: userReducer,

@@ -14,12 +14,17 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${props => props.theme.font};
     color: ${props => props.theme.black};
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 `;
 
 export const theme = {
   primaryBlue: '#0056FF',
   primaryBlueDark: '#052B80',
+  primaryBlueShadow: 'rgba(00, 86, 255, 0.1)',
   error: '#E01967',
   greyLightest: '#ddd',
   greyLight: '#888',

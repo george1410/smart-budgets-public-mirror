@@ -30,7 +30,7 @@ const Wrapper = styled.div`
   max-width: 30rem;
   flex-direction: column;
   background-color: ${props => props.theme.primaryBlue};
-  padding: 1rem 1rem;
+  padding: 1rem;
   align-items: center;
   justify-content: flex-end;
   height: auto;
@@ -150,7 +150,7 @@ FilterDrawer.propTypes = {
 
 const mapStateToProps = state => ({
   visible: state.filters.drawerOpen,
-  categories: state.categories,
+  categories: state.categories.categories,
   shownCategories: state.filters.shownCategories,
 });
 

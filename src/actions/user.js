@@ -1,22 +1,31 @@
+import { SET_USER_INFO, USER_INFO_ERROR, USER_INFO_LOADING } from './types';
 import api from '../api/api';
-import { SET_USER_INFO } from './types';
-import { isLoading, hasErrored } from './status';
 
 export const setUserInfo = userInfo => ({
   type: SET_USER_INFO,
   userInfo,
 });
 
+export const setUserInfoError = status => ({
+  type: USER_INFO_ERROR,
+  status,
+});
+
+export const setUserInfoLoading = status => ({
+  type: USER_INFO_LOADING,
+  status,
+});
+
 export const startSetUserInfo = () => (dispatch, getState) => {
-  dispatch(isLoading(true));
+  dispatch(setUserInfoLoading(true));
   const { uid } = getState().auth;
   api.get(`api/users/${uid}`)
     .then((payload) => {
       dispatch(setUserInfo(payload.data));
-      dispatch(isLoading(false));
+      dispatch(setUserInfoLoading(false));
     })
     .catch(() => {
-      dispatch(isLoading(false));
-      dispatch(hasErrored(true));
+      dispatch(setUserInfoLoading(false));
+      dispatch(setUserInfoError(true));
     });
 };

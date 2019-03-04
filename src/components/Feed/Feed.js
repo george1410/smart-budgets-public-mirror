@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { AutoSizer, List as VirtualList } from 'react-virtualized';
+import { AutoSizer, InfiniteLoader, List as VirtualList } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import FeedHeader from './FeedHeader';
 import FilterDrawer from './FilterDrawer';
@@ -11,6 +11,7 @@ import Transaction from '../Transaction/Transaction';
 import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount, toggleFilterDrawer } from '../../actions/filters';
+import { startSetTransactions, setTransactionError } from '../../actions/transactions';
 
 const Wrapper = styled.div`
   display: flex;
@@ -54,6 +55,13 @@ class Feed extends React.Component {
     );
   }
 
+  componentWillMount = () => {
+    const { transactions } = this.props;
+    if (transactions.length === 0) {
+      this.fetchMore();
+    }
+  }
+
   sortByAmountOnClick = () => {
     const { sortingByAmount } = this.props;
     sortingByAmount();
@@ -77,8 +85,22 @@ class Feed extends React.Component {
     toggleDrawer();
   }
 
+  fetchMore = () => {
+    const { fetchTransactions } = this.props;
+    if (navigator.onLine) {
+      fetchTransactions();
+    }
+  }
+
+  isRowLoaded = ({ index }) => {
+    const { transactions } = this.props;
+    return !!transactions[index];
+  }
+
   render() {
-    const { transactions, filters: { drawerOpen } } = this.props;
+    const {
+      transactions, filters: { drawerOpen },
+    } = this.props;
     return (
       <>
         <FeedHeader
@@ -97,15 +119,27 @@ class Feed extends React.Component {
             <AutoSizer>
               {
               ({ width, height }) => (
-                <StyledList
-                  width={width}
-                  height={height}
-                  rowHeight={70}
-                  rowRenderer={this.renderRowVirtual}
-                  rowCount={transactions.length}
-                  // forces re-render as the list can see that data has changed
-                  data={transactions}
-                />
+                <InfiniteLoader
+                  isRowLoaded={this.isRowLoaded}
+                  loadMoreRows={this.fetchMore}
+                  rowCount={Number.MAX_SAFE_INTEGER}
+                >
+                  {
+                    ({ onRowsRendered, registerChild }) => (
+                      <StyledList
+                        width={width}
+                        height={height}
+                        rowHeight={70}
+                        rowRenderer={this.renderRowVirtual}
+                        rowCount={transactions.length}
+                        onRowsRendered={onRowsRendered}
+                        ref={registerChild}
+                        // forces re-render as the list can see that data has changed
+                        data={transactions}
+                      />
+                    )
+                  }
+                </InfiniteLoader>
               )
               }
             </AutoSizer>
@@ -124,6 +158,7 @@ Feed.defaultProps = {
     sortByAmount: 0,
     drawerOpen: false,
   },
+  error: '',
 };
 
 Feed.propTypes = {
@@ -136,17 +171,26 @@ Feed.propTypes = {
     sortByAmount: PropTypes.string,
     drawerOpen: PropTypes.bool,
   }),
+  fetchTransactions: PropTypes.func.isRequired,
+  hasMore: PropTypes.bool.isRequired,
+  error: PropTypes.string,
+  dismissError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  transactions: selectTransactions(state.transactions, state.filters),
+  transactions: selectTransactions(state.transactions.transactions, state.filters),
   filters: state.filters,
+  hasMore: state.transactions.hasMore,
+  isLoading: state.transactions.isLoading,
+  error: state.transactions.error,
 });
 
 const mapDispatchToProps = dispatch => ({
   sortingByDate: () => dispatch(sortByDate()),
   sortingByAmount: () => dispatch(sortByAmount()),
   toggleDrawer: () => dispatch(toggleFilterDrawer()),
+  fetchTransactions: () => dispatch(startSetTransactions()),
+  dismissError: () => dispatch(setTransactionError(undefined)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feed);
