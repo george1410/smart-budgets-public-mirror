@@ -8,6 +8,7 @@ import * as actions from '../../actions/auth';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
 import AltButton from '../Button/AltButton';
+import Logo from './Logo.png';
 
 const Wrapper = styled.div`
   width: 100vw;
@@ -40,17 +41,6 @@ const LoginWrapper = styled.div`
     background-color: ${props => props.theme.white};
     padding: 4rem;
   `}
-`;
-
-const Title = styled.div`
-  font-size: 5rem;
-
-  /* This styles the 2nd line of the title */
-  &:last-of-type {
-    margin-top: -1.2rem;
-    border-bottom: 4px solid ${props => props.theme.black};
-    padding-bottom: 1rem;
-  }
 `;
 
 const Subtitle = styled.span`
@@ -160,6 +150,17 @@ const Input = styled(Field)`
   }
 `;
 
+const Icon = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+
+  & > img {
+    width: 50%;
+  }
+`;
+
 class LoginPage extends React.Component {
   onSubmit = (formProps) => {
     const { startSignin: signIn, history } = this.props;
@@ -178,8 +179,9 @@ class LoginPage extends React.Component {
     return (
       <Wrapper>
         <LoginWrapper>
-          <Title>Smart</Title>
-          <Title>Budgets</Title>
+          <Icon>
+            <img alt="logo" src={Logo} />
+          </Icon>
           <Subtitle err={!!errorMsg}>
             {
               errorMsg || 'Please log in to get started.'
