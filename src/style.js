@@ -14,6 +14,10 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${props => props.theme.font};
     color: ${props => props.theme.black};
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 `;
 

@@ -6,13 +6,12 @@ import PropTypes from 'prop-types';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import CategoryProgress from '../CategoryProgress/CategoryProgress';
-import OfflineMessage from '../OfflineMessage/OfflineMessage';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-bottom: 5rem;
+  padding: 5rem 0;
   ${media.tablet`
     padding-bottom: 10rem;
   `}
@@ -21,7 +20,6 @@ const Wrapper = styled.div`
 const Overview = ({ categories }) => (
   <>
     <Header title="Budgets" />
-    <OfflineMessage message="You seem to be offline. Please check your connection." />
     <Wrapper>
       {
         categories.length === 0 ? (

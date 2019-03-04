@@ -7,12 +7,6 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
-// middleware to log requests
-app.use((req, res, next) => {
-  console.log(`${req.protocol}://${req.get('host')}${req.originalUrl}`);
-  next();
-});
-
 /**
  * GET route for various user info.
  * Endpoint: /api/users/{userid}
@@ -65,8 +59,8 @@ app.get('/api/users/:id', (req, res) => {
 app.get('/api/users/:id/transactions', (req, res) => {
   let badRequest = false;
   let sql = `
-    SELECT * FROM transactions AS t 
-    JOIN categories AS c ON c.categoryId = t.categoryId 
+    SELECT * FROM transactions AS t
+    JOIN categories AS c ON c.categoryId = t.categoryId
     WHERE t.userId = ${req.params.id} `;
 
   if (req.query.period) {
@@ -135,7 +129,7 @@ app.get('/api/users/:id/categories', (req, res) => {
       });
 
       sql = `
-        SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
+        SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets
         JOIN categories ON categories.categoryId = budgets.categoryId
         WHERE budgets.userId = ${req.params.id}
         GROUP BY categories.displayName `;

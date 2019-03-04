@@ -12,7 +12,6 @@ import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount, toggleFilterDrawer } from '../../actions/filters';
 import { startSetTransactions, setTransactionError } from '../../actions/transactions';
-import OfflineMessage from '../OfflineMessage/OfflineMessage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -21,8 +20,9 @@ const Wrapper = styled.div`
   width: 100vw;
   align-items: center;
   position: relative;
+  padding: 5rem 0 0 0;
   ${media.tablet`
-    /* padding: 0 0 5rem 0; */
+    padding: 5rem 0;
   `}
 `;
 
@@ -32,7 +32,7 @@ const StyledList = styled(VirtualList)`
 `;
 
 const ListWrapper = styled.div`
-  height: calc(100vh - 5rem);
+  height: calc(100vh - 10rem);
   width: 100%;
 
   & > div > div::-webkit-scrollbar {
@@ -108,7 +108,6 @@ class Feed extends React.Component {
           toggleDrawer={this.drawerToggle}
           drawerOpen={drawerOpen}
         />
-        <OfflineMessage message="You seem to be offline. Please check your connection." offCenter />
         <Wrapper>
           <InfoHeader
             sortingByAmount={this.sortByAmountOnClick}

@@ -1,70 +1,52 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-import { Online, Offline } from 'react-detect-offline';
+import { Offline } from 'react-detect-offline';
 import media from '../../util/mediaQueries';
-
 
 const OfflineWrapper = styled.div`
   display: flex;
   justify-content: center;
-  width: 100vw;
+  width: 10rem;
+  position: fixed;
+  z-index: 5;
   ${media.desktop`
     justify-content: flex-start;
   `}
   ${media.tablet`
+    width: 100vw;
     justify-content: center;
   `}
 `;
 
 const Message = styled.div`
-  padding-top: 5rem;
-  min-height: 10rem;
+  min-height: 5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 50rem;
+  min-width: 20vw;
   background-color: ${props => props.theme.primaryBlueShadow};
   color: ${props => props.theme.primaryBlue};
   font-size: ${props => props.theme.fontTiny};
   user-select: none;
   text-align: center;
-  ${media.desktop`
-    margin-left: ${props => (props.offCenter ? ('calc((100vw - 72rem) / 2 + 22rem)') : ('calc((100vw - 50rem) / 2)'))};
-  `}
   ${media.tablet`
-    margin-left: 0;
-  `}
-  ${media.phone`
-    width: 100%;
+    min-width: 100vw;
   `}
 `;
 
-// This offsets the InfoHeader for Feed when the OfflineMessage is not present.
-const Padding = styled.div`
-  min-height: 5rem;
-`;
-
-const OfflineMessage = ({ message, offCenter }) => (
+const OfflineMessage = ({ message }) => (
   <OfflineWrapper>
     <Offline>
-      <Message offCenter={offCenter}>
+      <Message>
         {message}
       </Message>
     </Offline>
-    <Online>
-      <Padding />
-    </Online>
   </OfflineWrapper>
 );
 
-OfflineMessage.defaultProps = {
-  offCenter: false,
-};
-
 OfflineMessage.propTypes = {
   message: PropTypes.string.isRequired,
-  offCenter: PropTypes.bool,
 };
 
 export default OfflineMessage;
