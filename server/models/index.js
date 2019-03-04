@@ -3,13 +3,13 @@ const path = require('path');
 const Sequelize = require('sequelize');
 
 const sequelize = new Sequelize(
-  process.env.DB_DATABASE,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  'smartbudgets',
+  'smartbudgets',
+  'capitalone',
   {
-    host: process.env.DB_HOST,
+    host: 'smartbudgets.co6kasjhhncd.eu-west-1.rds.amazonaws.com',
     dialect: 'mysql',
-    port: process.env.DB_PORT,
+    port: 8080,
   },
 );
 

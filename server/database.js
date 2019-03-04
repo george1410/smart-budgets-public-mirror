@@ -2,11 +2,11 @@ const mysql = require('mysql');
 
 const pool = mysql.createPool({
   connectionLimit: 10,
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_DATABASE,
-  port: process.env.DB_PORT,
+  host: 'smartbudgets.co6kasjhhncd.eu-west-1.rds.amazonaws.com',
+  user: 'smartbudgets',
+  password: 'capitalone',
+  database: 'smartbudgets',
+  port: 8080,
 });
 
 module.exports = pool;
