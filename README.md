@@ -6,7 +6,7 @@
 
 <p align="center">
   <a href="https://travis-ci.com/rudotriton/smart-budgets">
-    <img src ="https://travis-ci.com/rudotriton/smart-budgets.svg?          token=PJMxKULJiyzPDCea6SwE&branch=master">
+    <img src ="https://travis-ci.com/rudotriton/smart-budgets.svg?token=PJMxKULJiyzPDCea6SwE&branch=master">
     <a>
 </p>
 
