@@ -19,7 +19,9 @@ describe('auth actions', () => {
     const action = authError(err);
     expect(action).toEqual({
       type: AUTH_ERROR,
-      err,
+      payload: {
+        err,
+      },
     });
   });
 

@@ -11,7 +11,9 @@ export const authenticate = payload => ({
 
 export const authError = err => ({
   type: AUTH_ERROR,
-  err,
+  payload: {
+    err,
+  },
 });
 
 export const startSignin = (formProps, cb) => async (dispatch) => {
