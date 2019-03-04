@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AutoSizer, InfiniteLoader, List as VirtualList } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import { Offline } from 'react-detect-offline';
 import FeedHeader from './FeedHeader';
 import FilterDrawer from './FilterDrawer';
 import media from '../../util/mediaQueries';
@@ -13,7 +12,7 @@ import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount, toggleFilterDrawer } from '../../actions/filters';
 import { startSetTransactions, setTransactionError } from '../../actions/transactions';
-import OfflineMsg from './OfflineMsg';
+import OfflineMessage from '../OfflineMessage/OfflineMessage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,9 +21,8 @@ const Wrapper = styled.div`
   width: 100vw;
   align-items: center;
   position: relative;
-  padding: 5rem 0 0 0;
   ${media.tablet`
-    padding: 5rem 0;
+    /* padding: 0 0 5rem 0; */
   `}
 `;
 
@@ -34,30 +32,12 @@ const StyledList = styled(VirtualList)`
 `;
 
 const ListWrapper = styled.div`
-  height: calc(100vh - 10rem);
+  height: calc(100vh - 5rem);
   width: 100%;
 
   & > div > div::-webkit-scrollbar {
     width: 0;
   }
-`;
-
-const OfflineWrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-self: flex-end;
-  margin-right: calc((100vw - 50rem) / 2);
-  ${media.desktop`
-    margin-right: calc((100vw - 72rem) / 2);
-  `}
-  ${media.tablet`
-    align-self: center;
-    margin-right: 0;
-  `}
-  ${media.phone`
-    width: 100%;
-  `}
 `;
 
 class Feed extends React.Component {
@@ -128,6 +108,7 @@ class Feed extends React.Component {
           toggleDrawer={this.drawerToggle}
           drawerOpen={drawerOpen}
         />
+        <OfflineMessage message="You seem to be offline. Please check your connection." offCenter />
         <Wrapper>
           <InfoHeader
             sortingByAmount={this.sortByAmountOnClick}
@@ -164,11 +145,6 @@ class Feed extends React.Component {
               }
             </AutoSizer>
           </ListWrapper>
-          <OfflineWrapper>
-            <Offline>
-              <OfflineMsg message="You seem to be offline. Please check your connection." />
-            </Offline>
-          </OfflineWrapper>
         </Wrapper>
         <FilterDrawer />
       </>
