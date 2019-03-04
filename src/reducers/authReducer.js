@@ -1,12 +1,12 @@
 import { AUTHENTICATE, AUTH_ERROR, DEAUTHENTICATE } from '../actions/types';
 
-const defaultState = {
+export const defaultAuthState = {
   authenticated: localStorage.getItem('token') || '',
   uid: localStorage.getItem('uid') || '',
   error: '',
 };
 
-export default (state = defaultState, action) => {
+export default (state = defaultAuthState, action) => {
   switch (action.type) {
     case AUTHENTICATE:
       return {

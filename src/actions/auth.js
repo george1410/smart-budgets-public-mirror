@@ -9,6 +9,11 @@ export const authenticate = payload => ({
   payload,
 });
 
+export const authError = err => ({
+  type: AUTH_ERROR,
+  err,
+});
+
 export const startSignin = (formProps, cb) => async (dispatch) => {
   try {
     const response = await api.post('/auth/signin', formProps);
@@ -20,7 +25,7 @@ export const startSignin = (formProps, cb) => async (dispatch) => {
     dispatch(startSetUserInfo());
     cb();
   } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: { err: 'Invalid login details.' } });
+    dispatch(authError('Invalid login details.'));
   }
 };
 
