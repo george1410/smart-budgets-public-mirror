@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
 import { setFilterCategory, setStartDate, setEndDate } from '../../actions/filters';
+import { clearTransactions, setTransactionStart, setHasMore } from '../../actions/transactions';
 
 /*
 Calculations for CSS:
@@ -146,6 +146,13 @@ class FilterDrawer extends React.PureComponent {
     setDateEnd(date);
   }
 
+  applyFilters = () => {
+    const { clearFeed, setStart, setHavingMore } = this.props;
+    clearFeed();
+    setStart();
+    setHavingMore();
+  }
+
   render() {
     const {
       visible, categories, selectCategory, shownCategories,
@@ -178,7 +185,7 @@ class FilterDrawer extends React.PureComponent {
             ))
           }
         </Group>
-        <Apply type="button">Apply Filter</Apply>
+        <Apply type="button" onClick={this.applyFilters}>Apply Filter</Apply>
       </Wrapper>
     );
   }
@@ -197,6 +204,9 @@ FilterDrawer.propTypes = {
   shownCategories: PropTypes.instanceOf(Array),
   setDateEnd: PropTypes.func.isRequired,
   setDateStart: PropTypes.func.isRequired,
+  clearFeed: PropTypes.func.isRequired,
+  setStart: PropTypes.func.isRequired,
+  setHavingMore: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -209,6 +219,9 @@ const mapDispatchToProps = dispatch => ({
   selectCategory: ids => dispatch(setFilterCategory(ids)),
   setDateStart: date => dispatch(setStartDate(date)),
   setDateEnd: date => dispatch(setEndDate(date)),
+  clearFeed: () => dispatch(clearTransactions()),
+  setStart: () => dispatch(setTransactionStart(0)),
+  setHavingMore: () => dispatch(setHasMore(true)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterDrawer);
