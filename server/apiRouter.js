@@ -151,4 +151,15 @@ module.exports = (app) => {
       });
     }
   });
+
+  /**
+  * Filter transactions between 2 dates.
+  */
+
+  app.get('/api/users/:id/transactions', (req, res) => {
+    let { start } = req.query;
+    let { end } = req.query;
+    let sql = `
+        SELECT * FROM transactions WHERE t.userId = ${req.params.id} AND t.date BETWEEN ${start} AND ${end} `;
+    });
 };
