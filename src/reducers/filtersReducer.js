@@ -40,6 +40,7 @@ export default (state = defaultFilterState, {
     case CLEAR_FILTERS:
       return {
         ...defaultFilterState,
+        drawerOpen: true,
       };
     case SORT_BY_DATE:
       return {

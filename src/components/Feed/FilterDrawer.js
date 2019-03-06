@@ -120,11 +120,13 @@ const Apply = styled.button`
   border-bottom: 1px solid ${props => props.theme.white};
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  outline-color: white;
   margin-bottom: 2rem;
   padding: 0.5rem 1rem;
   user-select: none;
   ${media.tablet`
     font-size: ${props => props.theme.fontMedium};
+    outline-color: -webkit-focus-ring-color;;
     padding: 0.5rem 2rem;
     border: 1px solid ${props => props.theme.white};
     background-color: ${props => props.theme.white};
@@ -138,24 +140,24 @@ const Apply = styled.button`
 `;
 
 const ClearFiltersButton = styled.button`
-  font-size: ${props => props.theme.fontSmall};
+  font-size: ${props => props.theme.fontTiny};
   font-weight: 500;
-  border: 1px solid ${props => props.theme.primaryBlue};
+  border: 1px solid ${props => props.theme.offWhite};
   background-color: ${props => props.theme.primaryBlue};
-  color: ${props => props.theme.error};
-  border-bottom: 1px solid ${props => props.theme.error};
+  color: ${props => props.theme.offWhite};
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  outline-color: white;
   margin-bottom: 2rem;
   padding: 0.5rem 1rem;
   user-select: none;
   ${media.tablet`
     font-size: ${props => props.theme.fontSmall};
+    outline-color: -webkit-focus-ring-color;;
     padding: 0.5rem 2rem;
-    border: 1px solid ${props => props.theme.white};
+    color: ${props => props.theme.error};
+    border: 1px solid ${props => props.theme.error};
     background-color: ${props => props.theme.white};
-    /* color: ${props => props.theme.primaryBlue}; */
-    border-bottom: 1px solid ${props => props.theme.error};
   `}
 
   &:active {
@@ -174,9 +176,7 @@ class FilterDrawer extends React.PureComponent {
   }
 
   onStartDateChange = (e) => {
-    // const { setDateStart } = this.props;
     const date = e.target.value;
-    // setDateStart(date);
     this.setState(() => ({
       start: date,
     }));
@@ -251,7 +251,7 @@ class FilterDrawer extends React.PureComponent {
             ))
           }
         </Group>
-        <Apply type="button" onClick={this.onApplyFilters}>Apply Filter</Apply>
+        <Apply type="button" onClick={this.onApplyFilters}>Apply Filters</Apply>
         <ClearFiltersButton type="button" onClick={this.onClear}>Clear Filters</ClearFiltersButton>
       </Wrapper>
     );
