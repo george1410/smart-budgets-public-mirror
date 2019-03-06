@@ -4,8 +4,12 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
-import { setFilterCategory, setStartDate, setEndDate } from '../../actions/filters';
-import { clearTransactions, setTransactionStart, setHasMore } from '../../actions/transactions';
+import {
+  setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
+} from '../../actions/filters';
+import {
+  clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
+} from '../../actions/transactions';
 
 /*
 Calculations for CSS:
@@ -147,10 +151,14 @@ class FilterDrawer extends React.PureComponent {
   }
 
   applyFilters = () => {
-    const { clearFeed, setStart, setHavingMore } = this.props;
+    const {
+      clearFeed, setStart, setHavingMore, fetchTransactions, toggleDrawer,
+    } = this.props;
     clearFeed();
     setStart();
     setHavingMore();
+    fetchTransactions();
+    toggleDrawer();
   }
 
   render() {
@@ -207,6 +215,8 @@ FilterDrawer.propTypes = {
   clearFeed: PropTypes.func.isRequired,
   setStart: PropTypes.func.isRequired,
   setHavingMore: PropTypes.func.isRequired,
+  fetchTransactions: PropTypes.func.isRequired,
+  toggleDrawer: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -222,6 +232,8 @@ const mapDispatchToProps = dispatch => ({
   clearFeed: () => dispatch(clearTransactions()),
   setStart: () => dispatch(setTransactionStart(0)),
   setHavingMore: () => dispatch(setHasMore(true)),
+  fetchTransactions: () => dispatch(startSetTransactions()),
+  toggleDrawer: () => dispatch(toggleFilterDrawer()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterDrawer);

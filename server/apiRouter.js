@@ -36,6 +36,10 @@ module.exports = (app) => {
    *   period
    *    values: WEEK, MONTH
    *    default: All transactions
+   *   startDate
+   *     yyyy-mm-dd
+   *   endDate
+   *     yyy-mm-dd
    * Response format:
    *   [
    *     {
@@ -72,8 +76,10 @@ module.exports = (app) => {
       }
     }
 
-    // if query params not present, for some reason, then default to first 50
-    sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
+    if (req.query.startDate && req.query.endDate) {
+      const { startDate, endDate } = req.query;
+      sql += `AND t.date BETWEEN '${startDate}' AND '${endDate}' `;
+    }
 
     if (req.query.searchTerm) {
       let { searchTerm } = req.query;
@@ -81,6 +87,9 @@ module.exports = (app) => {
       sql += `
       AND t.merchant LIKE '%${searchTerm}%'`;
     }
+
+    // if query params not present, for some reason, then default to first 50
+    sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
 
     if (!badRequest) {
       pool.query(sql, (error, results) => {
@@ -151,15 +160,4 @@ module.exports = (app) => {
       });
     }
   });
-
-  /**
-  * Filter transactions between 2 dates.
-  */
-
-  app.get('/api/users/:id/transactions', (req, res) => {
-    let { start } = req.query;
-    let { end } = req.query;
-    let sql = `
-        SELECT * FROM transactions WHERE t.userId = ${req.params.id} AND t.date BETWEEN ${start} AND ${end} `;
-    });
 };
