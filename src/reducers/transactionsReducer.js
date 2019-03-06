@@ -4,6 +4,7 @@ import {
   TRANSACTION_LOADING,
   TRANSACTION_ERROR,
   TRANSACTIONS_HAS_MORE,
+  CLEAR_TRANSACTIONS,
 } from '../actions/types';
 
 export const defaultTransactionsState = {
@@ -21,6 +22,12 @@ export default (state = defaultTransactionsState, action) => {
       return {
         ...state,
         start: action.start,
+      };
+    case CLEAR_TRANSACTIONS:
+      return {
+        ...state,
+        error: '',
+        transactions: [],
       };
     case TRANSACTIONS_HAS_MORE:
       return {
