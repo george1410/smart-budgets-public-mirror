@@ -8,16 +8,11 @@ const Button = styled.button`
   padding: 1.5rem;
   font-size: ${props => props.theme.fontSmall};
   font-family: inherit;
-  color: ${props => props.theme.white};
-  background-color: ${props => props.theme.error};
-  border: none;
-  outline: none;
-  box-shadow: 0 4px 0 #800022;
-  margin-top: 2rem;
-
-  /* to make button the same height as input fields */
-  border-bottom: 3px solid ${props => props.theme.error};
-  border-top: 3px solid ${props => props.theme.error};
+  color: ${props => props.theme.error};
+  background-color: ${props => props.theme.white};
+  box-shadow: 0 4px 0 ${props => props.theme.errorDark};
+  border: 3px solid ${props => props.theme.error};
+  user-select: none;
 
   &:active {
     transform: translateY(4px);

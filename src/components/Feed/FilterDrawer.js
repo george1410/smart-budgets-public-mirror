@@ -80,7 +80,7 @@ const GroupName = styled.div`
   color: ${props => props.theme.white};
   user-select: none;
   ${media.tablet`
-    border-bottom: 1px solid ${props => props.theme.greyLightest};
+    border-bottom: 1px solid ${props => props.theme.offWhite};
     color: ${props => props.theme.black};
   `}
 `;
