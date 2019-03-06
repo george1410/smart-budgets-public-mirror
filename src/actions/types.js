@@ -40,4 +40,8 @@ export const SORT_BY_AMOUNT = 'SORT_BY_AMOUNT';
 
 export const SET_FILTER_CATEGORY = 'SET_FITLER_CATEGORY';
 
+export const SET_START_DATE = 'SET_START_DATE';
+
+export const SET_END_DATE = 'SET_END_DATE';
+
 export const TOGGLE_FILTER_DRAWER = 'TOGGLE_FILTER_DRAWER';

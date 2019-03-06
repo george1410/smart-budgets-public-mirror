@@ -3,6 +3,8 @@ import {
   SORT_BY_AMOUNT,
   TOGGLE_FILTER_DRAWER,
   SET_FILTER_CATEGORY,
+  SET_START_DATE,
+  SET_END_DATE,
 } from '../actions/types';
 
 export const defaultFilterState = {
@@ -10,6 +12,8 @@ export const defaultFilterState = {
   sortByAmount: undefined,
   drawerOpen: false,
   shownCategories: [],
+  startDate: undefined,
+  endDate: undefined,
 };
 
 // if not categories set then set all from newCategories
@@ -27,7 +31,9 @@ const switchCategories = (oldFilters, newFilters) => {
   return ret;
 };
 
-export default (state = defaultFilterState, { type, shownCategories }) => {
+export default (state = defaultFilterState, {
+  type, shownCategories, startDate, endDate,
+}) => {
   switch (type) {
     case SORT_BY_DATE:
       return {
@@ -50,6 +56,16 @@ export default (state = defaultFilterState, { type, shownCategories }) => {
       return {
         ...state,
         drawerOpen: !state.drawerOpen,
+      };
+    case SET_START_DATE:
+      return {
+        ...state,
+        startDate,
+      };
+    case SET_END_DATE:
+      return {
+        ...state,
+        endDate,
       };
     default:
       return state;
