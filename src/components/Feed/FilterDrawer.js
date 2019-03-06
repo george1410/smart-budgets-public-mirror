@@ -137,13 +137,13 @@ class FilterDrawer extends React.PureComponent {
   onStartDateChange = (e) => {
     const { setDateStart } = this.props;
     const date = e.target.value;
-    setDateStart(moment(date));
+    setDateStart(date);
   }
 
   onEndDateChange = (e) => {
     const { setDateEnd } = this.props;
     const date = e.target.value;
-    setDateEnd(moment(date));
+    setDateEnd(date);
   }
 
   render() {
