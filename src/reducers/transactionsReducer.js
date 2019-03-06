@@ -26,6 +26,7 @@ export default (state = defaultTransactionsState, action) => {
     case CLEAR_TRANSACTIONS:
       return {
         ...state,
+        error: '',
         transactions: [],
       };
     case TRANSACTIONS_HAS_MORE:

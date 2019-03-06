@@ -6,6 +6,7 @@ import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
 import {
   setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
+  clearFilters,
 } from '../../actions/filters';
 import {
   clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
@@ -111,7 +112,6 @@ const DatePicker = styled.input`
 `;
 
 const Apply = styled.button`
-  outline: none;
   font-size: ${props => props.theme.fontSmall};
   font-weight: 500;
   border: 1px solid ${props => props.theme.primaryBlue};
@@ -137,23 +137,65 @@ const Apply = styled.button`
   }
 `;
 
+const ClearFiltersButton = styled.button`
+  font-size: ${props => props.theme.fontSmall};
+  font-weight: 500;
+  border: 1px solid ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.primaryBlue};
+  color: ${props => props.theme.error};
+  border-bottom: 1px solid ${props => props.theme.error};
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  padding: 0.5rem 1rem;
+  user-select: none;
+  ${media.tablet`
+    font-size: ${props => props.theme.fontSmall};
+    padding: 0.5rem 2rem;
+    border: 1px solid ${props => props.theme.white};
+    background-color: ${props => props.theme.white};
+    /* color: ${props => props.theme.primaryBlue}; */
+    border-bottom: 1px solid ${props => props.theme.error};
+  `}
+
+  &:active {
+    transform: translateY(2px);
+  }
+`;
+
 class FilterDrawer extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    const { startDate, endDate } = this.props;
+    this.state = {
+      start: startDate,
+      end: endDate,
+    };
+  }
+
   onStartDateChange = (e) => {
-    const { setDateStart } = this.props;
+    // const { setDateStart } = this.props;
     const date = e.target.value;
-    setDateStart(date);
+    // setDateStart(date);
+    this.setState(() => ({
+      start: date,
+    }));
   }
 
   onEndDateChange = (e) => {
-    const { setDateEnd } = this.props;
     const date = e.target.value;
-    setDateEnd(date);
+    this.setState(() => ({
+      end: date,
+    }));
   }
 
-  applyFilters = () => {
+  onApplyFilters = () => {
     const {
-      clearFeed, setStart, setHavingMore, fetchTransactions, toggleDrawer,
+      clearFeed, setStart, setHavingMore, fetchTransactions, toggleDrawer, setDateStart, setDateEnd,
     } = this.props;
+    const { start, end } = this.state;
+    setDateStart(start);
+    setDateEnd(end);
     clearFeed();
     setStart();
     setHavingMore();
@@ -161,10 +203,26 @@ class FilterDrawer extends React.PureComponent {
     toggleDrawer();
   }
 
+  onClear = () => {
+    const {
+      clear, endDate, fetchTransactions, clearFeed, setStart, setHavingMore,
+    } = this.props;
+    clear();
+    this.setState(() => ({
+      start: '',
+      end: endDate,
+    }));
+    clearFeed();
+    setStart();
+    setHavingMore();
+    fetchTransactions();
+  }
+
   render() {
     const {
       visible, categories, selectCategory, shownCategories,
     } = this.props;
+    const { start, end } = this.state;
     return (
       <Wrapper visible={visible}>
         <Title>Filter</Title>
@@ -172,11 +230,11 @@ class FilterDrawer extends React.PureComponent {
         <Group col>
           <Label>
             StartDate
-            <DatePicker type="date" name="start" onChange={this.onStartDateChange} />
+            <DatePicker type="date" value={start} onChange={this.onStartDateChange} />
           </Label>
           <Label>
             EndDate
-            <DatePicker type="date" name="end" onChange={this.onEndDateChange} />
+            <DatePicker type="date" value={end} onChange={this.onEndDateChange} />
           </Label>
         </Group>
         <GroupName>Categories</GroupName>
@@ -193,7 +251,8 @@ class FilterDrawer extends React.PureComponent {
             ))
           }
         </Group>
-        <Apply type="button" onClick={this.applyFilters}>Apply Filter</Apply>
+        <Apply type="button" onClick={this.onApplyFilters}>Apply Filter</Apply>
+        <ClearFiltersButton type="button" onClick={this.onClear}>Clear Filters</ClearFiltersButton>
       </Wrapper>
     );
   }
@@ -203,6 +262,8 @@ FilterDrawer.defaultProps = {
   visible: false,
   categories: [],
   shownCategories: [],
+  startDate: '',
+  endDate: '',
 };
 
 FilterDrawer.propTypes = {
@@ -217,9 +278,14 @@ FilterDrawer.propTypes = {
   setHavingMore: PropTypes.func.isRequired,
   fetchTransactions: PropTypes.func.isRequired,
   toggleDrawer: PropTypes.func.isRequired,
+  clear: PropTypes.func.isRequired,
+  startDate: PropTypes.string,
+  endDate: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
+  startDate: state.filters.startDate,
+  endDate: state.filters.endDate,
   visible: state.filters.drawerOpen,
   categories: state.categories.categories,
   shownCategories: state.filters.shownCategories,
@@ -234,6 +300,7 @@ const mapDispatchToProps = dispatch => ({
   setHavingMore: () => dispatch(setHasMore(true)),
   fetchTransactions: () => dispatch(startSetTransactions()),
   toggleDrawer: () => dispatch(toggleFilterDrawer()),
+  clear: () => dispatch(clearFilters()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterDrawer);

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import {
   SORT_BY_DATE,
   SORT_BY_AMOUNT,
@@ -5,6 +6,7 @@ import {
   SET_FILTER_CATEGORY,
   SET_START_DATE,
   SET_END_DATE,
+  CLEAR_FILTERS,
 } from '../actions/types';
 
 export const defaultFilterState = {
@@ -13,7 +15,7 @@ export const defaultFilterState = {
   drawerOpen: true,
   shownCategories: [],
   startDate: undefined,
-  endDate: undefined,
+  endDate: moment().format('YYYY-MM-DD'),
 };
 
 // if not categories set then set all from newCategories
@@ -35,6 +37,10 @@ export default (state = defaultFilterState, {
   type, shownCategories, startDate, endDate,
 }) => {
   switch (type) {
+    case CLEAR_FILTERS:
+      return {
+        ...defaultFilterState,
+      };
     case SORT_BY_DATE:
       return {
         ...state,
