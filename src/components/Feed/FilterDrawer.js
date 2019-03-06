@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
-import { setFilterCategory } from '../../actions/filters';
+import { setFilterCategory, setStartDate, setEndDate } from '../../actions/filters';
 
 /*
 Calculations for CSS:
@@ -57,6 +58,7 @@ const Wrapper = styled.div`
 const Group = styled.div`
   padding: 1rem;
   display: flex;
+  flex-direction: ${props => (props.col ? 'column' : 'row')};
   flex-wrap: wrap;
   justify-content: center;
 `;
@@ -83,6 +85,25 @@ const GroupName = styled.div`
     border-bottom: 1px solid ${props => props.theme.greyLightest};
     color: ${props => props.theme.black};
   `}
+`;
+
+const Label = styled.label`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: ${props => props.theme.fontSmall};
+  padding: 0.5rem;
+  color: ${props => props.theme.white};
+  ${media.tablet`
+    color: ${props => props.theme.black};
+  `}
+`;
+
+const DatePicker = styled.input`
+  padding: 5px;
+  font-size: ${props => props.theme.fontSmall};
+  border: 1px solid ${props => props.theme.primaryBlue};
+  margin-top: 0.5rem;
 `;
 
 const Apply = styled.button`
@@ -112,28 +133,56 @@ const Apply = styled.button`
   }
 `;
 
-const FilterDrawer = ({
-  visible, categories, selectCategory, shownCategories,
-}) => (
-  <Wrapper visible={visible}>
-    <Title>Filter</Title>
-    <GroupName>Categories</GroupName>
-    <Group>
-      {
-        categories.map(category => (
-          <SelectCategory
-            key={category.id[0]}
-            displayName={category.displayName}
-            select={selectCategory}
-            ids={category.id}
-            visible={shownCategories.includes(category.id[0])}
-          />
-        ))
-      }
-    </Group>
-    <Apply type="button">Apply Filter</Apply>
-  </Wrapper>
-);
+class FilterDrawer extends React.PureComponent {
+  onStartDateChange = (e) => {
+    const { setDateStart } = this.props;
+    const date = e.target.value;
+    setDateStart(moment(date));
+  }
+
+  onEndDateChange = (e) => {
+    const { setDateEnd } = this.props;
+    const date = e.target.value;
+    setDateEnd(moment(date));
+  }
+
+  render() {
+    const {
+      visible, categories, selectCategory, shownCategories,
+    } = this.props;
+    return (
+      <Wrapper visible={visible}>
+        <Title>Filter</Title>
+        <GroupName>Date</GroupName>
+        <Group col>
+          <Label>
+            StartDate
+            <DatePicker type="date" name="start" onChange={this.onStartDateChange} />
+          </Label>
+          <Label>
+            EndDate
+            <DatePicker type="date" name="end" onChange={this.onEndDateChange} />
+          </Label>
+        </Group>
+        <GroupName>Categories</GroupName>
+        <Group>
+          {
+            categories.map(category => (
+              <SelectCategory
+                key={category.id[0]}
+                displayName={category.displayName}
+                select={selectCategory}
+                ids={category.id}
+                visible={shownCategories.includes(category.id[0])}
+              />
+            ))
+          }
+        </Group>
+        <Apply type="button">Apply Filter</Apply>
+      </Wrapper>
+    );
+  }
+}
 
 FilterDrawer.defaultProps = {
   visible: false,
@@ -146,6 +195,8 @@ FilterDrawer.propTypes = {
   categories: PropTypes.instanceOf(Array),
   selectCategory: PropTypes.func.isRequired,
   shownCategories: PropTypes.instanceOf(Array),
+  setDateEnd: PropTypes.func.isRequired,
+  setDateStart: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -156,6 +207,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   selectCategory: ids => dispatch(setFilterCategory(ids)),
+  setDateStart: date => dispatch(setStartDate(date)),
+  setDateEnd: date => dispatch(setEndDate(date)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterDrawer);
