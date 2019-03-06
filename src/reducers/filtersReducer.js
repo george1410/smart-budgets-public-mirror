@@ -12,7 +12,7 @@ import {
 export const defaultFilterState = {
   sortByDate: 'greatest',
   sortByAmount: undefined,
-  drawerOpen: true,
+  drawerOpen: false,
   shownCategories: [],
   startDate: undefined,
   endDate: moment().format('YYYY-MM-DD'),
