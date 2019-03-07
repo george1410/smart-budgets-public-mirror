@@ -1,5 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 import media from './util/mediaQueries';
+import isiPhoneX from './util/detectiPhoneX';
 
 export const GlobalStyle = createGlobalStyle`
   html {
@@ -21,6 +22,8 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const isX = isiPhoneX();
+
 export const theme = {
   primaryBlue: '#0056FF',
   primaryBlueDark: '#052B80',
@@ -40,4 +43,8 @@ export const theme = {
   fontSmall: '1.8rem',
   fontMedium: '2.5rem',
   shadowCol: 'rgba(0, 0, 0, 0.1)',
+  navHeight: isX ? '10rem' : '5rem',
+  bottomPad: isX ? '15rem' : '10rem',
+  innerHeight: isX ? 'calc(100vh - 15rem)' : 'calc(100vh - 10rem)',
+  isX,
 };

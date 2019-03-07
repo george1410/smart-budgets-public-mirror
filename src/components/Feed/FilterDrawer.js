@@ -57,9 +57,9 @@ const Wrapper = styled.div`
     background-color: ${props => props.theme.white};
     transition: all 0.3s ease-in-out;
     position: fixed;
-    height: ${props => (props.visible ? 'calc(100vh - 10rem)' : '0')};
+    height: ${props => (props.visible ? props.theme.innerHeight : '0')};
     top: auto;
-    bottom: 5rem;
+    bottom: ${props => (props.theme.isX ? '10rem' : '5rem')};
     & * {
       visibility: ${props => (props.visible ? 'visible' : 'hidden')};
     }

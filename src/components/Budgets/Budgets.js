@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 5rem 0;
   ${media.tablet`
-    padding-bottom: 10rem;
+    padding-bottom: ${props => props.theme.bottomPad};
   `}
 `;
 

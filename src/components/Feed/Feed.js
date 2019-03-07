@@ -23,17 +23,17 @@ const Wrapper = styled.div`
   position: relative;
   padding: 5rem 0 0 0;
   ${media.tablet`
-    padding: 5rem 0;
+    padding: 5rem 0 ${props => (props.theme.isX ? '10rem' : '5rem')} 0;
   `}
 `;
 
 const StyledList = styled(VirtualList)`
-  height: calc(100vh - 10rem);
+  height: ${props => props.theme.innerHeight};
   outline: none;
 `;
 
 const ListWrapper = styled.div`
-  height: calc(100vh - 10rem);
+  height: ${props => props.theme.innerHeight};
   width: 100%;
 
   & > div > div::-webkit-scrollbar {
