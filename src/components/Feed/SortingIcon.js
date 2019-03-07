@@ -8,6 +8,7 @@ const Icon = styled.svg`
   width: 1.8rem;
   margin: 0 2px;
   opacity: 0;
+  transition: all 0.2s ease-in-out;
   ${({ show }) => show && 'opacity: 100;'}
   ${({ show }) => (show === 'smallest') && 'transform: rotate(180deg); '}
 

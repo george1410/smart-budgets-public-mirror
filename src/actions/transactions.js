@@ -44,7 +44,7 @@ export const startSetTransactions = () => (dispatch, getState) => {
     auth: { uid }, transactions: {
       start, count, hasMore, error,
     },
-    filters: { startDate, endDate },
+    filters: { startDate, endDate, textFilter },
   } = getState();
   if (hasMore && !error) {
     dispatch(setTransactionLoading(true));
@@ -52,12 +52,13 @@ export const startSetTransactions = () => (dispatch, getState) => {
     dispatch(setTransactionStart(start + count));
     api.get(`api/users/${uid}/transactions`, {
       params: {
-        start, count, startDate, endDate,
+        start, count, startDate, endDate, textFilter,
       },
     })
       .then((payload) => {
         dispatch(setTransactions(payload.data.transactions));
         dispatch(setTransactionLoading(false));
+
         // if less transactions are returned then hasMore will be false
         dispatch(setHasMore(payload.data.hasMore));
       })

@@ -33,6 +33,7 @@ const Wrapper = styled.div`
   margin-left: 2rem;
   top: 10rem;
   position: absolute;
+  width: calc((100vw - 58rem) / 2);
   max-width: 30rem;
   flex-direction: column;
   background-color: ${props => props.theme.primaryBlue};
@@ -41,27 +42,31 @@ const Wrapper = styled.div`
   justify-content: flex-end;
   height: auto;
   ${media.desktop`
+    top: 23rem;
     right: calc((100vw - 72rem) / 2 + 52rem);
+    width: 20rem;
     margin-left: calc((100vw - 72rem) / 2);
   `}
   ${media.tablet`
+    width: 100vw;
     right: auto;
     margin-left: auto;
     max-width: 100%;
     padding: 1rem 5rem;
-    visibility: ${props => (props.visible ? 'visible' : 'hidden')};
-    opacity: ${props => (props.visible ? '100' : '0')};
+    opacity: ${props => (props.visible ? '1' : '0')};
     background-color: ${props => props.theme.white};
-    transition: opacity 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
     position: fixed;
-    height: calc(100vh - 10rem);
+    height: ${props => (props.visible ? 'calc(100vh - 10rem)' : '0')};
     top: auto;
     bottom: 5rem;
+    & * {
+      visibility: ${props => (props.visible ? 'visible' : 'hidden')};
+    }
   `}
 `;
 
 const Group = styled.div`
-  padding: 1rem;
   display: flex;
   flex-direction: ${props => (props.col ? 'column' : 'row')};
   flex-wrap: wrap;
@@ -97,7 +102,7 @@ const Label = styled.label`
   flex-direction: column;
   align-items: center;
   font-size: ${props => props.theme.fontSmall};
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   color: ${props => props.theme.white};
   ${media.tablet`
     color: ${props => props.theme.black};
@@ -105,10 +110,19 @@ const Label = styled.label`
 `;
 
 const DatePicker = styled.input`
-  padding: 5px;
-  font-size: ${props => props.theme.fontSmall};
+  padding: 4px 8px;
+  font-size: 1.6rem;
   border: 1px solid ${props => props.theme.primaryBlue};
   margin-top: 0.5rem;
+  width: 90%;
+  ${media.desktop`
+    width: 18rem;
+  `}
+  ${media.tablet`
+    width: auto;
+    font-size: ${props => props.theme.fontSmall};
+    padding: 0.5rem 1rem;
+  `}
 `;
 
 const Apply = styled.button`
@@ -126,7 +140,7 @@ const Apply = styled.button`
   user-select: none;
   ${media.tablet`
     font-size: ${props => props.theme.fontMedium};
-    outline-color: -webkit-focus-ring-color;;
+    outline-color: -webkit-focus-ring-color;
     padding: 0.5rem 2rem;
     border: 1px solid ${props => props.theme.white};
     background-color: ${props => props.theme.white};
@@ -191,7 +205,13 @@ class FilterDrawer extends React.PureComponent {
 
   onApplyFilters = () => {
     const {
-      clearFeed, setStart, setHavingMore, fetchTransactions, toggleDrawer, setDateStart, setDateEnd,
+      clearFeed,
+      setStart,
+      setHavingMore,
+      fetchTransactions,
+      toggleFilters,
+      setDateStart,
+      setDateEnd,
     } = this.props;
     const { start, end } = this.state;
     setDateStart(start);
@@ -200,7 +220,7 @@ class FilterDrawer extends React.PureComponent {
     setStart();
     setHavingMore();
     fetchTransactions();
-    toggleDrawer();
+    toggleFilters();
   }
 
   onClear = () => {
@@ -277,7 +297,7 @@ FilterDrawer.propTypes = {
   setStart: PropTypes.func.isRequired,
   setHavingMore: PropTypes.func.isRequired,
   fetchTransactions: PropTypes.func.isRequired,
-  toggleDrawer: PropTypes.func.isRequired,
+  toggleFilters: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   startDate: PropTypes.string,
   endDate: PropTypes.string,
@@ -286,7 +306,7 @@ FilterDrawer.propTypes = {
 const mapStateToProps = state => ({
   startDate: state.filters.startDate,
   endDate: state.filters.endDate,
-  visible: state.filters.drawerOpen,
+  visible: state.filters.filterDrawerOpen,
   categories: state.categories.categories,
   shownCategories: state.filters.shownCategories,
 });
@@ -299,7 +319,7 @@ const mapDispatchToProps = dispatch => ({
   setStart: () => dispatch(setTransactionStart(0)),
   setHavingMore: () => dispatch(setHasMore(true)),
   fetchTransactions: () => dispatch(startSetTransactions()),
-  toggleDrawer: () => dispatch(toggleFilterDrawer()),
+  toggleFilters: () => dispatch(toggleFilterDrawer()),
   clear: () => dispatch(clearFilters()),
 });
 

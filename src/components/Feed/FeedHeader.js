@@ -1,7 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
 import media from '../../util/mediaQueries';
+import SearchIcon from './SearchIcon';
+import { toggleSearchDrawer, toggleFilterDrawer } from '../../actions/filters';
 
 const Wrapper = styled.header`
   height: 5rem;
@@ -13,7 +16,7 @@ const Wrapper = styled.header`
   justify-content: space-between;
   padding: 0 2rem;
   align-items: center;
-  z-index: 2;
+  z-index: 6;
   ${media.tablet`
     display: flex;
     top: 0;
@@ -24,10 +27,6 @@ const Title = styled.span`
   color: ${props => props.theme.primaryBlue};
   font-size: ${props => props.theme.fontSmall};
   user-select: none;
-`;
-
-const Search = styled.div`
-  color: salmon;
 `;
 
 const Filter = styled.div`
@@ -73,27 +72,49 @@ const FilterIcon = styled.span.attrs(({ checked, theme }) => ({
   }
 `;
 
-const FeedHeader = ({ title, toggleDrawer, drawerOpen }) => (
-  <Wrapper>
-    <Search>Search</Search>
-    <Title>
-      {title}
-    </Title>
-    <Filter onClick={toggleDrawer}>
-      <FilterIcon checked={drawerOpen} />
-    </Filter>
-  </Wrapper>
+const Search = styled.div`
+  cursor: pointer;
+`;
+
+const FeedHeader = ({
+  toggleFilters, filterOpen, searchOpen, toggleSearch,
+}) => (
+  <>
+    <Wrapper>
+      <Search onClick={toggleSearch}>
+        <SearchIcon open={searchOpen} />
+      </Search>
+      <Title>
+        Transactions
+      </Title>
+      <Filter onClick={toggleFilters}>
+        <FilterIcon checked={filterOpen} />
+      </Filter>
+    </Wrapper>
+  </>
 );
 
 FeedHeader.defaultProps = {
-  title: 'Title',
-  drawerOpen: false,
+  searchOpen: false,
+  filterOpen: false,
 };
 
 FeedHeader.propTypes = {
-  title: PropTypes.string,
-  drawerOpen: PropTypes.bool,
-  toggleDrawer: PropTypes.func.isRequired,
+  searchOpen: PropTypes.bool,
+  filterOpen: PropTypes.bool,
+  toggleSearch: PropTypes.func.isRequired,
+  toggleFilters: PropTypes.func.isRequired,
 };
 
-export default FeedHeader;
+const mapStateToProps = state => ({
+  searchText: state.filters.textFilter,
+  searchOpen: state.filters.searchDrawerOpen,
+  filterOpen: state.filters.filterDrawerOpen,
+});
+
+const mapDispatchToProps = dispatch => ({
+  toggleSearch: () => dispatch(toggleSearchDrawer()),
+  toggleFilters: () => dispatch(toggleFilterDrawer()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(FeedHeader);

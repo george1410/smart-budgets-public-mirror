@@ -81,11 +81,11 @@ module.exports = (app) => {
       sql += `AND t.date BETWEEN '${startDate}' AND '${endDate}' `;
     }
 
-    if (req.query.searchTerm) {
-      let { searchTerm } = req.query;
-      searchTerm = searchTerm.toUpperCase();
+    if (req.query.textFilter) {
+      let { textFilter } = req.query;
+      textFilter = textFilter.toUpperCase();
       sql += `
-      AND t.merchant LIKE '%${searchTerm}%'`;
+      AND t.merchant LIKE '%${textFilter}%'`;
     }
 
     // if query params not present, for some reason, then default to first 50

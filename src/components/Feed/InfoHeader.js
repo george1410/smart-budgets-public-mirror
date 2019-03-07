@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   width: 50rem;
   min-height: 5rem;
   padding: 0 2rem;
-  box-shadow: 0 1px 0 ${props => props.theme.primaryBlue};
+  box-shadow: 0 1px 5px ${props => props.theme.primaryBlue};
   ${media.desktop`
     margin-right: calc((100vw - 72rem) / 2);
   `}

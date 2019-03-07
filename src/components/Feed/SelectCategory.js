@@ -9,7 +9,6 @@ const Wrapper = styled.div`
   padding: 0.5rem 1rem;
   color: ${props => (props.show ? props.theme.primaryBlue : props.theme.white)};
   border: 1px solid ${props => props.theme.white};
-  /* border: 1px solid ${props => (props.show ? props.theme.primaryBlue : props.theme.white)}; */
   font-size: ${props => props.theme.fontTiny};
   font-weight: 500;
   margin: 0.5rem;
