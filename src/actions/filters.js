@@ -8,6 +8,8 @@ import {
   SET_END_DATE,
   CLEAR_FILTERS,
   SET_TEXT_FILTER,
+  SET_MIN_AMOUNT,
+  SET_MAX_AMOUNT,
 } from './types';
 
 export const clearFilters = () => ({
@@ -50,4 +52,14 @@ export const setStartDate = startDate => ({
 export const setEndDate = endDate => ({
   type: SET_END_DATE,
   endDate,
+});
+
+export const setMinAmount = minAmount => ({
+  type: SET_MIN_AMOUNT,
+  minAmount,
+});
+
+export const setMaxAmount = maxAmount => ({
+  type: SET_MIN_AMOUNT,
+  maxAmount,
 });
