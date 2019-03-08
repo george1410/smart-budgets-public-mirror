@@ -81,6 +81,11 @@ module.exports = (app) => {
       sql += `AND t.date BETWEEN '${startDate}' AND '${endDate}' `;
     }
 
+    if (req.query.shownCategories) {
+      const { shownCategories } = req.query;
+      sql += ` AND t.categoryId IN (${shownCategories.join(', ')})`;
+    }
+
     if (req.query.textFilter) {
       let { textFilter } = req.query;
       textFilter = textFilter.toUpperCase();
