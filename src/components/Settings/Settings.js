@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
-import { logout } from '../../actions/auth';
+import { signout } from '../../actions/auth';
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,7 +47,7 @@ Settings.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  startLogout: () => dispatch(logout()),
+  startLogout: () => dispatch(signout()),
 });
 
 export default connect(undefined, mapDispatchToProps)(Settings);

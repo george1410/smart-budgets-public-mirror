@@ -14,13 +14,18 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${props => props.theme.font};
     color: ${props => props.theme.black};
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 `;
 
 export const theme = {
   primaryBlue: '#0056FF',
   primaryBlueDark: '#052B80',
-  error: '#E41317',
+  primaryBlueShadow: 'rgba(00, 86, 255, 0.1)',
+  error: '#E01967',
   greyLightest: '#ddd',
   greyLight: '#888',
   grey: '#555',
@@ -32,5 +37,5 @@ export const theme = {
   fontTiny: '1.2rem',
   fontSmall: '1.8rem',
   fontMedium: '2.5rem',
-  vh: window.innerHeight,
+  shadowCol: 'rgba(0, 0, 0, 0.1)',
 };
