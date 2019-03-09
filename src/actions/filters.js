@@ -60,6 +60,6 @@ export const setMinAmount = minAmount => ({
 });
 
 export const setMaxAmount = maxAmount => ({
-  type: SET_MIN_AMOUNT,
+  type: SET_MAX_AMOUNT,
   maxAmount,
 });
