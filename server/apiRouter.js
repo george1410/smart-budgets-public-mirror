@@ -40,7 +40,7 @@ module.exports = (app) => {
    *     yyyy-mm-dd
    *   endDate
    *     yyy-mm-dd
-   *   showCategories
+   *   shownCategories
    *     [1,2,3,4,5..., 61]
    *   textFilter
    *     'merchant'
