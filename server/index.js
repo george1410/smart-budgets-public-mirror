@@ -70,6 +70,7 @@ app.get('/api/users/:id/transactions', (req, res) => {
     });
   }
 });
+// badRequest was pool. not sure what it did.
 // 'server-dev' command sets this env var
 // this makes writing and testing endpoints easier as you
 // dont need to have a jwt set.
