@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import numeral from 'numeral';
 import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
@@ -34,9 +35,10 @@ const LabelWrapper = styled.div`
 `;
 
 const LabelEnd = styled.span`
-  color: ${props => props.theme.grey};
   font-size: ${props => props.theme.fontSmall};
+  color: ${props => props.theme.grey};
   flex: 1;
+  font-weight: 500;
 
   &:last-of-type {
     text-align: end;
@@ -46,6 +48,8 @@ const LabelEnd = styled.span`
 const LabelMain = styled.span`
   color: ${props => props.theme.black};
   font-size: ${props => props.theme.fontMedium};
+  text-align: center;
+  align-self: stretch;
 `;
 
 const ProgressBar = styled.div`
@@ -65,21 +69,18 @@ const Progress = styled.div`
 const link = '/feed?displayName=';
 
 const CategoryProgress = ({ displayName, spend, budget }) => (
-  <NavLink to={link + displayName}>
+  <NavLink to={link} style={{ textDecoration: 'none' }}>
     <Wrapper>
       <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
+      <LabelMain>
+        {numeral(budget - spend).format('$0,0.00')}
+      </LabelMain>
       <LabelWrapper>
         <LabelEnd>
-          {spend}
-          {' spent'}
+          {numeral(spend).format('$0,0.00')}
         </LabelEnd>
-        <LabelMain>
-          {budget - spend}
-          {' left'}
-        </LabelMain>
         <LabelEnd>
-          {'of '}
-          {budget}
+          {numeral(budget).format('$0,0.00')}
         </LabelEnd>
       </LabelWrapper>
       <ProgressBar>

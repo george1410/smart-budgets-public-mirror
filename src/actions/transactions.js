@@ -5,11 +5,16 @@ import {
   TRANSACTION_ERROR,
   TRANSACTION_LOADING,
   TRANSACTIONS_HAS_MORE,
+  CLEAR_TRANSACTIONS,
 } from './types';
 
 export const setTransactions = transactions => ({
   type: SET_TRANSACTIONS,
   transactions,
+});
+
+export const clearTransactions = () => ({
+  type: CLEAR_TRANSACTIONS,
 });
 
 export const setTransactionStart = start => ({
@@ -39,15 +44,23 @@ export const startSetTransactions = () => (dispatch, getState) => {
     auth: { uid }, transactions: {
       start, count, hasMore, error,
     },
+    filters: {
+      startDate, endDate, textFilter, shownCategories,
+    },
   } = getState();
   if (hasMore && !error) {
     dispatch(setTransactionLoading(true));
     // increment the starting point for the next fetch;
     dispatch(setTransactionStart(start + count));
-    api.get(`api/users/${uid}/transactions`, { params: { start, count } })
+    api.get(`api/users/${uid}/transactions`, {
+      params: {
+        start, count, startDate, endDate, textFilter, shownCategories,
+      },
+    })
       .then((payload) => {
         dispatch(setTransactions(payload.data.transactions));
         dispatch(setTransactionLoading(false));
+
         // if less transactions are returned then hasMore will be false
         dispatch(setHasMore(payload.data.hasMore));
       })

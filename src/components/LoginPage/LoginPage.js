@@ -18,27 +18,26 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${props => props.theme.white};
+  background-color: ${props => props.theme.primaryBlue};
   ${media.phone`
     padding: 0;
   `}
 `;
 
 const LoginWrapper = styled.div`
-  background-color: ${props => props.theme.offWhite};
+  background-color: ${props => props.theme.white};
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   width: 40rem;
-  min-height: 60rem;
+  min-height: 70rem;
   padding: 5rem;
-  box-shadow: 10px 10px 0 ${props => props.theme.primaryBlue};
+  box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.3);
   ${media.phone`
     width: 100vw;
     height: 100vh;
     min-height: auto;
-    background-color: ${props => props.theme.white};
     padding: 4rem;
   `}
 `;
@@ -47,19 +46,12 @@ const Subtitle = styled.span`
   text-align: center;
   font-size: ${props => props.theme.fontSmall};
   color: ${props => (props.err ? props.theme.error : props.theme.grey)};
-  margin: 3rem 0 0 0;
+  margin: 3rem 0;
 `;
 
 const Form = styled.form`
   width: 100%;
-  height: 268px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  ${media.tablet`
-    height: 238px;
-  `}
+  padding-top: 0 !important;
   ${media.phone`
     font-size: 5rem;
   `}
@@ -67,9 +59,11 @@ const Form = styled.form`
 
 const InputWrapper = styled.div`
   width: 100%;
+  height: 6rem;
   display: flex;
   flex-flow: column-reverse;
-  cursor: text;
+  position: relative;
+  margin-bottom: 2rem;
 
   /* this moves the label into the input field */
   input:placeholder-shown + label {
@@ -91,10 +85,8 @@ const InputWrapper = styled.div`
     padding: 2rem 2.5rem 1rem 1.5rem;
   }
 
-  /* add space between pw field and log in button */
   :last-of-type {
-    /* it is set to -2rem in input, this makes it 4 */
-    margin-bottom: 6rem;
+    margin-bottom: 4rem;
   }
 `;
 
@@ -102,6 +94,8 @@ const Label = styled.label`
   font-size: ${props => props.theme.fontSmall};
   padding: 1rem 1.5rem;
   color: ${props => props.theme.greyLight};
+  position: absolute;
+  top: -3.7rem;
   cursor: text;
   user-select: none;
   pointer-events: none;
@@ -117,12 +111,11 @@ const Label = styled.label`
 const Input = styled(Field)`
   display: block;
   width: 100%;
-  margin-bottom: -2rem;
   padding: 1.5rem 1.5rem;
   font-size: ${props => props.theme.fontSmall};
   border-radius: 0;
   outline: none;
-  background: ${props => props.theme.white};
+  background: ${props => props.theme.offWhite};
   border: none;
   border-bottom: 3px solid transparent;
   border-top: 3px solid transparent;
@@ -137,12 +130,12 @@ const Input = styled(Field)`
     /* placeholder needs to be present, for label animations
        however, we don't want to actually see it */
     opacity: 0;
+    position: absolute;
   }
 
   &:focus {
     padding: 2rem 2.5rem 1rem 1.5rem;
     border-bottom: 3px solid ${props => props.theme.primaryBlue};
-    box-shadow: 4px 4px 0 ${props => props.theme.greyLightest};
   }
 
   &:focus:invalid {
@@ -153,11 +146,9 @@ const Input = styled(Field)`
 const Icon = styled.div`
   display: flex;
   align-items: center;
-  width: 100%;
-  justify-content: center;
 
   & > img {
-    width: 50%;
+    width: 15rem;
   }
 `;
 
@@ -214,7 +205,7 @@ class LoginPage extends React.Component {
             </InputWrapper>
             <Button title="Log In" type="submit" />
           </Form>
-          <AltButton onClick={this.onFillFakeLogins} title="Fill with demo logins" type="button" />
+          <AltButton style={{ marginTop: '2rem' }} onClick={this.onFillFakeLogins} title="Fill with demo logins" type="button" />
         </LoginWrapper>
       </Wrapper>
     );

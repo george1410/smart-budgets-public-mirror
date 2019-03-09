@@ -6,11 +6,12 @@ import { AutoSizer, InfiniteLoader, List as VirtualList } from 'react-virtualize
 import 'react-virtualized/styles.css';
 import FeedHeader from './FeedHeader';
 import FilterDrawer from './FilterDrawer';
+import SearchDrawer from './SearchDrawer';
 import media from '../../util/mediaQueries';
 import Transaction from '../Transaction/Transaction';
 import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
-import { sortByDate, sortByAmount, toggleFilterDrawer } from '../../actions/filters';
+import { sortByDate, sortByAmount } from '../../actions/filters';
 import { startSetTransactions, setTransactionError } from '../../actions/transactions';
 
 const Wrapper = styled.div`
@@ -22,17 +23,17 @@ const Wrapper = styled.div`
   position: relative;
   padding: 5rem 0 0 0;
   ${media.tablet`
-    padding: 5rem 0;
+    padding: 5rem 0 ${props => (props.theme.isX ? '10rem' : '5rem')} 0;
   `}
 `;
 
 const StyledList = styled(VirtualList)`
-  height: calc(100vh - 10rem);
+  height: ${props => props.theme.innerHeight};
   outline: none;
 `;
 
 const ListWrapper = styled.div`
-  height: calc(100vh - 10rem);
+  height: ${props => props.theme.innerHeight};
   width: 100%;
 
   & > div > div::-webkit-scrollbar {
@@ -42,14 +43,14 @@ const ListWrapper = styled.div`
 
 class Feed extends React.Component {
   renderRowVirtual = ({ index, key, style }) => {
-    const { transactions, filters: { drawerOpen } } = this.props;
+    const { transactions, filters: { searchDrawerOpen } } = this.props;
     const transaction = transactions[index];
     return (
       <div key={key} style={style}>
         <Transaction
           key={transaction.transactionId}
           {...transaction}
-          shouldShift={drawerOpen}
+          shouldShift={searchDrawerOpen}
         />
       </div>
     );
@@ -80,11 +81,6 @@ class Feed extends React.Component {
     };
   }
 
-  drawerToggle = () => {
-    const { toggleDrawer } = this.props;
-    toggleDrawer();
-  }
-
   fetchMore = () => {
     const { fetchTransactions } = this.props;
     if (navigator.onLine) {
@@ -99,21 +95,17 @@ class Feed extends React.Component {
 
   render() {
     const {
-      transactions, filters: { drawerOpen },
+      transactions, filters: { filterDrawerOpen },
     } = this.props;
     return (
       <>
-        <FeedHeader
-          title="Transactions"
-          toggleDrawer={this.drawerToggle}
-          drawerOpen={drawerOpen}
-        />
+        <FeedHeader />
         <Wrapper>
           <InfoHeader
             sortingByAmount={this.sortByAmountOnClick}
             sortingByDate={this.sortByDateOnClick}
             indicators={this.getSortIndicatorInfo()}
-            shouldShift={drawerOpen}
+            shouldShift={filterDrawerOpen}
           />
           <ListWrapper>
             <AutoSizer>
@@ -146,6 +138,7 @@ class Feed extends React.Component {
           </ListWrapper>
         </Wrapper>
         <FilterDrawer />
+        <SearchDrawer />
       </>
     );
   }
@@ -156,7 +149,6 @@ Feed.defaultProps = {
   filters: {
     sortByDate: 1,
     sortByAmount: 0,
-    drawerOpen: false,
   },
   error: '',
 };
@@ -165,11 +157,9 @@ Feed.propTypes = {
   transactions: PropTypes.instanceOf(Array),
   sortingByAmount: PropTypes.func.isRequired,
   sortingByDate: PropTypes.func.isRequired,
-  toggleDrawer: PropTypes.func.isRequired,
   filters: PropTypes.shape({
     sortByDate: PropTypes.string,
     sortByAmount: PropTypes.string,
-    drawerOpen: PropTypes.bool,
   }),
   fetchTransactions: PropTypes.func.isRequired,
   hasMore: PropTypes.bool.isRequired,
@@ -188,7 +178,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   sortingByDate: () => dispatch(sortByDate()),
   sortingByAmount: () => dispatch(sortByAmount()),
-  toggleDrawer: () => dispatch(toggleFilterDrawer()),
   fetchTransactions: () => dispatch(startSetTransactions()),
   dismissError: () => dispatch(setTransactionError(undefined)),
 });

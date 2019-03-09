@@ -12,7 +12,7 @@ const NavigationBar = styled.nav`
   position: fixed;
   background-color: ${props => props.theme.white};
   box-shadow: 0 1px 1px ${props => props.theme.shadowCol};
-  align-items: center;
+  align-items: ${props => (props.theme.isX ? 'flex-start' : 'center')};
   width: 100%;
   height: 5rem;
   z-index: 2;
@@ -22,7 +22,7 @@ const NavigationBar = styled.nav`
     box-shadow: 0 -1px 0 ${props => props.theme.shadowCol};
     justify-content: space-around;
     width: 100%;
-    height: 5rem;
+    height: ${props => props.theme.navHeight};
     bottom: 0;
   `}
 `;
@@ -39,6 +39,7 @@ const NavItem = styled(NavLink).attrs({
   text-align: center;
   display: flex;
   justify-content: center;
+  user-select: none;
 
   &.${activeClassName} {
     color: ${props => props.theme.primaryBlue};
@@ -55,7 +56,7 @@ const NavItem = styled(NavLink).attrs({
   ${media.tablet`
     flex: 1;
     color: ${props => props.theme.greyLight};
-    height: 100%;
+    height: ${props => (props.theme.isX ? 50 : 100)}%;
     margin: 0;
 
     & > span {

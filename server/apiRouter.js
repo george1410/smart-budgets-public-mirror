@@ -36,6 +36,10 @@ module.exports = (app) => {
    *   period
    *    values: WEEK, MONTH
    *    default: All transactions
+   *   startDate
+   *     yyyy-mm-dd
+   *   endDate
+   *     yyy-mm-dd
    * Response format:
    *   [
    *     {
@@ -72,15 +76,25 @@ module.exports = (app) => {
       }
     }
 
+    if (req.query.startDate && req.query.endDate) {
+      const { startDate, endDate } = req.query;
+      sql += `AND t.date BETWEEN '${startDate}' AND '${endDate}' `;
+    }
+
+    if (req.query.shownCategories) {
+      const { shownCategories } = req.query;
+      sql += ` AND t.categoryId IN (${shownCategories.join(', ')})`;
+    }
+
+    if (req.query.textFilter) {
+      let { textFilter } = req.query;
+      textFilter = textFilter.toUpperCase();
+      sql += `
+      AND t.merchant LIKE '%${textFilter}%'`;
+    }
+
     // if query params not present, for some reason, then default to first 50
     sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
-
-    if (req.query.searchTerm) {
-      let { searchTerm } = req.query;
-      searchTerm = searchTerm.toUpperCase();
-      sql += `
-      AND t.merchant LIKE '%${searchTerm}%'`;
-    }
 
     if (!badRequest) {
       pool.query(sql, (error, results) => {
