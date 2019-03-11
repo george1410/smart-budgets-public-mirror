@@ -60,17 +60,33 @@ app.get('public/api/users/:id/transactions', (req, res) => {
   }
 });
 
-
-// let sql = `
-// SELECT period FROM users 
-//   WHERE t.userId = ${req.params.id} `;
-//   if (sql === 'WEEK') {
-//    sql += `
-//     UPDATE period SET users = 'MONTH' WHERE userId = ${req.params.id}`;
-//   } else if(sql === 'MONTH'){
-//      sql += `
-//     UPDATE period SET users = 'WEEK' WHERE userId = ${req.params.id}`;
-
+/**
+ * Get and change period from user
+ */
+app.post('/period', (req, res) => {
+ let sql = `
+ SELECT period FROM users 
+ WHERE t.userId = ${req.params.id} `;
+ 
+  if (sql === 'WEEK') {
+   sql += `
+   UPDATE period SET users = 'MONTH' WHERE userId = ${req.params.id}`;
+ } else if(sql === 'MONTH'){
+   sql += `
+   
+   UPDATE period SET users = 'WEEK' WHERE userId = ${req.params.id}`;
+ }
+ if (!badRequest) {
+  pool.query(sql, (error, results) => {
+    if (error) throw error;
+    if (results.length < 1) {
+      res.status(404).json({ error: 'No results were found.' });
+    } else {
+      res.json(results);
+    }
+  });
+}
+});
 
 
 /**
