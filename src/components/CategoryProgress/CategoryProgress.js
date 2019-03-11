@@ -19,6 +19,12 @@ const Wrapper = styled.div`
   margin-top: 2rem;
   padding: 0 2rem;
   width: 50rem;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${props => props.theme.primaryBlueShadow};
+  }
+
   ${media.phone`
     width: 100%;
   `}
