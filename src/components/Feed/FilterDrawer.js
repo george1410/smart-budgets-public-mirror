@@ -6,7 +6,7 @@ import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
 import {
   setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
-  clearFilters,
+  clearFilters, setMinAmount, setMaxAmount,
 } from '../../actions/filters';
 import {
   clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
@@ -48,6 +48,7 @@ const Wrapper = styled.div`
     margin-left: calc((100vw - 72rem) / 2);
   `}
   ${media.tablet`
+    overflow: auto;
     width: 100vw;
     right: auto;
     margin-left: auto;
@@ -57,12 +58,16 @@ const Wrapper = styled.div`
     background-color: ${props => props.theme.white};
     transition: all 0.3s ease-in-out;
     position: fixed;
-    height: ${props => (props.visible ? props.theme.innerHeight : '0')};
-    top: auto;
+    max-height: ${props => (props.visible ? props.theme.innerHeight : '0')};
+    top: 5rem;
     bottom: ${props => (props.theme.isX ? '10rem' : '5rem')};
     & * {
       visibility: ${props => (props.visible ? 'visible' : 'hidden')};
     }
+  `}
+  ${media.phone`
+    justify-content: space-around;
+    padding: 1rem;
   `}
 `;
 
@@ -80,6 +85,7 @@ const Title = styled.div`
   user-select: none;
   ${media.tablet`
     color: ${props => props.theme.black};
+    display: none;
   `}
 `;
 
@@ -107,6 +113,10 @@ const Label = styled.label`
   ${media.tablet`
     color: ${props => props.theme.black};
   `}
+  ${media.phone`
+    flex-direction: row;
+    padding: 0;
+  `}
 `;
 
 const DatePicker = styled.input`
@@ -122,6 +132,27 @@ const DatePicker = styled.input`
     width: auto;
     font-size: ${props => props.theme.fontSmall};
     padding: 0.5rem 1rem;
+  `}
+  ${media.phone`
+    margin-left: 2px;
+  `}
+`;
+
+const AmountPicker = styled.input`
+  padding: 4px 8px;
+  font-size: 1.6rem;
+  border: 1px solid ${props => props.theme.primaryBlue};
+  margin-top: 0.5rem;
+  width: 10rem;
+  ${media.tablet`
+    font-size: ${props => props.theme.fontSmall};
+    padding: 0.5rem 1rem;
+    :first-of-type {
+      margin-right: 1rem;
+    }
+  `}
+  ${media.phone`
+    margin-left: 0.5rem;
   `}
 `;
 
@@ -147,6 +178,9 @@ const Apply = styled.button`
     color: ${props => props.theme.primaryBlue};
     border-bottom: 1px solid ${props => props.theme.primaryBlue};
   `}
+  ${media.phone`
+    margin-bottom: 1rem;
+  `}
 
   &:active {
     transform: translateY(2px);
@@ -167,7 +201,7 @@ const ClearFiltersButton = styled.button`
   user-select: none;
   ${media.tablet`
     font-size: ${props => props.theme.fontSmall};
-    outline-color: -webkit-focus-ring-color;;
+    outline-color: -webkit-focus-ring-color;
     padding: 0.5rem 2rem;
     color: ${props => props.theme.error};
     border: 1px solid ${props => props.theme.error};
@@ -180,27 +214,16 @@ const ClearFiltersButton = styled.button`
 `;
 
 class FilterDrawer extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    const { startDate, endDate } = this.props;
-    this.state = {
-      start: startDate,
-      end: endDate,
-    };
-  }
-
   onStartDateChange = (e) => {
+    const { setDateStart } = this.props;
     const date = e.target.value;
-    this.setState(() => ({
-      start: date,
-    }));
+    setDateStart(date);
   }
 
   onEndDateChange = (e) => {
+    const { setDateEnd } = this.props;
     const date = e.target.value;
-    this.setState(() => ({
-      end: date,
-    }));
+    setDateEnd(date);
   }
 
   onApplyFilters = () => {
@@ -210,12 +233,7 @@ class FilterDrawer extends React.PureComponent {
       setHavingMore,
       fetchTransactions,
       toggleFilters,
-      setDateStart,
-      setDateEnd,
     } = this.props;
-    const { start, end } = this.state;
-    setDateStart(start);
-    setDateEnd(end);
     clearFeed();
     setStart();
     setHavingMore();
@@ -225,36 +243,65 @@ class FilterDrawer extends React.PureComponent {
 
   onClear = () => {
     const {
-      clear, endDate, fetchTransactions, clearFeed, setStart, setHavingMore,
+      clear, fetchTransactions, clearFeed, setStart, setHavingMore,
     } = this.props;
     clear();
-    this.setState(() => ({
-      start: '',
-      end: endDate,
-    }));
     clearFeed();
     setStart();
     setHavingMore();
     fetchTransactions();
   }
 
+  onMinAmountChange = (e) => {
+    const { setMin } = this.props;
+    const amount = e.target.value;
+    if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
+      setMin(amount);
+    }
+  }
+
+  onMaxAmountChange = (e) => {
+    const { setMax } = this.props;
+    const amount = e.target.value;
+    if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
+      setMax(amount);
+    }
+  }
+
   render() {
     const {
-      visible, categories, selectCategory, shownCategories,
+      visible,
+      categories,
+      selectCategory,
+      shownCategories,
+      startDate,
+      endDate,
+      minAmount,
+      maxAmount,
     } = this.props;
-    const { start, end } = this.state;
     return (
       <Wrapper visible={visible}>
         <Title>Filter</Title>
+        <GroupName>Amount</GroupName>
+        <Group>
+          <Label>
+            Min
+            <AmountPicker type="text" value={minAmount || ''} onChange={this.onMinAmountChange} />
+          </Label>
+          <Label>
+            Max
+            <AmountPicker type="text" value={maxAmount || ''} onChange={this.onMaxAmountChange} />
+          </Label>
+        </Group>
         <GroupName>Date</GroupName>
         <Group col>
           <Label>
             StartDate
-            <DatePicker type="date" value={start} onChange={this.onStartDateChange} />
+            <DatePicker type="date" value={startDate || ''} onChange={this.onStartDateChange} />
           </Label>
           <Label>
             EndDate
-            <DatePicker type="date" value={end} onChange={this.onEndDateChange} />
+            <DatePicker type="date" value={endDate} onChange={this.onEndDateChange} />
           </Label>
         </Group>
         <GroupName>Categories</GroupName>
@@ -283,7 +330,8 @@ FilterDrawer.defaultProps = {
   categories: [],
   shownCategories: [],
   startDate: '',
-  endDate: '',
+  minAmount: '',
+  maxAmount: '',
 };
 
 FilterDrawer.propTypes = {
@@ -300,7 +348,11 @@ FilterDrawer.propTypes = {
   toggleFilters: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   startDate: PropTypes.string,
-  endDate: PropTypes.string,
+  endDate: PropTypes.string.isRequired,
+  setMin: PropTypes.func.isRequired,
+  setMax: PropTypes.func.isRequired,
+  minAmount: PropTypes.string,
+  maxAmount: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -309,6 +361,8 @@ const mapStateToProps = state => ({
   visible: state.filters.filterDrawerOpen,
   categories: state.categories.categories,
   shownCategories: state.filters.shownCategories,
+  minAmount: state.filters.minAmount,
+  maxAmount: state.filters.maxAmount,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -321,6 +375,8 @@ const mapDispatchToProps = dispatch => ({
   fetchTransactions: () => dispatch(startSetTransactions()),
   toggleFilters: () => dispatch(toggleFilterDrawer()),
   clear: () => dispatch(clearFilters()),
+  setMax: amount => dispatch(setMaxAmount(amount)),
+  setMin: amount => dispatch(setMinAmount(amount)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilterDrawer);

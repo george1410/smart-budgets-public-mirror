@@ -25,6 +25,9 @@ const Wrapper = styled.div`
     border: 1px solid ${props => (props.show ? props.theme.white : props.theme.primaryBlue)};
     font-size: ${props => props.theme.fontSmall};
   `}
+  ${media.phone`
+    padding: 5px;
+  `}
 `;
 
 const CategorySelector = ({
