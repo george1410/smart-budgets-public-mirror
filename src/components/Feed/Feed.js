@@ -97,8 +97,6 @@ class Feed extends React.Component {
     const {
       transactions, filters: { filterDrawerOpen },
     } = this.props;
-    let url = window.location.href;
-
     return (
       <>
         <FeedHeader />

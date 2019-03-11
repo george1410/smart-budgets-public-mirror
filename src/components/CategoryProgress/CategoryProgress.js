@@ -1,9 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { NavLink } from 'react-router-dom';
 import numeral from 'numeral';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import media from '../../util/mediaQueries';
+import {
+  setFilterCategory,
+  clearFilters,
+} from '../../actions/filters';
+import {
+  clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
+} from '../../actions/transactions';
 
 const Wrapper = styled.div`
   display: flex;
@@ -66,29 +74,43 @@ const Progress = styled.div`
   transition: width 0.3s ease-in-out;
 `;
 
-const link = '/feed?displayName=';
+class CategoryProgress extends React.PureComponent {
+  fetchCategories = () => {
+    const {
+      id, selectCategory, clear, clearFeed, setHavingMore, setStart,
+      fetchTransactions, history,
+    } = this.props;
+    clearFeed();
+    clear();
+    selectCategory(id);
+    setHavingMore();
+    setStart();
+    fetchTransactions(() => history.push('/feed'));
+  }
 
-const CategoryProgress = ({ displayName, spend, budget }) => (
-  <NavLink to={link + displayName} style={{ textDecoration: 'none' }}>
-    <Wrapper>
-      <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
-      <LabelMain>
-        {numeral(budget - spend).format('$0,0.00')}
-      </LabelMain>
-      <LabelWrapper>
-        <LabelEnd>
-          {numeral(spend).format('$0,0.00')}
-        </LabelEnd>
-        <LabelEnd>
-          {numeral(budget).format('$0,0.00')}
-        </LabelEnd>
-      </LabelWrapper>
-      <ProgressBar>
-        <Progress spend={spend} budget={budget} />
-      </ProgressBar>
-    </Wrapper>
-  </NavLink>
-);
+  render() {
+    const { displayName, spend, budget } = this.props;
+    return (
+      <Wrapper onClick={this.fetchCategories}>
+        <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
+        <LabelMain>
+          {numeral(budget - spend).format('$0,0.00')}
+        </LabelMain>
+        <LabelWrapper>
+          <LabelEnd>
+            {numeral(spend).format('$0,0.00')}
+          </LabelEnd>
+          <LabelEnd>
+            {numeral(budget).format('$0,0.00')}
+          </LabelEnd>
+        </LabelWrapper>
+        <ProgressBar>
+          <Progress spend={spend} budget={budget} />
+        </ProgressBar>
+      </Wrapper>
+    );
+  }
+}
 
 CategoryProgress.propTypes = {
   displayName: PropTypes.string.isRequired,
@@ -96,4 +118,13 @@ CategoryProgress.propTypes = {
   budget: PropTypes.number.isRequired,
 };
 
-export default CategoryProgress;
+const mapDispatchToProps = dispatch => ({
+  setStart: () => dispatch(setTransactionStart(0)),
+  setHavingMore: () => dispatch(setHasMore(true)),
+  selectCategory: ids => dispatch(setFilterCategory(ids)),
+  fetchTransactions: cb => dispatch(startSetTransactions(cb)),
+  clearFeed: () => dispatch(clearTransactions()),
+  clear: () => dispatch(clearFilters()),
+});
+
+export default withRouter(connect(undefined, mapDispatchToProps)(CategoryProgress));

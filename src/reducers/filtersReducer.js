@@ -44,7 +44,6 @@ export default (state = defaultFilterState, {
     case CLEAR_FILTERS:
       return {
         ...defaultFilterState,
-        searchDrawerOpen: true,
       };
     case SORT_BY_DATE:
       return {
