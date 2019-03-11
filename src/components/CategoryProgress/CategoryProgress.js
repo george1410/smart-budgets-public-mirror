@@ -16,8 +16,7 @@ import {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
-  padding: 0 2rem;
+  padding: 2rem;
   width: 50rem;
   cursor: pointer;
 
