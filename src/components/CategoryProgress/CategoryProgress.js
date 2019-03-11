@@ -116,6 +116,17 @@ CategoryProgress.propTypes = {
   displayName: PropTypes.string.isRequired,
   spend: PropTypes.number.isRequired,
   budget: PropTypes.number.isRequired,
+  id: PropTypes.instanceOf(Array).isRequired,
+  setStart: PropTypes.func.isRequired,
+  setHavingMore: PropTypes.func.isRequired,
+  selectCategory: PropTypes.func.isRequired,
+  fetchTransactions: PropTypes.func.isRequired,
+  clearFeed: PropTypes.func.isRequired,
+  clear: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+
 };
 
 const mapDispatchToProps = dispatch => ({
