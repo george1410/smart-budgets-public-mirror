@@ -69,7 +69,7 @@ const Progress = styled.div`
 const link = '/feed?displayName=';
 
 const CategoryProgress = ({ displayName, spend, budget }) => (
-  <NavLink to={link} style={{ textDecoration: 'none' }}>
+  <NavLink to={link + displayName} style={{ textDecoration: 'none' }}>
     <Wrapper>
       <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
       <LabelMain>
