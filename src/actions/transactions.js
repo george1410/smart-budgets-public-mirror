@@ -39,7 +39,7 @@ export const setHasMore = status => ({
 
 // fetches transactions from the server, updating all the necessary
 // state variables along the way.
-export const startSetTransactions = () => (dispatch, getState) => {
+export const startSetTransactions = callback => (dispatch, getState) => {
   const {
     auth: { uid }, transactions: {
       start, count, hasMore, error,
@@ -70,6 +70,9 @@ export const startSetTransactions = () => (dispatch, getState) => {
 
         // if less transactions are returned then hasMore will be false
         dispatch(setHasMore(payload.data.hasMore));
+        if (callback) {
+          callback();
+        }
       })
       .catch((err) => {
         // fetch unsuccessul, set the start back to original value at
