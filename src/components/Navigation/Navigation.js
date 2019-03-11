@@ -15,7 +15,7 @@ const NavigationBar = styled.nav`
   align-items: ${props => (props.theme.isX ? 'flex-start' : 'center')};
   width: 100%;
   height: 5rem;
-  z-index: 2;
+  z-index: 6;
   ${media.tablet`
     position: fixed;
     background-color: ${props => props.theme.white};

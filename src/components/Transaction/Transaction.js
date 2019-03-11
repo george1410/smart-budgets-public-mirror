@@ -75,9 +75,7 @@ const Merchant = styled.div`
   white-space: nowrap;
   overflow: hidden;
   text-align: center;
-  ${media.tablet`
-    max-width: 220px;
-  `}
+  max-width: 220px;
   ${media.phone`
     max-width: 130px;
   `}

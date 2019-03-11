@@ -50,6 +50,10 @@ export const SET_START_DATE = 'SET_START_DATE';
 
 export const SET_END_DATE = 'SET_END_DATE';
 
+export const SET_MIN_AMOUNT = 'SET_MIN_AMOUNT';
+
+export const SET_MAX_AMOUNT = 'SET_MAX_AMOUNT';
+
 export const TOGGLE_FILTER_DRAWER = 'TOGGLE_FILTER_DRAWER';
 
 export const TOGGLE_SEARCH_DRAWER = 'TOGGLE_SEARCH_DRAWER';

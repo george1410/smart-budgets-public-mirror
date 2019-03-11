@@ -45,7 +45,7 @@ export const startSetTransactions = callback => (dispatch, getState) => {
       start, count, hasMore, error,
     },
     filters: {
-      startDate, endDate, textFilter, shownCategories,
+      startDate, endDate, textFilter, shownCategories, minAmount, maxAmount,
     },
   } = getState();
   if (hasMore && !error) {
@@ -54,7 +54,14 @@ export const startSetTransactions = callback => (dispatch, getState) => {
     dispatch(setTransactionStart(start + count));
     api.get(`api/users/${uid}/transactions`, {
       params: {
-        start, count, startDate, endDate, textFilter, shownCategories,
+        start,
+        count,
+        startDate,
+        endDate,
+        textFilter,
+        shownCategories,
+        minAmount,
+        maxAmount,
       },
     })
       .then((payload) => {

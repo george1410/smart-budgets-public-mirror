@@ -9,6 +9,8 @@ import {
   SET_END_DATE,
   CLEAR_FILTERS,
   SET_TEXT_FILTER,
+  SET_MIN_AMOUNT,
+  SET_MAX_AMOUNT,
 } from '../actions/types';
 
 export const defaultFilterState = {
@@ -20,6 +22,8 @@ export const defaultFilterState = {
   startDate: undefined,
   endDate: moment().format('YYYY-MM-DD'),
   textFilter: undefined,
+  minAmount: undefined,
+  maxAmount: undefined,
 };
 
 // if not categories set then set all from newCategories
@@ -38,7 +42,13 @@ const switchCategories = (oldFilters, newFilters) => {
 };
 
 export default (state = defaultFilterState, {
-  type, shownCategories, startDate, endDate, textFilter,
+  type,
+  shownCategories,
+  startDate,
+  endDate,
+  textFilter,
+  minAmount,
+  maxAmount,
 }) => {
   switch (type) {
     case CLEAR_FILTERS:
@@ -90,6 +100,16 @@ export default (state = defaultFilterState, {
       return {
         ...state,
         endDate,
+      };
+    case SET_MIN_AMOUNT:
+      return {
+        ...state,
+        minAmount,
+      };
+    case SET_MAX_AMOUNT:
+      return {
+        ...state,
+        maxAmount,
       };
     default:
       return state;

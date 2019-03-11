@@ -40,6 +40,14 @@ module.exports = (app) => {
    *     yyyy-mm-dd
    *   endDate
    *     yyy-mm-dd
+   *   shownCategories
+   *     [1,2,3,4,5..., 61]
+   *   textFilter
+   *     'merchant'
+   *    minAmount
+   *      numeric value
+   *    maxAmount
+   *      numeric value
    * Response format:
    *   [
    *     {
@@ -92,6 +100,14 @@ module.exports = (app) => {
       sql += `
       AND t.merchant LIKE '%${textFilter}%'`;
     }
+
+    if (req.query.minAmount && req.query.maxAmount) {
+      const { minAmount, maxAmount } = req.query;
+      sql += ` AND t.amount BETWEEN ${minAmount} AND ${maxAmount}`;
+    }
+
+    // sets default sorting order as this is also set on the frontend
+    sql += ' ORDER BY t.date DESC';
 
     // if query params not present, for some reason, then default to first 50
     sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
