@@ -2,7 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import numeral from 'numeral';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import media from '../../util/mediaQueries';
+import {
+  setFilterCategory,
+  clearFilters,
+} from '../../actions/filters';
+import {
+  clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
+} from '../../actions/transactions';
 
 const Wrapper = styled.div`
   display: flex;
@@ -10,6 +19,12 @@ const Wrapper = styled.div`
   margin-top: 2rem;
   padding: 0 2rem;
   width: 50rem;
+  cursor: pointer;
+
+  :hover {
+    background-color: ${props => props.theme.primaryBlueShadow};
+  }
+
   ${media.phone`
     width: 100%;
   `}
@@ -65,30 +80,68 @@ const Progress = styled.div`
   transition: width 0.3s ease-in-out;
 `;
 
-const CategoryProgress = ({ displayName, spend, budget }) => (
-  <Wrapper>
-    <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
-    <LabelMain>
-      {numeral(budget - spend).format('$0,0.00')}
-    </LabelMain>
-    <LabelWrapper>
-      <LabelEnd>
-        {numeral(spend).format('$0,0.00')}
-      </LabelEnd>
-      <LabelEnd>
-        {numeral(budget).format('$0,0.00')}
-      </LabelEnd>
-    </LabelWrapper>
-    <ProgressBar>
-      <Progress spend={spend} budget={budget} />
-    </ProgressBar>
-  </Wrapper>
-);
+class CategoryProgress extends React.PureComponent {
+  fetchCategories = () => {
+    const {
+      id, selectCategory, clear, clearFeed, setHavingMore, setStart,
+      fetchTransactions, history,
+    } = this.props;
+    clearFeed();
+    clear();
+    selectCategory(id);
+    setHavingMore();
+    setStart();
+    fetchTransactions(() => history.push('/feed'));
+  }
+
+  render() {
+    const { displayName, spend, budget } = this.props;
+    return (
+      <Wrapper onClick={this.fetchCategories}>
+        <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
+        <LabelMain>
+          {numeral(budget - spend).format('$0,0.00')}
+        </LabelMain>
+        <LabelWrapper>
+          <LabelEnd>
+            {numeral(spend).format('$0,0.00')}
+          </LabelEnd>
+          <LabelEnd>
+            {numeral(budget).format('$0,0.00')}
+          </LabelEnd>
+        </LabelWrapper>
+        <ProgressBar>
+          <Progress spend={spend} budget={budget} />
+        </ProgressBar>
+      </Wrapper>
+    );
+  }
+}
 
 CategoryProgress.propTypes = {
   displayName: PropTypes.string.isRequired,
   spend: PropTypes.number.isRequired,
   budget: PropTypes.number.isRequired,
+  id: PropTypes.instanceOf(Array).isRequired,
+  setStart: PropTypes.func.isRequired,
+  setHavingMore: PropTypes.func.isRequired,
+  selectCategory: PropTypes.func.isRequired,
+  fetchTransactions: PropTypes.func.isRequired,
+  clearFeed: PropTypes.func.isRequired,
+  clear: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+
 };
 
-export default CategoryProgress;
+const mapDispatchToProps = dispatch => ({
+  setStart: () => dispatch(setTransactionStart(0)),
+  setHavingMore: () => dispatch(setHasMore(true)),
+  selectCategory: ids => dispatch(setFilterCategory(ids)),
+  fetchTransactions: cb => dispatch(startSetTransactions(cb)),
+  clearFeed: () => dispatch(clearTransactions()),
+  clear: () => dispatch(clearFilters()),
+});
+
+export default withRouter(connect(undefined, mapDispatchToProps)(CategoryProgress));
