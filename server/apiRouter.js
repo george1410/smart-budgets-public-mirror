@@ -29,6 +29,18 @@ module.exports = (app) => {
     });
   });
 
+  app.post('/api/users/:id', (req, res) => {
+    const { period } = req.body;
+    const { id } = req.params;
+    const sql = `
+      UPDATE users SET period = '${period}' WHERE userId = ${id}
+      `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+
   /**
    * GET route for transaction info for a user.
    * Endpoint: /api/users/{userid}/transactions
@@ -163,7 +175,6 @@ module.exports = (app) => {
             res.status(404).json({ error: 'No results were found.' });
           } else if (!req.query.period) {
             req.query.period = results[0].period;
-            console.log(req.query);
             ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
           }
         });

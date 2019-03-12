@@ -1,9 +1,11 @@
-import { SET_USER_INFO, USER_INFO_LOADING, USER_INFO_ERROR } from '../actions/types';
+import {
+  SET_USER_INFO, USER_INFO_LOADING, USER_INFO_ERROR, SWITCH_PERIOD,
+} from '../actions/types';
 
 export const defaultUserState = {
-  userInfo: {},
   isLoading: false,
   error: false,
+  period: '',
 };
 
 export default (state = defaultUserState, action) => {
@@ -21,9 +23,15 @@ export default (state = defaultUserState, action) => {
     case SET_USER_INFO:
       return {
         ...state,
-        userInfo: action.userInfo,
+        ...action.userInfo,
       };
     default:
       return state;
+
+    case SWITCH_PERIOD:
+      return {
+        ...state,
+        period: state.period === 'MONTH' ? 'WEEK' : 'MONTH',
+      };
   }
 };

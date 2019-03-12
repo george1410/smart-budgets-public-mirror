@@ -6,21 +6,30 @@ import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
 import { signout } from '../../actions/auth';
+import { switchUserPeriods, updatePeriod } from '../../actions/user';
+import Toggle from './Toggle';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5rem 0 0 0;
+  padding: 10rem 0 5rem 0;
+  height: 100vh;
 
   & > button {
     max-width: 41rem;
   }
 
   ${media.tablet`
+    margin-top: 5rem;
+    height: calc(100vh - 10rem);
     /* clears Header and bottom Navigation with fixed position */
     padding: 5rem 5rem;
   `}
+`;
+
+const Extender = styled.div`
+  flex: 99;
 `;
 
 class Settings extends React.Component {
@@ -29,12 +38,21 @@ class Settings extends React.Component {
     startLogout();
   }
 
+  onSwitchPeriod = () => {
+    const { switchPeriod, periodUpdate } = this.props;
+    switchPeriod();
+    periodUpdate();
+  }
+
+
   render() {
+    const { period } = this.props;
     return (
       <>
         <Header title="Settings" />
         <Wrapper>
-          <p>This will be the settings page.</p>
+          <Toggle value={period} toggle={this.onSwitchPeriod} />
+          <Extender />
           <Button title="Log Out" onClick={this.logout} />
         </Wrapper>
       </>
@@ -44,10 +62,19 @@ class Settings extends React.Component {
 
 Settings.propTypes = {
   startLogout: PropTypes.func.isRequired,
+  period: PropTypes.string.isRequired,
+  switchPeriod: PropTypes.func.isRequired,
+  periodUpdate: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = state => ({
+  period: state.user.period,
+});
 
 const mapDispatchToProps = dispatch => ({
   startLogout: () => dispatch(signout()),
+  switchPeriod: () => dispatch(switchUserPeriods()),
+  periodUpdate: () => dispatch(updatePeriod()),
 });
 
-export default connect(undefined, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
