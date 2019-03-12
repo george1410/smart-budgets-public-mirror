@@ -203,4 +203,27 @@ module.exports = (app) => {
       });
     }
   });
+
+  /**
+   * POST route for adding a friend.
+   * Endpoint: /api/users/{userid}/friends
+   *
+   * POST Body:
+   *  {
+   *    friendId: {friendId}
+   *  }
+   */
+  app.post('/api/users/:id/friends', (req, res) => {
+    const user1 = req.params.id;
+    const user2 = req.body.friendId;
+
+    const sql = `
+      INSERT INTO friendships (userId1, userId2, accepted) VALUES (${user1}, ${user2}, TRUE)
+    `;
+
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(201);
+    });
+  });
 };
