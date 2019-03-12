@@ -31,7 +31,6 @@ export const sortByDate = order => ({
   sortByDateOrder: order,
 });
 
-
 export const toggleFilterDrawer = () => ({
   type: TOGGLE_FILTER_DRAWER,
 });

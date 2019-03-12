@@ -17,9 +17,8 @@ export const switchUserPeriods = () => ({
   type: SWITCH_PERIOD,
 });
 
-export const updatePeriod = () => (dispatch, getState) => {
+export const updatePeriod = () => (_, getState) => {
   const { period } = getState().user;
-  console.log(period);
   const { uid } = getState().auth;
   api.post(`api/users/${uid}`, { period });
 };
