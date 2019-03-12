@@ -29,6 +29,18 @@ module.exports = (app) => {
     });
   });
 
+  app.post('/api/users/:id', (req, res) => {
+    const { period } = req.body;
+    const { id } = req.params;
+    const sql = `
+      UPDATE users SET period = '${period}' WHERE userId = ${id}
+      `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+
   /**
    * GET route for transaction info for a user.
    * Endpoint: /api/users/{userid}/transactions
@@ -132,7 +144,7 @@ module.exports = (app) => {
    * Optional Query Parameters:
    *   period
    *    values: WEEK, MONTH
-   *    default: MONTH
+   *    default: USER'S SELECTED PERIOD
    * Response format:
    *    [
    *      {
@@ -150,12 +162,22 @@ module.exports = (app) => {
   app.get('/api/users/:id/categories', (req, res) => {
     let badRequest = false;
     let sql;
-    ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
 
     if (!badRequest) {
       let groups = [];
       pool.getConnection((err, conn) => {
         if (err) throw err;
+
+        sql = `SELECT period FROM users WHERE userId = ${req.params.id}`;
+        conn.query(sql, (error, results) => {
+          if (error) throw error;
+          if (results.length < 1) {
+            res.status(404).json({ error: 'No results were found.' });
+          } else if (!req.query.period) {
+            req.query.period = results[0].period;
+            ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
+          }
+        });
 
         conn.query(sql, (error, results) => {
           if (error) throw error;
