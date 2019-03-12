@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import CategoryProgress from '../CategoryProgress/CategoryProgress';
+import colors from '../../util/colors';
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ const Overview = ({ categories }) => (
               <CategoryProgress
                 key={category.id[0]}
                 {...category}
+                color={colors[category.displayName]}
               />
             ),
           )

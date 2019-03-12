@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
+import colors from '../../util/colors';
 import {
   setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
   clearFilters, setMinAmount, setMaxAmount,
@@ -318,6 +319,7 @@ class FilterDrawer extends React.PureComponent {
             categories.map(category => (
               <SelectCategory
                 key={category.id[0]}
+                color={colors[category.displayName]}
                 displayName={category.displayName}
                 select={selectCategory}
                 ids={category.id}

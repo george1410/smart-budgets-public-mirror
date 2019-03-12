@@ -62,7 +62,6 @@ const Input = styled.input`
   padding: 4px 8px;
   font-size: 1.6rem;
   border-radius: 0;
-  margin-left: 4rem;
 
   ::placeholder {
     color: ${props => props.theme.grey};
@@ -73,6 +72,7 @@ const Input = styled.input`
     width: 15rem;
   `}
   ${media.tablet`
+    margin-left: 4rem;
     padding: 1rem 1.5rem;
     border: 1px solid ${props => props.theme.primaryBlue};
     font-size: ${props => props.theme.fontSmall};
