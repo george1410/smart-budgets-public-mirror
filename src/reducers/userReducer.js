@@ -1,4 +1,6 @@
-import { SET_USER_INFO, USER_INFO_LOADING, USER_INFO_ERROR, SWITCH_PERIOD } from '../actions/types';
+import {
+  SET_USER_INFO, USER_INFO_LOADING, USER_INFO_ERROR, SWITCH_PERIOD,
+} from '../actions/types';
 
 export const defaultUserState = {
   isLoading: false,
@@ -26,11 +28,10 @@ export default (state = defaultUserState, action) => {
     default:
       return state;
 
-      case SWITCH_PERIOD:
-      return{
+    case SWITCH_PERIOD:
+      return {
         ...state,
-        period: state.period === 'MONTH' ? 'WEEK'  : 'MONTH',
-      }
-
+        period: state.period === 'MONTH' ? 'WEEK' : 'MONTH',
+      };
   }
 };

@@ -29,7 +29,6 @@ module.exports = (app) => {
     });
   });
 
-  
   app.post('/api/users/:id', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
@@ -176,7 +175,6 @@ module.exports = (app) => {
             res.status(404).json({ error: 'No results were found.' });
           } else if (!req.query.period) {
             req.query.period = results[0].period;
-            console.log(req.query);
             ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
           }
         });
