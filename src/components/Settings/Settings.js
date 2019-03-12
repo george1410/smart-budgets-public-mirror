@@ -9,13 +9,12 @@ import { signout } from '../../actions/auth';
 import { switchUserPeriods, updatePeriod } from '../../actions/user';
 import Toggle from './Toggle';
 
-
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5rem 0 0 0;
-  height: calc(100vh - 5rem);
+  padding: 10rem 0 5rem 0;
+  height: 100vh;
 
   & > button {
     max-width: 41rem;
@@ -53,7 +52,6 @@ class Settings extends React.Component {
         <Header title="Settings" />
         <Wrapper>
           <Toggle value={period} toggle={this.onSwitchPeriod} />
-          {/* <Button title="Switch Period" onClick={this.onClickSwitch} /> */}
           <Extender />
           <Button title="Log Out" onClick={this.logout} />
         </Wrapper>
