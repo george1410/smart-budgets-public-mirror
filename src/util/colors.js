@@ -12,12 +12,12 @@ const colors = {
     text: 'black',
   },
   GROCERIES: {
-    color: '#D4533B',
-    text: 'white',
+    color: '#FFC900',
+    text: 'black',
   },
   HEALTH: {
-    color: '#00909F',
-    text: 'white',
+    color: '#00C1FF',
+    text: 'black',
   },
   LEISURE: {
     color: '#00439F',
