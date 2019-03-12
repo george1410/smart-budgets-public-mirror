@@ -219,7 +219,7 @@ module.exports = (app) => {
 
     // in future we need to change the TRUE below to FALSE, to allow accepting/declining requests
     const sql = `
-      INSERT INTO friendships (userId1, userId2, accepted) VALUES (${user1}, ${user2}, TRUE)
+      INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
     `;
 
     pool.query(sql, (err) => {
@@ -272,5 +272,41 @@ module.exports = (app) => {
       });
       res.json(resArr);
     });
+  });
+
+  /**
+   * POST route for accepting a friend request
+   * Endpoint: /api/users/{id}/friends/{friendId}
+   *
+   * POST Body:
+   *  {
+   *    accepted: TRUE | FALSE
+   *  }
+   */
+  app.post('/api/users/:id/friends/:friendId', (req, res) => {
+    const { accepted } = req.body;
+    let sql;
+    if (typeof accepted !== 'undefined') {
+      if (accepted) {
+        sql = `
+          UPDATE friendships
+          SET accepted = TRUE
+          WHERE userId1 = ${req.params.friendId}
+          AND userId2 = ${req.params.id}
+        `;
+      } else {
+        sql = `
+          DELETE FROM friendships
+          WHERE userId1 = ${req.params.friendId}
+          AND userId2 = ${req.params.id}
+        `;
+      }
+      pool.query(sql, (err) => {
+        if (err) throw err;
+        res.sendStatus(200);
+      });
+    } else {
+      res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
+    }
   });
 };
