@@ -217,6 +217,7 @@ module.exports = (app) => {
     const user1 = req.params.id;
     const user2 = req.body.friendId;
 
+    // in future we need to change the TRUE below to FALSE, to allow accepting/declining requests
     const sql = `
       INSERT INTO friendships (userId1, userId2, accepted) VALUES (${user1}, ${user2}, TRUE)
     `;
@@ -224,6 +225,52 @@ module.exports = (app) => {
     pool.query(sql, (err) => {
       if (err) throw err;
       res.sendStatus(201);
+    });
+  });
+
+  /**
+   * GET route for getting info about a user's friends.
+   * Endpoint: /api/users/{userid}/friends
+   *
+   * Optional Query Parameters:
+   *   accepted
+   *    values: TRUE, FALSE
+   *    default: both accepted and not accepted
+   * Response format:
+   *    [
+   *      {
+   *        "userId": 2,
+   *        "accepted": true
+   *      }, ...
+   *    ]
+   */
+  app.get('/api/users/:id/friends', (req, res) => {
+    const userId = req.params.id;
+    let sql = `
+      SELECT * FROM friendships
+      WHERE (userId1 = ${userId}
+      OR userId2 = ${userId}) 
+      `;
+
+    if (req.query.accepted) {
+      sql += `AND accepted = ${req.query.accepted}`;
+    }
+
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      const resArr = [];
+      results.forEach((result) => {
+        const obj = {
+          accepted: result.accepted,
+        };
+        if (result.userId1 === userId) {
+          obj.userId = result.userId2;
+        } else {
+          obj.userId = result.userId1;
+        }
+        resArr.push(obj);
+      });
+      res.json(resArr);
     });
   });
 };
