@@ -177,28 +177,28 @@ module.exports = (app) => {
             req.query.period = results[0].period;
             ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
           }
-        });
 
-        conn.query(sql, (error, results) => {
-          if (error) throw error;
-          groups = results;
-        });
+          conn.query(sql, (error1, results1) => {
+            if (error1) throw error;
+            groups = results1;
+          });
 
-        sql = `
-            SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets
-            JOIN categories ON categories.categoryId = budgets.categoryId
-            WHERE budgets.userId = ${req.params.id}
-            GROUP BY categories.displayName `;
+          sql = `
+              SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets
+              JOIN categories ON categories.categoryId = budgets.categoryId
+              WHERE budgets.userId = ${req.params.id}
+              GROUP BY categories.displayName `;
 
-        conn.query(sql, (error, results) => {
-          if (error) throw err;
-          if (results.length < 1) {
-            res.status(404).json({ error: 'No results were found.' });
-          } else {
-            conn.release();
-            if (error) throw error;
-            res.json(generateCategoryObjects(results, groups));
-          }
+          conn.query(sql, (error2, results2) => {
+            if (error2) throw err;
+            if (results2.length < 1) {
+              res.status(404).json({ error: 'No results were found.' });
+            } else {
+              conn.release();
+              if (error) throw error;
+              res.json(generateCategoryObjects(results2, groups));
+            }
+          });
         });
       });
     }
