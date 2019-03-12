@@ -29,22 +29,20 @@ module.exports = (app) => {
     });
   });
 
-  
-  app.post('/api/users/:id', (req, res) => {
 
+  app.post('/api/users/:id', (req, res) => {
+    console.log(req.body.period);
     let sql = `
-    SELECT period FROM users 
+    SELECT period FROM users
       WHERE t.userId = ${req.params.id} `;
-       if (sql === 'WEEK') {
-       sql += `
+    if (sql === 'WEEK') {
+      sql += `
          UPDATE period SET users = 'MONTH' WHERE userId = ${req.params.id}`;
-      } else if(sql === 'MONTH'){
-          sql += `
+    } else if (sql === 'MONTH') {
+      sql += `
                UPDATE period SET users = 'WEEK' WHERE userId = ${req.params.id}`;
-    
-      }
-    
-      });
+    }
+  });
 
   /**
    * GET route for transaction info for a user.

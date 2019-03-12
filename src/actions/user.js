@@ -1,4 +1,6 @@
-import { SET_USER_INFO, USER_INFO_ERROR, USER_INFO_LOADING, SWITCH_PERIOD } from './types';
+import {
+  SET_USER_INFO, USER_INFO_ERROR, USER_INFO_LOADING, SWITCH_PERIOD,
+} from './types';
 import api from '../api/api';
 
 export const setUserInfo = userInfo => ({
@@ -12,13 +14,15 @@ export const setUserInfoError = status => ({
 });
 
 export const switchUserPeriods = () => ({
-  type: SWITCH_PERIOD
+  type: SWITCH_PERIOD,
 });
 
 export const updatePeriod = () => (dispatch, getState) => {
-
-
-});
+  const { period } = getState().user;
+  console.log(period);
+  const { uid } = getState().auth;
+  api.post(`api/users/${uid}`, { period });
+};
 
 export const setUserInfoLoading = status => ({
   type: USER_INFO_LOADING,

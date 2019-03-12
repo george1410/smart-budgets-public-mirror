@@ -6,7 +6,7 @@ import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
 import { signout } from '../../actions/auth';
-import { switchUserPeriods } from '../../actions/user';
+import { switchUserPeriods, updatePeriod } from '../../actions/user';
 
 
 const Wrapper = styled.div`
@@ -32,14 +32,15 @@ class Settings extends React.Component {
   }
 
 onClickSwitch = () => {
-const {switchPeriod} = this.props;
-switchPeriod();
+  const { switchPeriod, update } = this.props;
+  switchPeriod();
+  update();
 }
 
 
-  render() {
-    return (
-      <>
+render() {
+  return (
+    <>
         <Header title="Settings" />
         <Wrapper>
           <p>This will be the settings page.</p>
@@ -47,8 +48,8 @@ switchPeriod();
           <Button title="Switch Period" onClick={this.onClickSwitch} />
         </Wrapper>
       </>
-    );
-  }
+  );
+}
 }
 
 Settings.propTypes = {
@@ -58,6 +59,7 @@ Settings.propTypes = {
 const mapDispatchToProps = dispatch => ({
   startLogout: () => dispatch(signout()),
   switchPeriod: () => dispatch(switchUserPeriods()),
+  update: () => dispatch(updatePeriod()),
 });
 
 export default connect(undefined, mapDispatchToProps)(Settings);
