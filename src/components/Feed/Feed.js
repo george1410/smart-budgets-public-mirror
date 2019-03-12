@@ -8,6 +8,7 @@ import FeedHeader from './FeedHeader';
 import FilterDrawer from './FilterDrawer';
 import SearchDrawer from './SearchDrawer';
 import media from '../../util/mediaQueries';
+import colors from '../../util/colors';
 import Transaction from '../Transaction/Transaction';
 import InfoHeader from './InfoHeader';
 import selectTransactions from '../../selectors/transactions';
@@ -51,6 +52,8 @@ class Feed extends React.Component {
           key={transaction.transactionId}
           {...transaction}
           shouldShift={searchDrawerOpen}
+          color={colors[transaction.displayName].color}
+          textCol={colors[transaction.displayName].text}
         />
       </div>
     );
