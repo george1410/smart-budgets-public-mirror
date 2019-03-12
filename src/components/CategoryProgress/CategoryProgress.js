@@ -120,7 +120,7 @@ class CategoryProgress extends React.PureComponent {
           </LabelEnd>
         </LabelWrapper>
         <ProgressBar color={color}>
-          <Progress spend={spend} budget={budget} />
+          <Progress color={color} spend={spend} budget={budget} />
         </ProgressBar>
       </Wrapper>
     );
