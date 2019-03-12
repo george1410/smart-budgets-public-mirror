@@ -29,19 +29,17 @@ module.exports = (app) => {
     });
   });
 
-
+  
   app.post('/api/users/:id', (req, res) => {
-    console.log(req.body.period);
-    let sql = `
-    SELECT period FROM users
-      WHERE t.userId = ${req.params.id} `;
-    if (sql === 'WEEK') {
-      sql += `
-         UPDATE period SET users = 'MONTH' WHERE userId = ${req.params.id}`;
-    } else if (sql === 'MONTH') {
-      sql += `
-               UPDATE period SET users = 'WEEK' WHERE userId = ${req.params.id}`;
-    }
+    const { period } = req.body;
+    const { id } = req.params;
+    const sql = `
+      UPDATE users SET period = '${period}' WHERE userId = ${id}
+      `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
   });
 
   /**
