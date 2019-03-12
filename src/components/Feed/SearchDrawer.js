@@ -61,6 +61,8 @@ const Input = styled.input`
   width: 100%;
   padding: 4px 8px;
   font-size: 1.6rem;
+  border-radius: 0;
+  margin-left: 4rem;
 
   ::placeholder {
     color: ${props => props.theme.grey};
