@@ -1,7 +1,6 @@
 import {
   SORT_BY_AMOUNT,
   SORT_BY_DATE,
-  PERIOD,
   TOGGLE_FILTER_DRAWER,
   TOGGLE_SEARCH_DRAWER,
   SET_FILTER_CATEGORY,
@@ -32,10 +31,7 @@ export const sortByDate = order => ({
   sortByDateOrder: order,
 });
 
-export const sortByPeriod = period => ({
-  type: PERIOD,
-  sortByPeriod: period,
-});
+
 export const toggleFilterDrawer = () => ({
   type: TOGGLE_FILTER_DRAWER,
 });

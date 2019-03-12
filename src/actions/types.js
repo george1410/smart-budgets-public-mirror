@@ -44,7 +44,8 @@ export const SORT_BY_DATE = 'SORT_BY_DATE';
 
 export const SORT_BY_AMOUNT = 'SORT_BY_AMOUNT';
 
-export const PERIOD = 'PERIOD';
+export const SWITCH_PERIOD = 'PERIOD';
+
 export const SET_FILTER_CATEGORY = 'SET_FITLER_CATEGORY';
 
 export const SET_START_DATE = 'SET_START_DATE';

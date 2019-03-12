@@ -6,6 +6,8 @@ import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
 import { signout } from '../../actions/auth';
+import { switchUserPeriods } from '../../actions/user';
+
 
 const Wrapper = styled.div`
   display: flex;
@@ -29,6 +31,12 @@ class Settings extends React.Component {
     startLogout();
   }
 
+onClickSwitch = () => {
+const {switchPeriod} = this.props;
+switchPeriod();
+}
+
+
   render() {
     return (
       <>
@@ -36,6 +44,7 @@ class Settings extends React.Component {
         <Wrapper>
           <p>This will be the settings page.</p>
           <Button title="Log Out" onClick={this.logout} />
+          <Button title="Switch Period" onClick={this.onClickSwitch} />
         </Wrapper>
       </>
     );
@@ -48,6 +57,7 @@ Settings.propTypes = {
 
 const mapDispatchToProps = dispatch => ({
   startLogout: () => dispatch(signout()),
+  switchPeriod: () => dispatch(switchUserPeriods()),
 });
 
 export default connect(undefined, mapDispatchToProps)(Settings);

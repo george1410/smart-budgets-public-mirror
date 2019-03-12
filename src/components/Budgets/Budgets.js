@@ -19,16 +19,17 @@ const Wrapper = styled.div`
   `}
 `;
 
-sortByPeriod = () => {
-  const { startSwitch } = this.props;
-  startSwitch();
-}
+//sortByPeriod = () => {
+ // const { startSwitch } = this.props;
+ // startSwitch();
+//}
 
 const Overview = ({ categories }) => (
   <>
     <Header title="Budgets" />
     <Wrapper>
-    <Button title="Change Filter" onClick={this.sortByPeriod} />
+    <Button title="Change Filter"  />
+    
       {
         categories.length === 0 ? (
           <p>No categories to show</p>
