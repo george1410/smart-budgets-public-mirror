@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import SelectCategory from './SelectCategory';
 import media from '../../util/mediaQueries';
-import colors from '../../util/colors';
 import {
   setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
   clearFilters, setMinAmount, setMaxAmount,
@@ -169,8 +168,8 @@ const Apply = styled.button`
   font-size: ${props => props.theme.fontSmall};
   font-weight: 500;
   border: 1px solid ${props => props.theme.primaryBlue};
-  background-color: ${props => props.theme.primaryBlue};
-  color: ${props => props.theme.white};
+  background-color: ${props => props.theme.white};
+  color: ${props => props.theme.primaryBlue};
   border-bottom: 1px solid ${props => props.theme.white};
   transition: all 0.2s ease-in-out;
   cursor: pointer;
@@ -183,8 +182,8 @@ const Apply = styled.button`
     outline-color: -webkit-focus-ring-color;
     padding: 0.5rem 2rem;
     border: 1px solid ${props => props.theme.white};
-    background-color: ${props => props.theme.white};
-    color: ${props => props.theme.primaryBlue};
+    background-color: ${props => props.theme.primaryBlue};
+    color: ${props => props.theme.white};
     border-bottom: 1px solid ${props => props.theme.primaryBlue};
   `}
   ${media.phone`
@@ -319,7 +318,6 @@ class FilterDrawer extends React.PureComponent {
             categories.map(category => (
               <SelectCategory
                 key={category.id[0]}
-                color={colors[category.displayName]}
                 displayName={category.displayName}
                 select={selectCategory}
                 ids={category.id}

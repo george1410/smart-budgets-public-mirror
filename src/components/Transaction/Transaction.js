@@ -83,21 +83,26 @@ const Merchant = styled.div`
 
 const Category = styled.div`
   background-color: ${props => props.color};
-  color: ${props => props.theme.white};
-  font-size: ${props => props.theme.fontTiny};
+  color: ${props => props.theme[props.textCol]};
+  font-size: ${props => props.theme.fontSmall};
   padding: 2px 7px;
   font-weight: 500;
   text-transform: capitalize;
 `;
 
 const Transaction = ({
-  date, merchant, amount, displayName, shouldShift, color,
+  date, merchant, amount, displayName, shouldShift, color, textCol,
 }) => (
   <Wrapper shouldShift={shouldShift}>
     <EndLabel>{moment(date).format('DD-MM-YYYY')}</EndLabel>
     <Middle>
       <Merchant>{merchant.toLowerCase()}</Merchant>
-      <Category color={color}>{displayName.toLowerCase()}</Category>
+      <Category
+        color={color}
+        textCol={textCol}
+      >
+        {displayName.toLowerCase()}
+      </Category>
     </Middle>
     <EndLabel>{numeral(amount).format('$0,0.00')}</EndLabel>
   </Wrapper>
@@ -110,6 +115,7 @@ Transaction.propTypes = {
   displayName: PropTypes.string.isRequired,
   shouldShift: PropTypes.bool.isRequired,
   color: PropTypes.string.isRequired,
+  textCol: PropTypes.string.isRequired,
 };
 
 export default Transaction;

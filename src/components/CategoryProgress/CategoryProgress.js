@@ -34,7 +34,7 @@ const CategoryTitle = styled.span`
   text-align: center;
   align-self: center;
   font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme.white};
+  color: ${props => props.theme[props.textCol]};
   background-color: ${props => props.color};
   font-weight: 500;
   text-transform: capitalize;
@@ -98,11 +98,16 @@ class CategoryProgress extends React.PureComponent {
 
   render() {
     const {
-      displayName, spend, budget, color,
+      displayName, spend, budget, color, textCol,
     } = this.props;
     return (
       <Wrapper onClick={this.fetchCategories}>
-        <CategoryTitle color={color}>{displayName.toLowerCase()}</CategoryTitle>
+        <CategoryTitle
+          color={color}
+          textCol={textCol}
+        >
+          {displayName.toLowerCase()}
+        </CategoryTitle>
         <LabelMain>
           {numeral(budget - spend).format('$0,0.00')}
         </LabelMain>
@@ -137,6 +142,7 @@ CategoryProgress.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
   color: PropTypes.string.isRequired,
+  textCol: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({

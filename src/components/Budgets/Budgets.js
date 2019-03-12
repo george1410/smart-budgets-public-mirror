@@ -31,7 +31,8 @@ const Overview = ({ categories }) => (
               <CategoryProgress
                 key={category.id[0]}
                 {...category}
-                color={colors[category.displayName]}
+                color={colors[category.displayName].color}
+                textCol={colors[category.displayName].text}
               />
             ),
           )

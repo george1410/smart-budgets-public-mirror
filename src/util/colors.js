@@ -1,13 +1,40 @@
 const colors = {
-  BILLS: '#003CE4',
-  CASH: '#1EAA2C',
-  'EATING OUT': '#4800D3',
-  GROCERIES: '#F5A623',
-  HEALTH: '#EE2222',
-  LEISURE: '#174AF6',
-  MISCELLANEOUS: '#9900A3',
-  SHOPPING: '#00A32A',
-  TRAVEL: '#FF2A00',
+  BILLS: {
+    color: '#cf000f',
+    text: 'white',
+  },
+  CASH: {
+    color: '#27C900',
+    text: 'black',
+  },
+  'EATING OUT': {
+    color: '#FFB71C',
+    text: 'black',
+  },
+  GROCERIES: {
+    color: '#D4533B',
+    text: 'white',
+  },
+  HEALTH: {
+    color: '#00909F',
+    text: 'white',
+  },
+  LEISURE: {
+    color: '#00439F',
+    text: 'white',
+  },
+  MISCELLANEOUS: {
+    color: '#5A009F',
+    text: 'white',
+  },
+  SHOPPING: {
+    color: '#E413C3',
+    text: 'white',
+  },
+  TRAVEL: {
+    color: '#1C30FF',
+    text: 'white',
+  },
 };
 
 export default colors;

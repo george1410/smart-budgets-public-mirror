@@ -52,7 +52,8 @@ class Feed extends React.Component {
           key={transaction.transactionId}
           {...transaction}
           shouldShift={searchDrawerOpen}
-          color={colors[transaction.displayName]}
+          color={colors[transaction.displayName].color}
+          textCol={colors[transaction.displayName].text}
         />
       </div>
     );
