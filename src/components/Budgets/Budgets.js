@@ -13,10 +13,9 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5rem 0 0 0;
+  padding: 5rem 0;
   ${media.tablet`
-    /* clears Header and bottom Navigation with fixed position */
-    padding: 5rem 0;
+    padding-bottom: ${props => props.theme.bottomPad};
   `}
 `;
 
@@ -27,7 +26,7 @@ sortByPeriod = () => {
 
 const Overview = ({ categories }) => (
   <>
-    <Header title="Overview" />
+    <Header title="Budgets" />
     <Wrapper>
     <Button title="Change Filter" onClick={this.sortByPeriod} />
       {
@@ -57,7 +56,7 @@ Overview.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: state.categories,
+  categories: state.categories.categories,
 });
 
 

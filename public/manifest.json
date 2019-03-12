@@ -1,12 +1,22 @@
 {
-  "short_name": "Smart Budgets",
-  "name": "Smart Budgets",
+  "short_name": "SmartBudgets",
+  "name": "SmartBudgets",
   "description": "Get a better understanding of you spending habits.",
   "icons": [
     {
-      "src": "images/icons/favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "images/icons/favicon-24x24.png",
+      "sizes": "24x24",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icons/favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "images/icons/favicon-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
     },
     {
       "src": "images/icons/android-icon-48x48.png",

@@ -3,25 +3,26 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import media from '../../util/mediaQueries';
 import {
-  OverviewIcon, FeedIcon, SettingsIcon, AchievementIcon,
+  HomeIcon, FeedIcon, SettingsIcon, BudgetsIcon,
 } from './Icons';
+import Logo from './Logo.png';
 
 const NavigationBar = styled.nav`
   display: flex;
   position: fixed;
   background-color: ${props => props.theme.white};
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
-  align-items: center;
+  box-shadow: 0 1px 1px ${props => props.theme.shadowCol};
+  align-items: ${props => (props.theme.isX ? 'flex-start' : 'center')};
   width: 100%;
   height: 5rem;
-  z-index: 2;
+  z-index: 6;
   ${media.tablet`
     position: fixed;
     background-color: ${props => props.theme.white};
-    box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 -1px 0 ${props => props.theme.shadowCol};
     justify-content: space-around;
     width: 100%;
-    height: 5rem;
+    height: ${props => props.theme.navHeight};
     bottom: 0;
   `}
 `;
@@ -32,12 +33,13 @@ const NavItem = styled(NavLink).attrs({
   activeClassName,
 })`
   color: ${props => props.theme.grey};
-  margin: 1.5rem 4rem;
+  margin: 1.5rem 2rem;
   font-size: 1.6rem;
   text-decoration: none;
   text-align: center;
   display: flex;
   justify-content: center;
+  user-select: none;
 
   &.${activeClassName} {
     color: ${props => props.theme.primaryBlue};
@@ -54,7 +56,7 @@ const NavItem = styled(NavLink).attrs({
   ${media.tablet`
     flex: 1;
     color: ${props => props.theme.greyLight};
-    height: 100%;
+    height: ${props => (props.theme.isX ? 50 : 100)}%;
     margin: 0;
 
     & > span {
@@ -71,7 +73,9 @@ const NavItem = styled(NavLink).attrs({
   `}
 `;
 
-const Logo = styled.div`
+const Icon = styled.div`
+  display: flex;
+  align-items: center;
   flex: 2;
 
   & > a {
@@ -79,6 +83,11 @@ const Logo = styled.div`
     text-decoration: none;
     font-weight: 500;
     font-size: ${props => props.theme.fontSmall};
+  }
+
+  & > a > img {
+    height: 4.5rem;
+    width: 4.5rem;
   }
 
   padding: 0 2rem;
@@ -89,22 +98,25 @@ const Logo = styled.div`
 
 const Navigation = () => (
   <NavigationBar>
-    <Logo>
-      <NavLink to="/overview">
+    <Icon>
+      <NavLink to="/home">
+        <img alt="logo" src={Logo} />
+      </NavLink>
+      <NavLink to="/home">
         Smart Budgets
       </NavLink>
-    </Logo>
-    <NavItem to="/overview">
-      <span>Overview</span>
-      <OverviewIcon />
+    </Icon>
+    <NavItem to="/home">
+      <span>Home</span>
+      <HomeIcon />
+    </NavItem>
+    <NavItem to="/budgets">
+      <span>Budgets</span>
+      <BudgetsIcon />
     </NavItem>
     <NavItem to="/feed">
       <span>Feed</span>
-      <FeedIcon />
-    </NavItem>
-    <NavItem to="/social">
-      <span>Social</span>
-      <AchievementIcon />
+      <FeedIcon style={{ transform: 'rotate(90deg)' }} />
     </NavItem>
     <NavItem to="/settings">
       <span>Settings</span>

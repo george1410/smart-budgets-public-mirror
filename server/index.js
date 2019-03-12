@@ -1,9 +1,13 @@
 const express = require('express');
+require('dotenv').config();
 const path = require('path');
-const pool = require('./database');
-const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
+const bodyParser = require('body-parser');
+const apiRouter = require('./apiRouter');
+const authRouter = require('./authRouter');
+const idMatcher = require('./middleware/idMatcher');
 
 const app = express();
+app.use(bodyParser.json({ type: '*/*' }));
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
@@ -123,29 +127,23 @@ app.get('/api/users/:id/categories', (req, res) => {
         if (error) throw error;
         groups = results;
       });
+// 'server-dev' command sets this env var
+// this makes writing and testing endpoints easier as you
+// dont need to have a jwt set.
+if (!process.env.NO_JWT) {
+  app.use('/api/users/:id', idMatcher);
+}
 
-      sql = `
-        SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets 
-        JOIN categories ON categories.categoryId = budgets.categoryId
-        WHERE budgets.userId = ${req.params.id}
-        GROUP BY categories.displayName `;
+app.use(express.static(path.join(__dirname, '..', 'build')));
 
-      conn.query(sql, (error, results) => {
-        if (error) throw err;
-        if (results.length < 1) {
-          res.status(404).json({ error: 'No results were found.' });
-        } else {
-          conn.release();
-          if (error) throw error;
-          res.json(generateCategoryObjects(results, groups));
-        }
-      });
-    });
-  }
-});
+// Auth Routing
+authRouter(app);
+
+// API Routing
+apiRouter(app);
 
 app.get('/*', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));

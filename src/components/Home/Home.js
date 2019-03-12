@@ -11,13 +11,13 @@ const Wrapper = styled.div`
   `}
 `;
 
-const Social = () => (
+const Home = () => (
   <>
-    <Header title="Social" />
+    <Header title="Home" />
     <Wrapper>
       <p>This will be the social / home page</p>
     </Wrapper>
   </>
 );
 
-export default Social;
+export default Home;
