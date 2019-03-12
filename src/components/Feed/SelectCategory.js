@@ -33,7 +33,7 @@ const Wrapper = styled.div`
 const CategorySelector = ({
   displayName, select, ids, visible,
 }) => (
-  <Wrapper onClick={() => select(ids)} show={visible}>
+  <Wrapper tabIndex={0} onClick={() => select(ids)} onKeyPress={() => select(ids)} show={visible}>
     {displayName.toLowerCase()}
   </Wrapper>
 );
