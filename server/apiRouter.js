@@ -309,4 +309,44 @@ module.exports = (app) => {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
     }
   });
+
+  /**
+   * GET route for getting information about a specific friend of a user
+   * Endpoint: /api/users/{id}/friends/{friendId}
+   * 
+   * Response format:
+   * {
+   *   userId: 2,
+   *   firstName: 'Jane',
+   *   lastName: 'Smith'
+   * }
+   */
+  app.get('/api/users/:id/friends/:friendId', (req, res) => {
+    const { id, friendId } = req.params;
+    
+    let sql = `
+      SELECT friendshipId 
+      FROM friendships 
+      WHERE ((userId1 = ${id} AND userId2 = ${friendId})
+      OR (userId1 = ${friendId} AND userId2 = ${id}))
+      AND accepted = TRUE
+    `;
+
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      if (results.length < 1) {
+        res.sendStatus(404);
+      } else {
+        sql = `
+          SELECT userId, firstName, lastName
+          FROM users
+          WHERE userId = ${friendId}
+        `;
+        pool.query(sql, (err1, results1) => {
+          if (err1) throw err1;
+          res.json(results1[0]);
+        });
+      }
+    });
+  });
 };
