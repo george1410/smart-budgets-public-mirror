@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 3rem;
   width: 100%;
-  max-width: 30rem;
+  max-width: 20rem;
   background-color: ${props => (props.bg === 'MONTH' ? props.theme.primaryBlue : props.theme.error)};
   border-radius: 100px;
   position: relative;
@@ -28,11 +28,13 @@ const Dot = styled.div`
 `;
 
 const Title = styled.span`
+  font-weight: 500;
   font-size: 1.4rem;
   position: absolute;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
+  text-transform: capitalize;
   color: ${props => props.theme.white};
 `;
 
@@ -40,7 +42,7 @@ const Title = styled.span`
 const Toggle = ({ value, toggle }) => (
   <Wrapper bg={value} onClick={toggle} onKeyPress={toggle} tabIndex={0}>
     <Dot align={value} />
-    <Title>{value}</Title>
+    <Title>{value.toLowerCase()}</Title>
   </Wrapper>
 );
 
