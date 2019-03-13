@@ -1,21 +1,21 @@
 const pool = require('./database');
 const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
 
-/**
- * GET route for various user info.
- * Endpoint: /api/users/{userid}
- * Response format:
- *   [
- *     {
- *       "firstName": "John",
- *       "lastName": "Doe",
- *       "email": "example@email.com",
- *       "period": "MONTH"
- *    }
- *  ]
- */
 
 module.exports = (app) => {
+  /**
+   * GET route for various user info.
+   * Endpoint: /api/users/{userid}
+   * Response format:
+   *   [
+   *     {
+   *       "firstName": "John",
+   *       "lastName": "Doe",
+   *       "email": "example@email.com",
+   *       "period": "MONTH"
+   *    }
+   *  ]
+   */
   app.get('/api/users/:id', (req, res) => {
     const sql = `
         SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
@@ -29,6 +29,15 @@ module.exports = (app) => {
     });
   });
 
+  /**
+   * POST route for updating user period.
+   * Endpoint: /api/users/{userid}
+   * 
+   * POST Body:
+   *  {
+   *    period: "WEEK" | "MONTH"
+   *  }
+   */
   app.post('/api/users/:id', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
@@ -313,17 +322,17 @@ module.exports = (app) => {
   /**
    * GET route for getting information about a specific friend of a user
    * Endpoint: /api/users/{id}/friends/{friendId}
-   * 
+   *
    * Response format:
    * {
    *   userId: 2,
-   *   firstName: 'Jane',
-   *   lastName: 'Smith'
+   *   firstName: "Jane",
+   *   lastName: "Smith"
    * }
    */
   app.get('/api/users/:id/friends/:friendId', (req, res) => {
     const { id, friendId } = req.params;
-    
+
     let sql = `
       SELECT friendshipId 
       FROM friendships 
