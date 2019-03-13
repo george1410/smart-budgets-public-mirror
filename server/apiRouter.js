@@ -89,7 +89,8 @@ module.exports = (app) => {
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
-        WHERE t.userId = ${req.params.id} `;
+        WHERE t.userId = ${req.params.id} 
+        AND t.date <= CURDATE() `;
 
     if (req.query.period) {
       let { period } = req.query;
@@ -97,8 +98,7 @@ module.exports = (app) => {
       if (period === 'WEEK' || period === 'MONTH') {
         sql += `
             AND ${period}(t.date) = ${period}(CURDATE()) AND
-            YEAR(t.date) = YEAR(CURDATE()) AND
-            t.date <= CURDATE() `;
+            YEAR(t.date) = YEAR(CURDATE()) `;
       } else {
         badRequest = true;
         res.status(400).json({ error: 'Bad Request. Invalid period.' });

@@ -16,8 +16,7 @@ import {
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 2rem;
-  padding: 0 2rem;
+  padding: 2rem;
   width: 50rem;
   cursor: pointer;
 
@@ -31,10 +30,12 @@ const Wrapper = styled.div`
 `;
 
 const CategoryTitle = styled.span`
+  padding: 0.5rem 2rem;
   text-align: center;
-  align-self: stretch;
+  align-self: center;
   font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme.primaryBlue};
+  color: ${props => props.theme[props.textCol]};
+  background-color: ${props => props.color};
   font-weight: 500;
   text-transform: capitalize;
   margin-bottom: 1rem;
@@ -67,16 +68,17 @@ const LabelMain = styled.span`
 `;
 
 const ProgressBar = styled.div`
+  width: 100%;
   vertical-align: middle;
   display: flex;
   align-items: center;
-  border: 2px solid ${props => props.theme.primaryBlue};
+  border: 2px solid ${props => props.color};
 `;
 
 const Progress = styled.div`
   height: 1rem;
   width: calc(${props => props.spend} / ${props => props.budget} * 100%);
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.color};
   transition: width 0.3s ease-in-out;
 `;
 
@@ -95,10 +97,17 @@ class CategoryProgress extends React.PureComponent {
   }
 
   render() {
-    const { displayName, spend, budget } = this.props;
+    const {
+      displayName, spend, budget, color, textCol,
+    } = this.props;
     return (
       <Wrapper onClick={this.fetchCategories}>
-        <CategoryTitle>{displayName.toLowerCase()}</CategoryTitle>
+        <CategoryTitle
+          color={color}
+          textCol={textCol}
+        >
+          {displayName.toLowerCase()}
+        </CategoryTitle>
         <LabelMain>
           {numeral(budget - spend).format('$0,0.00')}
         </LabelMain>
@@ -110,8 +119,8 @@ class CategoryProgress extends React.PureComponent {
             {numeral(budget).format('$0,0.00')}
           </LabelEnd>
         </LabelWrapper>
-        <ProgressBar>
-          <Progress spend={spend} budget={budget} />
+        <ProgressBar color={color}>
+          <Progress color={color} spend={spend} budget={budget} />
         </ProgressBar>
       </Wrapper>
     );
@@ -132,7 +141,8 @@ CategoryProgress.propTypes = {
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,
-
+  color: PropTypes.string.isRequired,
+  textCol: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
