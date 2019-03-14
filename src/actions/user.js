@@ -30,6 +30,7 @@ export const updatePeriod = () => (dispatch, getState) => {
   api.post(`api/users/${uid}`, { period })
     .then(() => {
       dispatch(startSetCategories());
+      dispatch(setUserInfoLoading(false));
     })
     .catch(() => {
       dispatch(setUserInfoLoading(false));
