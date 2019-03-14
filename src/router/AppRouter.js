@@ -8,6 +8,7 @@ import NotFound from '../components/NotFoundPage/NotFoundPage';
 import Home from '../components/Home/Home';
 import Settings from '../components/Settings/Settings';
 import Feed from '../components/Feed/Feed';
+import AddFriends from '../components/AddFriends/AddFriends';
 import Budgets from '../components/Budgets/Budgets';
 import ConnectedPrivateRoute from './PrivateRoute';
 import ConnectedPublicRoute from './PublicRoute';
@@ -19,6 +20,7 @@ const AppRouter = () => (
     <Switch>
       <ConnectedPublicRoute exact path="/" component={Login} />
       <ConnectedPrivateRoute exact path="/home" component={Home} />
+      <ConnectedPrivateRoute exact path="/friends" component={AddFriends} />
       <ConnectedPrivateRoute exact path="/budgets" component={Budgets} />
       <ConnectedPrivateRoute exact path="/feed" component={Feed} />
       <ConnectedPrivateRoute exact path="/settings" component={Settings} />
