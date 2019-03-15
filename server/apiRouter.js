@@ -4,8 +4,11 @@ const { generateCategorySpendSql, generateCategoryObjects } = require('./categor
 
 module.exports = (app) => {
   /**
-   * GET route for various user info.
-   * Endpoint: /api/users/{userid}
+   * GET route for returning all users based on search term.
+   * Endpoint: /api/users/
+   * Required Query Parameters:
+   *   searchTerm
+   *     'string'
    * Response format:
    *   [
    *     {
@@ -15,6 +18,30 @@ module.exports = (app) => {
    *       "period": "MONTH"
    *    }
    *  ]
+   */
+  app.get('/api/users/', (req, res) => {
+    const { searchTerm } = req.query;
+    const sql = `
+        SELECT firstName, lastName, email, period FROM users WHERE firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%'`;
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.' });
+      } else {
+        res.json(results);
+      }
+    });
+  });
+  /**
+   * GET route for various user info.
+   * Endpoint: /api/users/{userid}
+   * Response format:
+   *   {
+   *     "firstName": "John",
+   *     "lastName": "Doe",
+   *     "email": "example@email.com",
+   *     "period": "MONTH"
+   *  }
    */
   app.get('/api/users/:id', (req, res) => {
     const sql = `
@@ -32,7 +59,7 @@ module.exports = (app) => {
   /**
    * POST route for updating user period.
    * Endpoint: /api/users/{userid}
-   * 
+   *
    * POST Body:
    *  {
    *    period: "WEEK" | "MONTH"
@@ -89,7 +116,7 @@ module.exports = (app) => {
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
-        WHERE t.userId = ${req.params.id} 
+        WHERE t.userId = ${req.params.id}
         AND t.date <= CURDATE() `;
 
     if (req.query.period) {
@@ -258,7 +285,7 @@ module.exports = (app) => {
     let sql = `
       SELECT * FROM friendships
       WHERE (userId1 = ${userId}
-      OR userId2 = ${userId}) 
+      OR userId2 = ${userId})
       `;
 
     if (req.query.accepted) {
@@ -334,8 +361,8 @@ module.exports = (app) => {
     const { id, friendId } = req.params;
 
     let sql = `
-      SELECT friendshipId 
-      FROM friendships 
+      SELECT friendshipId
+      FROM friendships
       WHERE ((userId1 = ${id} AND userId2 = ${friendId})
       OR (userId1 = ${friendId} AND userId2 = ${id}))
       AND accepted = TRUE
