@@ -7,7 +7,6 @@ import media from '../../util/mediaQueries';
 const Wrapper = styled.div`
   display: flex;
   width: 40rem;
-  /* background-color: ${props => props.theme.offWhite}; */
   align-items: center;
   justify-content: center;
   padding: 1rem 3rem;

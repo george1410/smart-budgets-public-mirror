@@ -9,6 +9,7 @@ import { signout } from '../../actions/auth';
 import { switchUserPeriods, updatePeriod } from '../../actions/user';
 import Toggle from './Toggle';
 import UserCard from './UserCard';
+import DayPicker from './DayPicker';
 
 const Wrapper = styled.div`
   display: flex;
@@ -37,6 +38,16 @@ const SettingsRow = styled.div`
   height: 4rem;
   border: 1px solid ${props => props.theme.offWhite};
   width: 40rem;
+
+  &:first-of-type {
+    border-bottom: none;
+  }
+
+  &:last-of-type {
+    border-top: none;
+    background-color: red;
+  }
+
   ${media.phone`
     width: 100%;
   `}
@@ -64,8 +75,18 @@ class Settings extends React.Component {
     periodUpdate();
   }
 
+  onPeriodChange = (e) => {
+    // TODO take the day and write it to redux store
+    // TODO take the value from store and write to db
+    const day = e.target.value;
+    if (day.match(/\d/) && day >= 1 && day <= 31) {
+      console.log(day);
+    }
+  }
+
 
   render() {
+    // TODO take periodStart from props
     const { period, user } = this.props;
     return (
       <>
@@ -75,6 +96,14 @@ class Settings extends React.Component {
           <SettingsRow>
             <RowTitle>Budgeting Period</RowTitle>
             <Toggle value={period} toggle={this.onSwitchPeriod} />
+          </SettingsRow>
+          <SettingsRow>
+            <RowTitle>Start of Period</RowTitle>
+            <DayPicker
+              onPeriodChange={this.onPeriodChange}
+              // currentStart={periodStart}
+              // currentStart={16}
+            />
           </SettingsRow>
           <Extender />
           <Button title="Log Out" onClick={this.logout} />
@@ -95,6 +124,7 @@ Settings.propTypes = {
 const mapStateToProps = state => ({
   period: state.user.period,
   user: state.user,
+  // periodStart: state.user.periodStart,
 });
 
 const mapDispatchToProps = dispatch => ({
