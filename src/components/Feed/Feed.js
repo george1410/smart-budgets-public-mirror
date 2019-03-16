@@ -1,52 +1,25 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { AutoSizer, InfiniteLoader, List as VirtualList } from 'react-virtualized';
+import { AutoSizer, InfiniteLoader } from 'react-virtualized';
 import 'react-virtualized/styles.css';
 import FeedHeader from './FeedHeader/FeedHeader';
-import FilterDrawer from './FilterDrawer';
-import SearchDrawer from './SearchDrawer';
-import media from '../../util/mediaQueries';
+import FilterDrawer from './FilterDrawer/FilterDrawer';
+import SearchDrawer from './SearchDrawer/SearchDrawer';
 import colors from '../../util/colors';
 import Transaction from '../Transaction/Transaction';
 import ListHeader from './ListHeader/ListHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount } from '../../actions/filters';
 import { startSetTransactions, setTransactionError } from '../../actions/transactions';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100vw;
-  align-items: center;
-  position: relative;
-  padding: 5rem 0 0 0;
-  ${media.tablet`
-    padding: 5rem 0 ${props => (props.theme.isX ? '10rem' : '5rem')} 0;
-  `}
-`;
-
-const StyledList = styled(VirtualList)`
-  height: ${props => props.theme.innerHeight};
-  outline: none;
-`;
-
-const ListWrapper = styled.div`
-  height: ${props => props.theme.innerHeight};
-  width: 100%;
-
-  & > div > div::-webkit-scrollbar {
-    width: 0;
-  }
-`;
+import { StyledList, ListWrapper } from './ListStyles';
+import Wrapper from './Wrapper';
 
 const Feed = ({
   transactions,
   fetchTransactions,
-  error,
-  dismissError,
+  // error,
+  // dismissError,
   sortingByAmount,
   sortingByDate,
   filters: {
@@ -150,7 +123,7 @@ Feed.defaultProps = {
     sortByDate: 1,
     sortByAmount: 0,
   },
-  error: '',
+  // error: '',
 };
 
 Feed.propTypes = {
@@ -162,8 +135,8 @@ Feed.propTypes = {
     sortByAmount: PropTypes.string,
   }),
   fetchTransactions: PropTypes.func.isRequired,
-  error: PropTypes.string,
-  dismissError: PropTypes.func.isRequired,
+  // error: PropTypes.string,
+  // dismissError: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
