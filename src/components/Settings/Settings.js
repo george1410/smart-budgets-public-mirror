@@ -32,33 +32,33 @@ const Extender = styled.div`
   flex: 99;
 `;
 
-class Settings extends React.Component {
-  logout = () => {
-    const { startLogout } = this.props;
+const Settings = ({
+  startLogout,
+  switchPeriod,
+  periodUpdate,
+  period,
+}) => {
+  const logout = () => {
     startLogout();
-  }
+  };
 
-  onSwitchPeriod = () => {
-    const { switchPeriod, periodUpdate } = this.props;
+  const onSwitchPeriod = () => {
     switchPeriod();
     periodUpdate();
-  }
+  };
 
 
-  render() {
-    const { period } = this.props;
-    return (
-      <>
-        <Header title="Settings" />
-        <Wrapper>
-          <Toggle value={period} toggle={this.onSwitchPeriod} />
-          <Extender />
-          <Button title="Log Out" onClick={this.logout} />
-        </Wrapper>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <Header title="Settings" />
+      <Wrapper>
+        <Toggle value={period} toggle={onSwitchPeriod} />
+        <Extender />
+        <Button title="Log Out" onClick={logout} />
+      </Wrapper>
+    </>
+  );
+};
 
 Settings.propTypes = {
   startLogout: PropTypes.func.isRequired,

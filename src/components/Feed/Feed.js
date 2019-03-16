@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -42,12 +42,24 @@ const ListWrapper = styled.div`
   }
 `;
 
-class Feed extends React.Component {
-  renderRowVirtual = ({ index, key, style }) => {
-    const { transactions, filters: { searchDrawerOpen } } = this.props;
-    const transaction = transactions[index];
+const Feed = ({
+  transactions,
+  fetchTransactions,
+  error,
+  dismissError,
+  sortingByAmount,
+  sortingByDate,
+  filters: {
+    searchDrawerOpen,
+    filterDrawerOpen,
+    sortByDate: byDate,
+    sortByAmount: byAmount,
+  },
+}) => {
+  const renderRowVirtual = (params) => {
+    const transaction = transactions[params.index];
     return (
-      <div key={key} style={style}>
+      <div key={params.key} style={params.style}>
         <Transaction
           key={transaction.transactionId}
           {...transaction}
@@ -57,66 +69,52 @@ class Feed extends React.Component {
         />
       </div>
     );
-  }
-
-  componentWillMount = () => {
-    const { transactions } = this.props;
-    if (transactions.length === 0) {
-      this.fetchMore();
-    }
-  }
-
-  sortByAmountOnClick = () => {
-    const { sortingByAmount } = this.props;
-    sortingByAmount();
   };
 
-  sortByDateOnClick = () => {
-    const { sortingByDate } = this.props;
-    sortingByDate();
-  };
-
-  getSortIndicatorInfo = () => {
-    const { filters } = this.props;
-    return {
-      date: filters.sortByDate,
-      amount: filters.sortByAmount,
-    };
-  }
-
-  fetchMore = () => {
-    const { fetchTransactions } = this.props;
+  const fetchMore = () => {
     if (navigator.onLine) {
       fetchTransactions();
     }
-  }
+  };
 
-  isRowLoaded = ({ index }) => {
-    const { transactions } = this.props;
-    return !!transactions[index];
-  }
+  useEffect(() => {
+    if (transactions.length === 0) {
+      fetchMore();
+    }
+  }, []);
 
-  render() {
-    const {
-      transactions, filters: { filterDrawerOpen },
-    } = this.props;
-    return (
-      <>
-        <FeedHeader />
-        <Wrapper>
-          <InfoHeader
-            sortingByAmount={this.sortByAmountOnClick}
-            sortingByDate={this.sortByDateOnClick}
-            indicators={this.getSortIndicatorInfo()}
-            shouldShift={filterDrawerOpen}
-          />
-          <ListWrapper>
-            <AutoSizer>
-              {
+  const sortByAmountOnClick = () => {
+    sortingByAmount();
+  };
+
+  const sortByDateOnClick = () => {
+    sortingByDate();
+  };
+
+  const indicatorInfo = {
+    date: byDate,
+    amount: byAmount,
+  };
+
+  const isRowLoaded = ({ index }) => !!transactions[index];
+
+  return (
+    <>
+      <FeedHeader />
+      <Wrapper>
+        <InfoHeader
+          sortingByAmount={sortByAmountOnClick}
+          sortingByDate={sortByDateOnClick}
+          indicators={indicatorInfo}
+          shouldShift={filterDrawerOpen}
+        />
+        <ListWrapper>
+          <AutoSizer>
+            {
               ({ width, height }) => (
                 <InfiniteLoader
-                  isRowLoaded={this.isRowLoaded}
-                  loadMoreRows={this.fetchMore}
+                  isRowLoaded={isRowLoaded}
+                  loadMoreRows={fetchMore}
                   rowCount={Number.MAX_SAFE_INTEGER}
                 >
                   {
@@ -125,7 +123,7 @@ class Feed extends React.Component {
                         width={width}
                         height={height}
                         rowHeight={70}
-                        rowRenderer={this.renderRowVirtual}
+                        rowRenderer={renderRowVirtual}
                         rowCount={transactions.length}
                         onRowsRendered={onRowsRendered}
                         ref={registerChild}
@@ -137,15 +135,14 @@ class Feed extends React.Component {
                 </InfiniteLoader>
               )
               }
-            </AutoSizer>
-          </ListWrapper>
-        </Wrapper>
-        <FilterDrawer />
-        <SearchDrawer />
-      </>
-    );
-  }
-}
+          </AutoSizer>
+        </ListWrapper>
+      </Wrapper>
+      <FilterDrawer />
+      <SearchDrawer />
+    </>
+  );
+};
 
 Feed.defaultProps = {
   transactions: [],
@@ -165,7 +162,6 @@ Feed.propTypes = {
     sortByAmount: PropTypes.string,
   }),
   fetchTransactions: PropTypes.func.isRequired,
-  hasMore: PropTypes.bool.isRequired,
   error: PropTypes.string,
   dismissError: PropTypes.func.isRequired,
 };

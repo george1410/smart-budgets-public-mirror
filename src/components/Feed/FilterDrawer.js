@@ -221,100 +221,93 @@ const ClearFiltersButton = styled.button`
   }
 `;
 
-class FilterDrawer extends React.PureComponent {
-  onStartDateChange = (e) => {
-    const { setDateStart } = this.props;
+const FilterDrawer = ({
+  setDateStart,
+  setDateEnd,
+  clearFeed,
+  setStart,
+  setHavingMore,
+  fetchTransactions,
+  toggleFilters,
+  clear,
+  setMin,
+  setMax,
+  visible,
+  categories,
+  selectCategory,
+  shownCategories,
+  startDate,
+  endDate,
+  minAmount,
+  maxAmount,
+}) => {
+  const onStartDateChange = (e) => {
     const date = e.target.value;
     setDateStart(date);
-  }
+  };
 
-  onEndDateChange = (e) => {
-    const { setDateEnd } = this.props;
+  const onEndDateChange = (e) => {
     const date = e.target.value;
     setDateEnd(date);
-  }
+  };
 
-  onApplyFilters = () => {
-    const {
-      clearFeed,
-      setStart,
-      setHavingMore,
-      fetchTransactions,
-      toggleFilters,
-    } = this.props;
+  const onApplyFilters = () => {
     clearFeed();
     setStart();
     setHavingMore();
     fetchTransactions();
     toggleFilters();
-  }
+  };
 
-  onClear = () => {
-    const {
-      clear, fetchTransactions, clearFeed, setStart, setHavingMore,
-    } = this.props;
+  const onClear = () => {
     clear();
     clearFeed();
     setStart();
     setHavingMore();
     fetchTransactions();
-  }
+  };
 
-  onMinAmountChange = (e) => {
-    const { setMin } = this.props;
+  const onMinAmountChange = (e) => {
     const amount = e.target.value;
     if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
       setMin(amount);
     }
-  }
+  };
 
-  onMaxAmountChange = (e) => {
-    const { setMax } = this.props;
+  const onMaxAmountChange = (e) => {
     const amount = e.target.value;
     if (!amount || amount.match(/^\d{1,}(\.\d{0,2})?$/)) {
       setMax(amount);
     }
-  }
-
-  render() {
-    const {
-      visible,
-      categories,
-      selectCategory,
-      shownCategories,
-      startDate,
-      endDate,
-      minAmount,
-      maxAmount,
-    } = this.props;
-    return (
-      <Wrapper visible={visible}>
-        <Title>Filter</Title>
-        <GroupName>Amount</GroupName>
-        <Group>
-          <Label>
+  };
+  return (
+    <Wrapper visible={visible}>
+      <Title>Filter</Title>
+      <GroupName>Amount</GroupName>
+      <Group>
+        <Label>
             Min
-            <AmountPicker type="text" value={minAmount || ''} onChange={this.onMinAmountChange} />
-          </Label>
-          <Label>
+          <AmountPicker type="text" value={minAmount || ''} onChange={onMinAmountChange} />
+        </Label>
+        <Label>
             Max
-            <AmountPicker type="text" value={maxAmount || ''} onChange={this.onMaxAmountChange} />
-          </Label>
-        </Group>
-        <GroupName>Date</GroupName>
-        <Group col>
-          <Label>
+          <AmountPicker type="text" value={maxAmount || ''} onChange={onMaxAmountChange} />
+        </Label>
+      </Group>
+      <GroupName>Date</GroupName>
+      <Group col>
+        <Label>
             StartDate
-            <DatePicker type="date" value={startDate || ''} onChange={this.onStartDateChange} />
-          </Label>
-          <Label>
+          <DatePicker type="date" value={startDate || ''} onChange={onStartDateChange} />
+        </Label>
+        <Label>
             EndDate
-            <DatePicker type="date" value={endDate} onChange={this.onEndDateChange} />
-          </Label>
-        </Group>
-        <GroupName>Categories</GroupName>
-        <Group>
-          {
+          <DatePicker type="date" value={endDate} onChange={onEndDateChange} />
+        </Label>
+      </Group>
+      <GroupName>Categories</GroupName>
+      <Group>
+        {
             categories.map(category => (
               <SelectCategory
                 key={category.id[0]}
@@ -325,13 +318,12 @@ class FilterDrawer extends React.PureComponent {
               />
             ))
           }
-        </Group>
-        <Apply type="button" onClick={this.onApplyFilters}>Apply Filters</Apply>
-        <ClearFiltersButton type="button" onClick={this.onClear}>Clear Filters</ClearFiltersButton>
-      </Wrapper>
-    );
-  }
-}
+      </Group>
+      <Apply type="button" onClick={onApplyFilters}>Apply Filters</Apply>
+      <ClearFiltersButton type="button" onClick={onClear}>Clear Filters</ClearFiltersButton>
+    </Wrapper>
+  );
+};
 
 FilterDrawer.defaultProps = {
   visible: false,

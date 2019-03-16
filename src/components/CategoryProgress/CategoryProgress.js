@@ -82,50 +82,54 @@ const Progress = styled.div`
   transition: width 0.3s ease-in-out;
 `;
 
-class CategoryProgress extends React.PureComponent {
-  fetchCategories = () => {
-    const {
-      id, selectCategory, clear, clearFeed, setHavingMore, setStart,
-      fetchTransactions, history,
-    } = this.props;
+const CategoryProgress = ({
+  displayName,
+  spend,
+  budget,
+  color,
+  textCol,
+  id,
+  selectCategory,
+  clear,
+  clearFeed,
+  setHavingMore,
+  fetchTransactions,
+  setStart,
+  history,
+}) => {
+  const fetchCategories = () => {
     clearFeed();
     clear();
     selectCategory(id);
     setHavingMore();
     setStart();
     fetchTransactions(() => history.push('/feed'));
-  }
-
-  render() {
-    const {
-      displayName, spend, budget, color, textCol,
-    } = this.props;
-    return (
-      <Wrapper onClick={this.fetchCategories}>
-        <CategoryTitle
-          color={color}
-          textCol={textCol}
-        >
-          {displayName.toLowerCase()}
-        </CategoryTitle>
-        <LabelMain>
-          {numeral(budget - spend).format('$0,0.00')}
-        </LabelMain>
-        <LabelWrapper>
-          <LabelEnd>
-            {numeral(spend).format('$0,0.00')}
-          </LabelEnd>
-          <LabelEnd>
-            {numeral(budget).format('$0,0.00')}
-          </LabelEnd>
-        </LabelWrapper>
-        <ProgressBar color={color}>
-          <Progress color={color} spend={spend} budget={budget} />
-        </ProgressBar>
-      </Wrapper>
-    );
-  }
-}
+  };
+  return (
+    <Wrapper onClick={fetchCategories}>
+      <CategoryTitle
+        color={color}
+        textCol={textCol}
+      >
+        {displayName.toLowerCase()}
+      </CategoryTitle>
+      <LabelMain>
+        {numeral(budget - spend).format('$0,0.00')}
+      </LabelMain>
+      <LabelWrapper>
+        <LabelEnd>
+          {numeral(spend).format('$0,0.00')}
+        </LabelEnd>
+        <LabelEnd>
+          {numeral(budget).format('$0,0.00')}
+        </LabelEnd>
+      </LabelWrapper>
+      <ProgressBar color={color}>
+        <Progress color={color} spend={spend} budget={budget} />
+      </ProgressBar>
+    </Wrapper>
+  );
+};
 
 CategoryProgress.propTypes = {
   displayName: PropTypes.string.isRequired,

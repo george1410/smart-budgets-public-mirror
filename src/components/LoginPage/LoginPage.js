@@ -152,65 +152,66 @@ const Icon = styled.div`
   }
 `;
 
-class LoginPage extends React.Component {
-  onSubmit = (formProps) => {
-    const { startSignin: signIn, history } = this.props;
-    signIn(formProps, () => history.push('/home'));
+const LoginPage = ({
+  startSignin,
+  history,
+  change: setField,
+  handleSubmit,
+  errorMsg,
+}) => {
+  const onSubmit = (formProps) => {
+    startSignin(formProps, () => history.push('/home'));
   };
 
   // button to fill with data for development
-  onFillFakeLogins = () => {
-    const { change: setField } = this.props;
+  const onFillFakeLogins = () => {
     setField('email', 'hello@georgemccarron.com');
     setField('password', 'password');
-  }
+  };
 
-  render() {
-    const { handleSubmit, errorMsg } = this.props;
-    return (
-      <Wrapper>
-        <LoginWrapper>
-          <Icon>
-            <img alt="logo" src={Logo} />
-          </Icon>
-          <Subtitle err={!!errorMsg}>
-            {
-              errorMsg || 'Please log in to get started.'
-            }
-          </Subtitle>
-          <Form onSubmit={handleSubmit(this.onSubmit)}>
-            <InputWrapper>
-              <Input
-                id="email"
-                name="email"
-                type="text"
-                component="input"
-                placeholder="Email"
-              />
-              <Label htmlFor="email">
+  return (
+    <Wrapper>
+      <LoginWrapper>
+        <Icon>
+          <img alt="logo" src={Logo} />
+        </Icon>
+        <Subtitle err={!!errorMsg}>
+          {
+            errorMsg || 'Please log in to get started.'
+          }
+        </Subtitle>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <InputWrapper>
+            <Input
+              id="email"
+              name="email"
+              type="text"
+              component="input"
+              placeholder="Email"
+            />
+            <Label htmlFor="email">
                 Email
-              </Label>
-            </InputWrapper>
-            <InputWrapper>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                component="input"
-                placeholder="password"
-              />
-              <Label htmlFor="password">
+            </Label>
+          </InputWrapper>
+          <InputWrapper>
+            <Input
+              id="password"
+              name="password"
+              type="password"
+              component="input"
+              placeholder="password"
+            />
+            <Label htmlFor="password">
                 Password
-              </Label>
-            </InputWrapper>
-            <Button title="Log In" type="submit" />
-          </Form>
-          <AltButton style={{ marginTop: '2rem' }} onClick={this.onFillFakeLogins} title="Fill with demo logins" type="button" />
-        </LoginWrapper>
-      </Wrapper>
-    );
-  }
-}
+            </Label>
+          </InputWrapper>
+          <Button title="Log In" type="submit" />
+        </Form>
+        <AltButton style={{ marginTop: '2rem' }} onClick={onFillFakeLogins} title="Fill with demo logins" type="button" />
+      </LoginWrapper>
+    </Wrapper>
+  );
+};
 
 LoginPage.propTypes = {
   handleSubmit: PropTypes.func.isRequired,

@@ -135,17 +135,23 @@ const Icon = styled.svg`
   }
 `;
 
-class SearchDrawer extends React.PureComponent {
-  onSearchChange = (e) => {
-    const { setSearchText } = this.props;
-    const searchText = e.target.value;
-    setSearchText(searchText);
-  }
+const SearchDrawer = ({
+  setSearchText,
+  clearFeed,
+  setStart,
+  setHavingMore,
+  fetchTransactions,
+  value,
+  toggleSearch,
+  searchOpen,
+  searchText,
+}) => {
+  const onSearchChange = (e) => {
+    const text = e.target.value;
+    setSearchText(text);
+  };
 
-  clearInput = () => {
-    const {
-      setSearchText, clearFeed, setStart, setHavingMore, fetchTransactions, value,
-    } = this.props;
+  const clearInput = () => {
     if (value !== '') {
       setSearchText('');
       clearFeed();
@@ -153,41 +159,33 @@ class SearchDrawer extends React.PureComponent {
       setHavingMore();
       fetchTransactions();
     }
-  }
+  };
 
-  onSearchSubmit = () => {
-    const {
-      clearFeed, setStart, setHavingMore, fetchTransactions, toggleSearch,
-    } = this.props;
+  const onSearchSubmit = () => {
     toggleSearch();
     clearFeed();
     setStart();
     setHavingMore();
     fetchTransactions();
-  }
+  };
 
-  render() {
-    const {
-      searchOpen, searchText,
-    } = this.props;
-    return (
-      <Wrapper open={searchOpen}>
-        <InputLine>
-          <Input type="text" value={searchText} placeholder="Search" onChange={this.onSearchChange} />
-          <Clear onClick={this.clearInput}>
-            <Icon open={searchOpen} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
-              <title>Close</title>
-              <g fill="#111111" stroke="none">
-                <path d="M13.41 12l4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z" />
-              </g>
-            </Icon>
-          </Clear>
-        </InputLine>
-        <SearchButton type="button" onClick={this.onSearchSubmit}>Search</SearchButton>
-      </Wrapper>
-    );
-  }
-}
+  return (
+    <Wrapper open={searchOpen}>
+      <InputLine>
+        <Input type="text" value={searchText} placeholder="Search" onChange={onSearchChange} />
+        <Clear onClick={clearInput}>
+          <Icon open={searchOpen} viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
+            <title>Close</title>
+            <g fill="#111111" stroke="none">
+              <path d="M13.41 12l4.3-4.29a1 1 0 1 0-1.42-1.42L12 10.59l-4.29-4.3a1 1 0 0 0-1.42 1.42l4.3 4.29-4.3 4.29a1 1 0 0 0 0 1.42 1 1 0 0 0 1.42 0l4.29-4.3 4.29 4.3a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42z" />
+            </g>
+          </Icon>
+        </Clear>
+      </InputLine>
+      <SearchButton type="button" onClick={onSearchSubmit}>Search</SearchButton>
+    </Wrapper>
+  );
+};
 
 SearchDrawer.defaultProps = {
   searchText: '',
