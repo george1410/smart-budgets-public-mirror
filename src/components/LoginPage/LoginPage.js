@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions/auth';
 import media from '../../util/mediaQueries';
 import Button from '../Button/Button';
-import AltButton from '../Button/AltButton';
 import Logo from './Logo.png';
 
 const Wrapper = styled.div`
@@ -207,7 +206,7 @@ const LoginPage = ({
           </InputWrapper>
           <Button title="Log In" type="submit" />
         </Form>
-        <AltButton style={{ marginTop: '2rem' }} onClick={onFillFakeLogins} title="Fill with demo logins" type="button" />
+        <Button altbtn style={{ marginTop: '2rem' }} onClick={onFillFakeLogins} title="Fill with demo logins" type="button" />
       </LoginWrapper>
     </Wrapper>
   );

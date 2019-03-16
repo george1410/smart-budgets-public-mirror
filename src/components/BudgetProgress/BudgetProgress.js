@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import numeral from 'numeral';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import media from '../../util/mediaQueries';
 import {
   setFilterCategory,
   clearFilters,
@@ -12,75 +10,12 @@ import {
 import {
   clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
 } from '../../actions/transactions';
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  width: 50rem;
-  cursor: pointer;
-
-  :hover {
-    background-color: ${props => props.theme.primaryBlueShadow};
-  }
-
-  ${media.phone`
-    width: 100%;
-  `}
-`;
-
-const CategoryTitle = styled.span`
-  padding: 0.5rem 2rem;
-  text-align: center;
-  align-self: center;
-  font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme[props.textCol]};
-  background-color: ${props => props.color};
-  font-weight: 500;
-  text-transform: capitalize;
-  margin-bottom: 1rem;
-`;
-
-const LabelWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  padding: 0 1rem;
-  justify-content: space-between;
-  align-items: baseline;
-`;
-
-const LabelEnd = styled.span`
-  font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme.grey};
-  flex: 1;
-  font-weight: 500;
-
-  &:last-of-type {
-    text-align: end;
-  }
-`;
-
-const LabelMain = styled.span`
-  color: ${props => props.theme.black};
-  font-size: ${props => props.theme.fontMedium};
-  text-align: center;
-  align-self: stretch;
-`;
-
-const ProgressBar = styled.div`
-  width: 100%;
-  vertical-align: middle;
-  display: flex;
-  align-items: center;
-  border: 2px solid ${props => props.color};
-`;
-
-const Progress = styled.div`
-  height: 1rem;
-  width: calc(${props => props.spend} / ${props => props.budget} * 100%);
-  background-color: ${props => props.color};
-  transition: width 0.3s ease-in-out;
-`;
+import Wrapper from './Wrapper';
+import CategoryTitle from './CategoryTitle';
+import LabelWrapper from './LabelWrapper';
+import EndLabel from './EndLabel';
+import MainLabel from './MainLabel';
+import { ProgressBorder, Progress } from './ProgressBar';
 
 const CategoryProgress = ({
   displayName,
@@ -113,20 +48,20 @@ const CategoryProgress = ({
       >
         {displayName.toLowerCase()}
       </CategoryTitle>
-      <LabelMain>
+      <MainLabel>
         {numeral(budget - spend).format('$0,0.00')}
-      </LabelMain>
+      </MainLabel>
       <LabelWrapper>
-        <LabelEnd>
+        <EndLabel>
           {numeral(spend).format('$0,0.00')}
-        </LabelEnd>
-        <LabelEnd>
+        </EndLabel>
+        <EndLabel>
           {numeral(budget).format('$0,0.00')}
-        </LabelEnd>
+        </EndLabel>
       </LabelWrapper>
-      <ProgressBar color={color}>
+      <ProgressBorder color={color}>
         <Progress color={color} spend={spend} budget={budget} />
-      </ProgressBar>
+      </ProgressBorder>
     </Wrapper>
   );
 };

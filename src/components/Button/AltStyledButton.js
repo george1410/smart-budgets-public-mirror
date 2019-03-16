@@ -1,8 +1,6 @@
-import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 
-const Button = styled.button`
+const AltStyledButton = styled.button`
   width: 100%;
   cursor: pointer;
   padding: 1.5rem;
@@ -20,20 +18,4 @@ const Button = styled.button`
   }
 `;
 
-const AltButton = ({ title, type, ...rest }) => (
-  <Button type={type} {...rest}>
-    {title}
-  </Button>
-);
-
-AltButton.defaultProps = {
-  title: 'Button',
-  type: 'button',
-};
-
-AltButton.propTypes = {
-  title: PropTypes.string,
-  type: PropTypes.string,
-};
-
-export default AltButton;
+export default AltStyledButton;
