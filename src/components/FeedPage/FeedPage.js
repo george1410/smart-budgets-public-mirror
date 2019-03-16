@@ -7,7 +7,7 @@ import FeedHeader from './FeedHeader/FeedHeader';
 import FilterDrawer from './FilterDrawer/FilterDrawer';
 import SearchDrawer from './SearchDrawer/SearchDrawer';
 import colors from '../../util/colors';
-import Transaction from '../Transaction/Transaction';
+import Transaction from './Transaction/Transaction';
 import ListHeader from './ListHeader/ListHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount } from '../../actions/filters';

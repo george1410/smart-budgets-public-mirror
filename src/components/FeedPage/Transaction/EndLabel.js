@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../util/mediaQueries';
+import media from '../../../util/mediaQueries';
 
 const EndLabel = styled.p`
   color: ${props => props.theme.black};

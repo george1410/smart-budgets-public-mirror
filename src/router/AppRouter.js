@@ -5,10 +5,10 @@ import {
 import createHistory from 'history/createBrowserHistory';
 import Login from '../components/LoginPage/LoginPage';
 import NotFound from '../components/NotFoundPage/NotFoundPage';
-import Home from '../components/Home/Home';
-import Settings from '../components/Settings/Settings';
-import Feed from '../components/Feed/Feed';
-import Budgets from '../components/Budgets/Budgets';
+import Home from '../components/HomePage/HomePage';
+import Settings from '../components/SettingsPage/SettingsPage';
+import Feed from '../components/FeedPage/FeedPage';
+import Budgets from '../components/BudgetsPage/BudgetsPage';
 import ConnectedPrivateRoute from './PrivateRoute';
 import ConnectedPublicRoute from './PublicRoute';
 

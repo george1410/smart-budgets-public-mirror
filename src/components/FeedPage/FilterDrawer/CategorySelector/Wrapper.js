@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../../util/mediaQueries';
+import media from '../../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   background-color: ${props => (props.show ? props.theme.white : props.theme.primaryBlue)};

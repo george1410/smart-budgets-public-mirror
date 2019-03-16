@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import CategorySelector from '../CategorySelector/CategorySelector';
+import CategorySelector from './CategorySelector/CategorySelector';
 import {
   setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
   clearFilters, setMinAmount, setMaxAmount,

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import media from '../../util/mediaQueries';
+import media from '../../../util/mediaQueries';
 
 // for margin-rigth calcs look at FilterDrawer
 const Wrapper = styled.div`
