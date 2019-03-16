@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import SelectCategory from './SelectCategory';
+import CategorySelector from './CategorySelector/CategorySelector';
 import media from '../../util/mediaQueries';
 import {
   setFilterCategory, setStartDate, setEndDate, toggleFilterDrawer,
@@ -309,7 +309,7 @@ const FilterDrawer = ({
       <Group>
         {
             categories.map(category => (
-              <SelectCategory
+              <CategorySelector
                 key={category.id[0]}
                 displayName={category.displayName}
                 select={selectCategory}

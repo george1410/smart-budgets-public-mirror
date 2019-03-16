@@ -1,8 +1,5 @@
-
-import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import media from '../../util/mediaQueries';
+import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   background-color: ${props => (props.show ? props.theme.white : props.theme.primaryBlue)};
@@ -30,23 +27,4 @@ const Wrapper = styled.div`
   `}
 `;
 
-const CategorySelector = ({
-  displayName, select, ids, visible,
-}) => (
-  <Wrapper tabIndex={0} onClick={() => select(ids)} onKeyPress={() => select(ids)} show={visible}>
-    {displayName.toLowerCase()}
-  </Wrapper>
-);
-
-CategorySelector.defaultProps = {
-  displayName: 'Category',
-};
-
-CategorySelector.propTypes = {
-  displayName: PropTypes.string,
-  select: PropTypes.func.isRequired,
-  ids: PropTypes.arrayOf(Number).isRequired,
-  visible: PropTypes.bool.isRequired,
-};
-
-export default CategorySelector;
+export default Wrapper;

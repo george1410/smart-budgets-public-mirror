@@ -5,13 +5,13 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import * as actions from '../../actions/auth';
 import Button from '../Button/Button';
-import Wrapper from './Wrapper';
-import Subtitle from './Subtitle';
+import Form from './Form';
+import { Input, InputWrapper } from './Input';
 import Label from './Label';
 import LoginCard from './LoginCard';
 import Logo from './Logo';
-import Form from './Form';
-import { Input, InputWrapper } from './Input';
+import Subtitle from './Subtitle';
+import Wrapper from './Wrapper';
 
 const LoginPage = ({
   startSignin,

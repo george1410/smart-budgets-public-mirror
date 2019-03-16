@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { AutoSizer, InfiniteLoader, List as VirtualList } from 'react-virtualized';
 import 'react-virtualized/styles.css';
-import FeedHeader from './FeedHeader';
+import FeedHeader from './FeedHeader/FeedHeader';
 import FilterDrawer from './FilterDrawer';
 import SearchDrawer from './SearchDrawer';
 import media from '../../util/mediaQueries';
 import colors from '../../util/colors';
 import Transaction from '../Transaction/Transaction';
-import InfoHeader from './InfoHeader';
+import ListHeader from './ListHeader/ListHeader';
 import selectTransactions from '../../selectors/transactions';
 import { sortByDate, sortByAmount } from '../../actions/filters';
 import { startSetTransactions, setTransactionError } from '../../actions/transactions';
@@ -102,7 +102,7 @@ const Feed = ({
     <>
       <FeedHeader />
       <Wrapper>
-        <InfoHeader
+        <ListHeader
           sortingByAmount={sortByAmountOnClick}
           sortingByDate={sortByDateOnClick}
           indicators={indicatorInfo}
