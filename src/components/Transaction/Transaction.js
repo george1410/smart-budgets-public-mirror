@@ -1,9 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
-import media from '../../util/mediaQueries';
+import Category from './Category';
+import EndLabel from './EndLabel';
+import MerchantLabel from './MerchantLabel';
+import MiddleGroup from './MiddleGroup';
+import Wrapper from './Wrapper';
 
 numeral.register('locale', 'en-gb', {
   delimiters: {
@@ -17,93 +20,20 @@ numeral.register('locale', 'en-gb', {
 
 numeral.locale('en-gb');
 
-// for margin-rigth calcs look at FilterDrawer
-
-const Wrapper = styled.div`
-  display: flex;
-  background-color: rgba(245, 245, 245, 0.5);
-  box-shadow: 0 1px 0 ${props => props.theme.shadowCol};
-  margin-right: calc((100vw - 50rem) / 2);
-  float: right;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 2rem;
-  height: 70px;
-  width: 50rem;
-  ${media.desktop`
-    margin-right: calc((100vw - 72rem) / 2);
-  `}
-  ${media.tablet`
-    margin: 0 auto;
-    float: none;
-  `}
-  ${media.phone`
-    width: 100%;
-    padding: 0 1rem;
-  `}
-`;
-
-const EndLabel = styled.p`
-  color: ${props => props.theme.black};
-  font-size: ${props => props.theme.fontSmall};
-  font-weight: 500;
-  flex: 1;
-  ${media.phone`
-    font-size: ${props => props.theme.fontTiny};
-  `}
-
-  &:last-of-type {
-    text-align: end;
-    font-size: ${props => props.theme.fontSmall};
-  }
-`;
-
-const Middle = styled.div`
-  display: flex;
-  height: 100%;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-`;
-
-const Merchant = styled.div`
-  font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme.black};
-  font-weight: 500;
-  text-transform: capitalize;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
-  text-align: center;
-  max-width: 220px;
-  ${media.phone`
-    max-width: 130px;
-  `}
-`;
-
-const Category = styled.div`
-  background-color: ${props => props.color};
-  color: ${props => props.theme[props.textCol]};
-  font-size: ${props => props.theme.fontSmall};
-  padding: 2px 7px;
-  font-weight: 500;
-  text-transform: capitalize;
-`;
-
 const Transaction = ({
   date, merchant, amount, displayName, shouldShift, color, textCol,
 }) => (
   <Wrapper shouldShift={shouldShift}>
     <EndLabel>{moment(date).format('DD-MM-YYYY')}</EndLabel>
-    <Middle>
-      <Merchant>{merchant.toLowerCase()}</Merchant>
+    <MiddleGroup>
+      <MerchantLabel>{merchant.toLowerCase()}</MerchantLabel>
       <Category
         color={color}
         textCol={textCol}
       >
         {displayName.toLowerCase()}
       </Category>
-    </Middle>
+    </MiddleGroup>
     <EndLabel>{numeral(amount).format('$0,0.00')}</EndLabel>
   </Wrapper>
 );

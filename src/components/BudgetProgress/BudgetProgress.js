@@ -10,12 +10,12 @@ import {
 import {
   clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
 } from '../../actions/transactions';
-import Wrapper from './Wrapper';
 import CategoryTitle from './CategoryTitle';
-import LabelWrapper from './LabelWrapper';
 import EndLabel from './EndLabel';
+import LabelWrapper from './LabelWrapper';
 import MainLabel from './MainLabel';
 import { ProgressBorder, Progress } from './ProgressBar';
+import Wrapper from './Wrapper';
 
 const CategoryProgress = ({
   displayName,
