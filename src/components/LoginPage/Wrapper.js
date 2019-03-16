@@ -2,18 +2,16 @@ import styled from 'styled-components';
 import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
+  width: 100vw;
+  height: 100vh;
+  padding: 40rem 0;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
-  width: 50rem;
-  cursor: pointer;
-
-  :hover {
-    background-color: ${props => props.theme.primaryBlueShadow};
-  }
-
+  justify-content: center;
+  align-items: center;
+  background-color: ${props => props.theme.primaryBlue};
   ${media.phone`
-    width: 100%;
+    padding: 0;
   `}
 `;
 

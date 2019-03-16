@@ -3,7 +3,7 @@ import 'react-sweet-progress/lib/style.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../Header/Header';
-import BudgetProgress from '../BudgetProgress/BudgetProgress';
+import BudgetProgress from './BudgetProgress/BudgetProgress';
 import colors from '../../util/colors';
 import Wrapper from './Wrapper';
 

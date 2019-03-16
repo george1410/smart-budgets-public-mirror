@@ -6,10 +6,10 @@ import { withRouter } from 'react-router-dom';
 import {
   setFilterCategory,
   clearFilters,
-} from '../../actions/filters';
+} from '../../../actions/filters';
 import {
   clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
-} from '../../actions/transactions';
+} from '../../../actions/transactions';
 import CategoryTitle from './CategoryTitle';
 import EndLabel from './EndLabel';
 import LabelWrapper from './LabelWrapper';
