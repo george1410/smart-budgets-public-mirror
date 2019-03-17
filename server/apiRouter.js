@@ -20,9 +20,9 @@ module.exports = (app) => {
    *  ]
    */
   app.get('/api/users/', (req, res) => {
-    const { searchTerm } = req.query;
+    const { id, searchTerm } = req.query;
     const sql = `
-        SELECT firstName, lastName, email, period FROM users WHERE firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%'`;
+        SELECT userId, firstName, lastName, email, period FROM users WHERE userId!=${id} AND firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%'`;
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {

@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import uuid from 'uuid/v4';
+import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import PersonCard from './PersonCard';
@@ -46,70 +48,73 @@ const Button = styled.button`
   }
 `;
 
-class AddFriends extends React.Component {
-  state = {
-    searchTerm: '',
-    friends: [],
-  }
+const AddFriends = ({ id }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [friends, setFriends] = useState([]);
+  const [error, setError] = useState(undefined);
 
-  onSearchChange = (e) => {
+  const onSearchChange = (e) => {
     const text = e.target.value;
-    this.setState(() => ({
-      searchTerm: text,
-    }));
-  }
+    setSearchTerm(text);
+  };
 
-  findFriends = (e) => {
+  const findFriends = (e) => {
     e.preventDefault();
-    const { searchTerm } = this.state;
     if (searchTerm === '') {
       return;
     }
     api.get('api/users', {
       params: {
+        id,
         searchTerm,
       },
     })
       .then((payload) => {
-        this.setState(() => ({
-          friends: payload.data,
-          error: '',
-        }));
+        setFriends(payload.data);
+        setError(undefined);
       })
       .catch(() => {
-        this.setState(() => ({
-          friends: [],
-          error: 'Could not find any friends.',
-        }));
+        setFriends([]);
+        setError('Could not find any friends.');
       });
-  }
+  };
 
-  render() {
-    const { searchTerm, friends, error } = this.state;
-    return (
-      <>
-        <Header title="Friends" />
-        <Wrapper>
-          <Form onSubmit={this.findFriends}>
-            <Input
-              placeholder="Search for a friend"
-              value={searchTerm}
-              onChange={this.onSearchChange}
-            />
-            <Button type="submit">Search</Button>
-          </Form>
-          {
-            friends && friends.map(user => (
-              <PersonCard {...user} key={uuid()} />
-            ))
-          }
-          {
-            error && <p>{error}</p>
-          }
-        </Wrapper>
-      </>
-    );
-  }
-}
+  const addFriend = (friendId) => {
+    api.post(`/api/users/${id}/friends`, { friendId });
+    console.log(friendId);
+  };
 
-export default AddFriends;
+  return (
+    <>
+      <Header title="Friends" />
+      <Wrapper>
+        <Form onSubmit={findFriends}>
+          <Input
+            placeholder="Search for a friend"
+            value={searchTerm}
+            onChange={onSearchChange}
+          />
+          <Button type="submit">Search</Button>
+        </Form>
+        {
+          friends && friends.map(user => (
+            <PersonCard {...user} key={uuid()} addFriend={addFriend} />
+          ))
+        }
+        {
+          error && <p>{error}</p>
+        }
+      </Wrapper>
+    </>
+  );
+};
+
+AddFriends.propTypes = {
+  id: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = state => ({
+  id: state.auth.uid,
+});
+
+export default connect(mapStateToProps)(AddFriends);

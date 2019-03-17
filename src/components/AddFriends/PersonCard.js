@@ -32,20 +32,24 @@ const AddButton = styled.button`
   }
 `;
 
-const PersonCard = ({ firstName, lastName }) => (
+const PersonCard = ({
+  userId, firstName, lastName, addFriend,
+}) => (
   <Wrapper>
     <Name>
       {firstName}
       {' '}
       {lastName}
     </Name>
-    <AddButton type="button">Add Friend</AddButton>
+    <AddButton type="button" onClick={() => addFriend(userId)}>Add Friend</AddButton>
   </Wrapper>
 );
 
 PersonCard.propTypes = {
+  userId: PropTypes.number.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
+  addFriend: PropTypes.func.isRequired,
 };
 
 export default PersonCard;
