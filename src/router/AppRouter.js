@@ -3,15 +3,15 @@ import {
   Router, Route, Switch,
 } from 'react-router-dom';
 import createHistory from 'history/createBrowserHistory';
-import Login from '../components/LoginPage/LoginPage';
-import NotFound from '../components/NotFoundPage/NotFoundPage';
-import Home from '../components/Home/Home';
-import Settings from '../components/Settings/Settings';
-import Feed from '../components/Feed/Feed';
-import AddFriends from '../components/AddFriends/AddFriends';
-import Budgets from '../components/Budgets/Budgets';
 import ConnectedPrivateRoute from './PrivateRoute';
 import ConnectedPublicRoute from './PublicRoute';
+import AddFriends from '../components/AddFriends/AddFriends';
+import Budgets from '../components/BudgetsPage/BudgetsPage';
+import Feed from '../components/FeedPage/FeedPage';
+import Home from '../components/HomePage/HomePage';
+import Login from '../components/LoginPage/LoginPage';
+import NotFound from '../components/NotFoundPage/NotFoundPage';
+import Settings from '../components/SettingsPage/SettingsPage';
 
 const history = createHistory();
 
