@@ -28,7 +28,7 @@ const Icon = styled.svg`
 `;
 
 const ClearIcon = ({ clearInput }) => (
-  <Wrapper onCLick={clearInput}>
+  <Wrapper onClick={clearInput}>
     <Icon viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink">
       <title>Clear</title>
       <g fill="#111111" stroke="none">
