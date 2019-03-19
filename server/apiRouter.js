@@ -18,7 +18,7 @@ module.exports = (app) => {
    */
   app.get('/api/users/:id', (req, res) => {
     const sql = `
-        SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
+        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}`;
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {
@@ -45,6 +45,27 @@ module.exports = (app) => {
     const { id } = req.params;
     const sql = `
       UPDATE users SET period = '${period}' WHERE userId = ${id}
+      `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+
+  /**
+   * POST route for updating user period value
+   * Endpoint: /api/users/{id}/periodStart
+   *
+   * POST body:
+   *   {
+   *     periodStart: Number from 1 to 31
+   *   }
+   */
+  app.post('/api/users/:id/periodStart', (req, res) => {
+    const { periodStart } = req.body;
+    const { id } = req.params;
+    const sql = `
+      UPDATE users SET periodStart = '${periodStart}' WHERE userId = ${id}
       `;
     pool.query(sql, (err) => {
       if (err) throw err;
@@ -91,7 +112,7 @@ module.exports = (app) => {
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
-        WHERE t.userId = ${req.params.id} 
+        WHERE t.userId = ${req.params.id}
         AND t.date <= CURDATE() `;
 
     if (req.query.period) {
@@ -231,7 +252,7 @@ module.exports = (app) => {
     pool.getConnection((err, conn) => {
       if (err) throw err;
       let sql = `
-      SELECT * FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR 
+      SELECT * FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR
       (userId1 = ${user2} AND userId2 = ${user1})
       `;
 
@@ -275,7 +296,7 @@ module.exports = (app) => {
       SELECT userId, userId1, userId2, accepted, firstName, lastName, period
       FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
       WHERE (userId1 = ${userId}
-      OR userId2 = ${userId}) 
+      OR userId2 = ${userId})
       `;
 
     if (req.query.accepted) {
