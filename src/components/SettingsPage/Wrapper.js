@@ -14,9 +14,8 @@ const Wrapper = styled.div`
 
   ${media.tablet`
     margin-top: 5rem;
-    height: calc(100vh - 10rem);
-    /* clears Header and bottom Navigation with fixed position */
     padding: 0 0 5rem 0;
+    height: ${props => props.theme.innerHeight};
   `}
 `;
 
