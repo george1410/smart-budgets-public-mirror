@@ -8,7 +8,8 @@ const Home = () => (
     <Header title="Home" />
     <Wrapper>
       <p>This will be the social / home page</p>
-      <StyledLink to="/friends">Add Friends</StyledLink>
+      <StyledLink to="/add">Find Friends</StyledLink>
+      <StyledLink to="/friends">Show Friends</StyledLink>
     </Wrapper>
   </>
 );

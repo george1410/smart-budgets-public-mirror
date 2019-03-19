@@ -89,15 +89,15 @@ const AddFriends = ({ id }) => {
 
   return (
     <>
-      <Header title="Friends" />
+      <Header title="Find Friends" />
       <Wrapper>
         <Form onSubmit={findFriends}>
           <Input
-            placeholder="Search for a friend"
+            placeholder="Look for a friend"
             value={searchTerm}
             onChange={onSearchChange}
           />
-          <Button type="submit">Search</Button>
+          <Button type="submit">Find</Button>
         </Form>
         {
           friends && friends.map(user => (
