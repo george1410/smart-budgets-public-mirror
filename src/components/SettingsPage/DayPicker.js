@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import media from '../../util/mediaQueries';
 
 const Select = styled.select`
@@ -13,10 +13,8 @@ const Select = styled.select`
   border-radius: 0;
   background-color: ${props => props.theme.white};
   ${media.desktop`
-    /* width: 18rem; */
   `}
   ${media.tablet`
-    /* width: auto; */
     font-size: ${props => props.theme.fontSmall};
     padding: 0.5rem 1rem;
   `}
@@ -39,8 +37,8 @@ const DayPicker = ({ currentStart, onPeriodChange }) => (
 );
 
 DayPicker.propTypes = {
-  // currentStart: PropTypes.string.isRequired,
-  // onPeriodChange: PropTypes.func.isRequired,
+  currentStart: PropTypes.string.isRequired,
+  onPeriodChange: PropTypes.func.isRequired,
 };
 
 export default DayPicker;
