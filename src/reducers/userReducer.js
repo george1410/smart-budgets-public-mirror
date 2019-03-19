@@ -10,7 +10,7 @@ export const defaultUserState = {
   isLoading: false,
   error: false,
   period: '',
-  periodStart: undefined,
+  periodStart: 1,
 };
 
 export default (state = defaultUserState, action) => {

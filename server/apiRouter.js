@@ -18,7 +18,7 @@ const { generateCategorySpendSql, generateCategoryObjects } = require('./categor
 module.exports = (app) => {
   app.get('/api/users/:id', (req, res) => {
     const sql = `
-        SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
+        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}`;
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {
@@ -44,7 +44,6 @@ module.exports = (app) => {
     const sql = `
       UPDATE users SET period = '${period}' WHERE userId = ${id}
       `;
-    console.log('sql :', sql);
     pool.query(sql, (err) => {
       if (err) throw err;
       res.sendStatus(200);
@@ -66,11 +65,10 @@ module.exports = (app) => {
     const sql = `
       UPDATE users SET periodStart = '${periodStart}' WHERE userId = ${id}
       `;
-    console.log('sql :', sql);
-    // pool.query(sql, (err) => {
-    //   if (err) throw err;
-    //   res.sendStatus(200);
-    // });
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
   });
 
   /**

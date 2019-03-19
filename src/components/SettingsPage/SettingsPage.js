@@ -21,6 +21,7 @@ const Settings = ({
   switchPeriod,
   periodUpdate,
   period,
+  periodStart,
   user,
   pickStart,
   periodStartUpdate,
@@ -35,7 +36,7 @@ const Settings = ({
   };
 
   const onPeriodChange = (e) => {
-    const day = e.target.value;
+    const day = parseInt(e.target.value, 10);
     pickStart(day);
     periodStartUpdate();
   };
@@ -53,7 +54,7 @@ const Settings = ({
           <RowTitle>Start of Period</RowTitle>
           <DayPicker
             onPeriodChange={onPeriodChange}
-          // currentStart={periodStart}
+            currentStart={periodStart}
           />
         </SettingsRow>
         <div style={{ flex: 99 }} />
@@ -71,13 +72,13 @@ Settings.propTypes = {
   user: PropTypes.instanceOf(Object).isRequired,
   pickStart: PropTypes.func.isRequired,
   periodStartUpdate: PropTypes.func.isRequired,
-  // periodStart: PropTypes.string.isRequired,
+  periodStart: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
   period: state.user.period,
   user: state.user,
-  // periodStart: state.user.periodStart,
+  periodStart: state.user.periodStart,
 });
 
 const mapDispatchToProps = dispatch => ({
