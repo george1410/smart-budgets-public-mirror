@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import Gravatar from 'react-gravatar';
 import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
@@ -33,9 +34,10 @@ const AddButton = styled.button`
 `;
 
 const PersonCard = ({
-  userId, firstName, lastName, addFriend,
+  userId, firstName, lastName, addFriend, email,
 }) => (
   <Wrapper>
+    <Gravatar email={email} size={40} />
     <Name>
       {firstName}
       {' '}
@@ -50,6 +52,7 @@ PersonCard.propTypes = {
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
   addFriend: PropTypes.func.isRequired,
+  email: PropTypes.string.isRequired,
 };
 
 export default PersonCard;

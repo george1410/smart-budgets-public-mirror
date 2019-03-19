@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import Name from './Name';
 import Wrapper from './Wrapper';
 
-const UserCard = ({ user: { firstName, lastName } }) => (
+const UserCard = ({ user: { firstName, lastName, email } }) => (
   <Wrapper>
     <Gravatar
       style={{ borderRadius: '100px' }}
-      email="firstName"
+      email={email}
       size={50}
     />
     <Name>{`${firstName} ${lastName}`}</Name>

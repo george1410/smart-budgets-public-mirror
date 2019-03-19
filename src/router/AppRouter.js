@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Router, Route, Switch,
 } from 'react-router-dom';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import ConnectedPrivateRoute from './PrivateRoute';
 import ConnectedPublicRoute from './PublicRoute';
 import AddFriends from '../components/AddFriends/AddFriends';
@@ -13,7 +13,7 @@ import Login from '../components/LoginPage/LoginPage';
 import NotFound from '../components/NotFoundPage/NotFoundPage';
 import Settings from '../components/SettingsPage/SettingsPage';
 
-const history = createHistory();
+const history = createBrowserHistory();
 
 const AppRouter = () => (
   <Router history={history}>

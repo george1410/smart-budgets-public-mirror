@@ -14,14 +14,14 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 5rem 0 0 0;
   ${media.tablet`
-    /* clears Header and bottom Navigation with fixed position */
-    padding: 5rem 0;
+    padding-bottom: ${props => props.theme.bottomPad};
   `}
 `;
 
 const Form = styled.form`
   display: flex;
   width: 50rem;
+  padding: 1rem 2rem;
   ${media.phone`
     width: 100%;
   `}
@@ -31,13 +31,17 @@ const Input = styled.input`
   width: 100%;
   height: 4rem;
   font-size: ${props => props.theme.fontSmall};
+  line-height: normal;
+  border-radius: 0;
+  padding: 0 2rem;
+  border: 1px solid ${props => props.theme.primaryBlue};
   ${media.phone`
     width: 100%;
   `}
 `;
 
 const Button = styled.button`
-  width: 10rem;
+  min-width: 10rem;
   border: none;
   font-size: ${props => props.theme.fontSmall};
   background-color: ${props => props.theme.primaryBlue};
@@ -81,7 +85,6 @@ const AddFriends = ({ id }) => {
 
   const addFriend = (friendId) => {
     api.post(`/api/users/${id}/friends`, { friendId });
-    console.log(friendId);
   };
 
   return (

@@ -13,6 +13,7 @@ export const Input = styled.input`
   padding: 4px 8px;
   font-size: 1.6rem;
   border-radius: 0;
+  line-height: normal;
 
   ::placeholder {
     color: ${props => props.theme.grey};
