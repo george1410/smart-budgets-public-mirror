@@ -37,7 +37,7 @@ const DayPicker = ({ currentStart, onPeriodChange }) => (
 );
 
 DayPicker.propTypes = {
-  currentStart: PropTypes.string.isRequired,
+  currentStart: PropTypes.number.isRequired,
   onPeriodChange: PropTypes.func.isRequired,
 };
 
