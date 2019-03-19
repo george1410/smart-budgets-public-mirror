@@ -29,16 +29,48 @@ module.exports = (app) => {
     });
   });
 
-  app.post('/api/users/:id', (req, res) => {
+  /**
+   * POST route for updating user period value
+   * Endpoint: /api/users/{id}/period
+   *
+   * POST body:
+   *   {
+   *     period: MONTH | WEEK
+   *   }
+   */
+  app.post('/api/users/:id/period', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
     const sql = `
       UPDATE users SET period = '${period}' WHERE userId = ${id}
       `;
+    console.log('sql :', sql);
     pool.query(sql, (err) => {
       if (err) throw err;
       res.sendStatus(200);
     });
+  });
+
+  /**
+   * POST route for updating user period value
+   * Endpoint: /api/users/{id}/periodStart
+   *
+   * POST body:
+   *   {
+   *     periodStart: Number from 1 to 31
+   *   }
+   */
+  app.post('/api/users/:id/periodStart', (req, res) => {
+    const { periodStart } = req.body;
+    const { id } = req.params;
+    const sql = `
+      UPDATE users SET periodStart = '${periodStart}' WHERE userId = ${id}
+      `;
+    console.log('sql :', sql);
+    // pool.query(sql, (err) => {
+    //   if (err) throw err;
+    //   res.sendStatus(200);
+    // });
   });
 
   /**
@@ -80,7 +112,7 @@ module.exports = (app) => {
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
-        WHERE t.userId = ${req.params.id} 
+        WHERE t.userId = ${req.params.id}
         AND t.date <= CURDATE() `;
 
     if (req.query.period) {

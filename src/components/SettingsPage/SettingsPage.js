@@ -4,20 +4,26 @@ import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import Button from '../Button/Button';
 import { signout } from '../../actions/auth';
-import { switchUserPeriods, updatePeriod } from '../../actions/user';
+import {
+  switchUserPeriods,
+  updatePeriod,
+  pickPeriodStart,
+  updatePeriodStart,
+} from '../../actions/user';
 import Toggle from './Toggle/Toggle';
 import Wrapper from './Wrapper';
 import UserCard from './UserCard/UserCard';
 import DayPicker from './DayPicker';
 import { SettingsRow, RowTitle } from './SettingsRow';
 
-// TODO take periodStart from props
 const Settings = ({
   startLogout,
   switchPeriod,
   periodUpdate,
   period,
   user,
+  pickStart,
+  periodStartUpdate,
 }) => {
   const logout = () => {
     startLogout();
@@ -29,10 +35,9 @@ const Settings = ({
   };
 
   const onPeriodChange = (e) => {
-    // TODO take the day and write it to redux store
-    // TODO take the value from store and write to db
     const day = e.target.value;
-    console.log(day);
+    pickStart(day);
+    periodStartUpdate();
   };
 
   return (
@@ -49,7 +54,6 @@ const Settings = ({
           <DayPicker
             onPeriodChange={onPeriodChange}
           // currentStart={periodStart}
-          // currentStart={16}
           />
         </SettingsRow>
         <div style={{ flex: 99 }} />
@@ -65,6 +69,9 @@ Settings.propTypes = {
   switchPeriod: PropTypes.func.isRequired,
   periodUpdate: PropTypes.func.isRequired,
   user: PropTypes.instanceOf(Object).isRequired,
+  pickStart: PropTypes.func.isRequired,
+  periodStartUpdate: PropTypes.func.isRequired,
+  // periodStart: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -77,6 +84,8 @@ const mapDispatchToProps = dispatch => ({
   startLogout: () => dispatch(signout()),
   switchPeriod: () => dispatch(switchUserPeriods()),
   periodUpdate: () => dispatch(updatePeriod()),
+  pickStart: day => dispatch(pickPeriodStart(day)),
+  periodStartUpdate: () => dispatch(updatePeriodStart()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
