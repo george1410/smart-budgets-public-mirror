@@ -226,15 +226,32 @@ module.exports = (app) => {
     const user1 = req.params.id;
     const user2 = req.body.friendId;
 
-    // in future we need to change the TRUE below to FALSE, to allow accepting/declining requests
-    const sql = `
-      INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
-    `;
-
-    pool.query(sql, (err) => {
+    pool.getConnection((err, conn) => {
       if (err) throw err;
-      res.sendStatus(201);
+      let sql = `
+      SELECT * FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR 
+      (userId1 = ${user2} AND userId2 = ${user1})
+      `;
+
+      conn.query(sql, (err1, results) => {
+        if (err1) throw err1;
+        if (results.length > 0){
+          res.status(200).json({ error: "Friendship already exists"});
+        }
+        else {
+          sql = `
+          INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
+          `;
+    
+          conn.query(sql, (err2) => {
+            if (err2) throw err2;
+            res.sendStatus(201);
+          });
+        }
+      });
     });
+    // in future we need to change the TRUE below to FALSE, to allow accepting/declining requests
+   
   });
 
   /**
