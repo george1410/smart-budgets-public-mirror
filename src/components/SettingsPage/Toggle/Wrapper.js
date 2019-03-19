@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   justify-content: center;
   height: 3rem;
   width: 100%;
-  max-width: 30rem;
+  max-width: 20rem;
   background-color: ${props => (props.bg === 'MONTH' ? props.theme.primaryBlue : props.theme.error)};
   border-radius: 100px;
   position: relative;

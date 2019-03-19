@@ -12,7 +12,7 @@ const Toggle = ({ value, toggle }) => (
     tabIndex={0}
   >
     <Dot align={value} />
-    <Title>{value}</Title>
+    <Title>{value.toLowerCase()}</Title>
   </Wrapper>
 );
 
