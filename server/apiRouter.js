@@ -1,21 +1,21 @@
 const pool = require('./database');
 const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
 
-/**
- * GET route for various user info.
- * Endpoint: /api/users/{userid}
- * Response format:
- *   [
- *     {
- *       "firstName": "John",
- *       "lastName": "Doe",
- *       "email": "example@email.com",
- *       "period": "MONTH"
- *    }
- *  ]
- */
 
 module.exports = (app) => {
+  /**
+   * GET route for various user info.
+   * Endpoint: /api/users/{userid}
+   * Response format:
+   *   [
+   *     {
+   *       "firstName": "John",
+   *       "lastName": "Doe",
+   *       "email": "example@email.com",
+   *       "period": "MONTH"
+   *    }
+   *  ]
+   */
   app.get('/api/users/:id', (req, res) => {
     const sql = `
         SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
@@ -29,6 +29,15 @@ module.exports = (app) => {
     });
   });
 
+  /**
+   * POST route for updating user period.
+   * Endpoint: /api/users/{userid}
+   *
+   * POST Body:
+   *  {
+   *    period: "WEEK" | "MONTH"
+   *  }
+   */
   app.post('/api/users/:id', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
@@ -202,5 +211,166 @@ module.exports = (app) => {
         });
       });
     }
+  });
+
+  /**
+   * POST route for adding a friend.
+   * Endpoint: /api/users/{userid}/friends
+   *
+   * POST Body:
+   *  {
+   *    friendId: {friendId}
+   *  }
+   */
+  app.post('/api/users/:id/friends', (req, res) => {
+    const user1 = req.params.id;
+    const user2 = req.body.friendId;
+
+    pool.getConnection((err, conn) => {
+      if (err) throw err;
+      let sql = `
+      SELECT * FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR 
+      (userId1 = ${user2} AND userId2 = ${user1})
+      `;
+
+      conn.query(sql, (err1, results) => {
+        if (err1) throw err1;
+        if (results.length > 0) {
+          res.status(200).json({ error: 'Friendship already exists' });
+        } else {
+          sql = `
+          INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
+          `;
+
+          conn.query(sql, (err2) => {
+            if (err2) throw err2;
+            res.sendStatus(201);
+          });
+        }
+      });
+    });
+  });
+
+  /**
+   * GET route for getting info about a user's friends.
+   * Endpoint: /api/users/{userid}/friends
+   *
+   * Optional Query Parameters:
+   *   accepted
+   *    values: TRUE, FALSE
+   *    default: both accepted and not accepted
+   * Response format:
+   *    [
+   *      {
+   *        "userId": 2,
+   *        "accepted": true
+   *      }, ...
+   *    ]
+   */
+  app.get('/api/users/:id/friends', (req, res) => {
+    const userId = req.params.id;
+    let sql = `
+      SELECT userId, userId1, userId2, accepted, firstName, lastName, period
+      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
+      WHERE (userId1 = ${userId}
+      OR userId2 = ${userId}) 
+      `;
+
+    if (req.query.accepted) {
+      sql += `AND accepted = ${req.query.accepted}`;
+    }
+
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      const resArr = [];
+      results.forEach((result) => {
+        if (result.userId.toString() !== userId) {
+          const obj = {};
+          obj.accepted = result.accepted;
+          obj.userId = result.userId;
+          obj.firstName = result.firstName;
+          obj.lastName = result.lastName;
+          obj.period = result.period;
+          resArr.push(obj);
+        }
+      });
+      res.json(resArr);
+    });
+  });
+
+  /**
+   * POST route for accepting a friend request
+   * Endpoint: /api/users/{id}/friends/{friendId}
+   *
+   * POST Body:
+   *  {
+   *    accepted: TRUE | FALSE
+   *  }
+   */
+  app.post('/api/users/:id/friends/:friendId', (req, res) => {
+    const { accepted } = req.body;
+    let sql;
+    if (typeof accepted !== 'undefined') {
+      if (accepted) {
+        sql = `
+          UPDATE friendships
+          SET accepted = TRUE
+          WHERE userId1 = ${req.params.friendId}
+          AND userId2 = ${req.params.id}
+        `;
+      } else {
+        sql = `
+          DELETE FROM friendships
+          WHERE userId1 = ${req.params.friendId}
+          AND userId2 = ${req.params.id}
+        `;
+      }
+      pool.query(sql, (err) => {
+        if (err) throw err;
+        res.sendStatus(200);
+      });
+    } else {
+      res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
+    }
+  });
+
+  /**
+   * GET route for getting information about a specific friend of a user
+   * Endpoint: /api/users/{id}/friends/{friendId}
+   *
+   * Response format:
+   * {
+   *   userId: 2,
+   *   firstName: "Jane",
+   *   lastName: "Smith"
+   * }
+   */
+  app.get('/api/users/:id/friends/:friendId', (req, res) => {
+    const { id, friendId } = req.params;
+
+    let sql = `
+      SELECT friendshipId 
+      FROM friendships 
+      WHERE ((userId1 = ${id} AND userId2 = ${friendId})
+      OR (userId1 = ${friendId} AND userId2 = ${id}))
+      AND accepted = TRUE
+    `;
+
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      if (results.length < 1) {
+        res.sendStatus(404);
+      } else {
+        sql = `
+          SELECT userId, firstName, lastName
+          FROM users
+          WHERE userId = ${friendId}
+        `;
+        pool.query(sql, (err1, results1) => {
+          if (err1) throw err1;
+          res.json(results1[0]);
+        });
+      }
+    });
   });
 };
