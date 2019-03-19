@@ -273,7 +273,8 @@ module.exports = (app) => {
   app.get('/api/users/:id/friends', (req, res) => {
     const userId = req.params.id;
     let sql = `
-      SELECT * FROM friendships
+      SELECT userId, userId1, userId2, accepted, firstName, lastName, period
+      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
       WHERE (userId1 = ${userId}
       OR userId2 = ${userId}) 
       `;
@@ -286,15 +287,17 @@ module.exports = (app) => {
       if (err) throw err;
       const resArr = [];
       results.forEach((result) => {
-        const obj = {
-          accepted: result.accepted,
-        };
-        if (result.userId1 === userId) {
-          obj.userId = result.userId2;
-        } else {
-          obj.userId = result.userId1;
+        if (result.userId != userId) {
+          console.log('res.userID=', result.userId);
+          console.log('userid=', userId);
+          let obj = {};
+          obj.accepted = result.accepted;
+          obj.userId = result.userId;
+          obj.firstName = result.firstName;
+          obj.lastName = result.lastName;
+          obj.period = result.period;
+          resArr.push(obj);
         }
-        resArr.push(obj);
       });
       res.json(resArr);
     });
