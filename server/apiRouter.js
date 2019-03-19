@@ -32,7 +32,7 @@ module.exports = (app) => {
   /**
    * POST route for updating user period.
    * Endpoint: /api/users/{userid}
-   * 
+   *
    * POST Body:
    *  {
    *    period: "WEEK" | "MONTH"
@@ -235,14 +235,13 @@ module.exports = (app) => {
 
       conn.query(sql, (err1, results) => {
         if (err1) throw err1;
-        if (results.length > 0){
-          res.status(200).json({ error: "Friendship already exists"});
-        }
-        else {
+        if (results.length > 0) {
+          res.status(200).json({ error: 'Friendship already exists' });
+        } else {
           sql = `
           INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
           `;
-    
+
           conn.query(sql, (err2) => {
             if (err2) throw err2;
             res.sendStatus(201);
@@ -250,8 +249,6 @@ module.exports = (app) => {
         }
       });
     });
-    // in future we need to change the TRUE below to FALSE, to allow accepting/declining requests
-   
   });
 
   /**
@@ -287,10 +284,8 @@ module.exports = (app) => {
       if (err) throw err;
       const resArr = [];
       results.forEach((result) => {
-        if (result.userId != userId) {
-          console.log('res.userID=', result.userId);
-          console.log('userid=', userId);
-          let obj = {};
+        if (result.userId.toString() !== userId) {
+          const obj = {};
           obj.accepted = result.accepted;
           obj.userId = result.userId;
           obj.firstName = result.firstName;
