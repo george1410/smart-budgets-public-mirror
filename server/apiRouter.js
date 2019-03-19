@@ -24,8 +24,9 @@ module.exports = (app) => {
       if (results.length < 1) {
         res.status(404).json({ error: 'No results were found.' });
       } else {
-        results[0].points = Math.floor(Math.random() * (+500 - +100) + +100);
-        res.json(results[0]);
+        let out = results[0];
+        out.points = Math.floor(Math.random() * (+500 - +100) + +100);
+        res.json(out);
       }
     });
   });
