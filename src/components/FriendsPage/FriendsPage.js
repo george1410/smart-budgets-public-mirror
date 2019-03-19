@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
+import Section from './Section/Section';
 
 const Wrapper = styled.div`
   display: flex;
@@ -15,31 +16,34 @@ const Wrapper = styled.div`
   `}
 `;
 
-const FriendsList = ({ friends }) => (
+const FriendsPage = ({ friends, sent, received }) => (
   <>
     <Header title="Friends List" />
     <Wrapper>
-
-      {
-       friends ? friends.map(friend => (
-         <p key={friend.userId}>{friend.firstName}</p>
-       ))
-         : <p>No friends to show</p>
-      }
+      <Section title="Received" users={received} />
+      <Section title="Sent" users={sent} />
+      <Section title="Friends" users={friends} />
     </Wrapper>
   </>
 );
 
-FriendsList.defaultProps = {
-  friends: [],
+FriendsPage.defaultProps = {
+  friends: undefined,
+  sent: undefined,
+  received: undefined,
+
 };
 
-FriendsList.propTypes = {
+FriendsPage.propTypes = {
   friends: PropTypes.instanceOf(Array),
+  received: PropTypes.instanceOf(Array),
+  sent: PropTypes.instanceOf(Array),
 };
 
 const mapStateToProps = state => ({
   friends: state.friends.friends,
+  received: state.friends.received,
+  sent: state.friends.sent,
 });
 
-export default connect(mapStateToProps)(FriendsList);
+export default connect(mapStateToProps)(FriendsPage);

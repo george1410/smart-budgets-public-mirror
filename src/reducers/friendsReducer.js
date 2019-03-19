@@ -7,9 +7,9 @@ import {
 } from '../actions/types';
 
 export const defaultFriendsState = {
-  friends: [],
-  sent: [],
-  received: [],
+  friends: undefined,
+  sent: undefined,
+  received: undefined,
   isLoading: false,
   error: false,
 };
