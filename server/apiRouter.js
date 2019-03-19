@@ -45,13 +45,15 @@ module.exports = (app) => {
    */
   app.get('/api/users/:id', (req, res) => {
     const sql = `
-        SELECT firstName, lastName, email, period FROM users WHERE userId = ${req.params.id}`;
+        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}`;
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {
         res.status(404).json({ error: 'No results were found.' });
       } else {
-        res.json(results[0]);
+        const out = results[0];
+        out.points = Math.floor(Math.random() * (+500 - +100) + +100);
+        res.json(out);
       }
     });
   });
@@ -65,11 +67,32 @@ module.exports = (app) => {
    *    period: "WEEK" | "MONTH"
    *  }
    */
-  app.post('/api/users/:id', (req, res) => {
+  app.post('/api/users/:id/period', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
     const sql = `
       UPDATE users SET period = '${period}' WHERE userId = ${id}
+      `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+
+  /**
+   * POST route for updating user period value
+   * Endpoint: /api/users/{id}/periodStart
+   *
+   * POST body:
+   *   {
+   *     periodStart: Number from 1 to 31
+   *   }
+   */
+  app.post('/api/users/:id/periodStart', (req, res) => {
+    const { periodStart } = req.body;
+    const { id } = req.params;
+    const sql = `
+      UPDATE users SET periodStart = '${periodStart}' WHERE userId = ${id}
       `;
     pool.query(sql, (err) => {
       if (err) throw err;
@@ -253,14 +276,28 @@ module.exports = (app) => {
     const user1 = req.params.id;
     const user2 = req.body.friendId;
 
-    // in future we need to change the TRUE below to FALSE, to allow accepting/declining requests
-    const sql = `
-      INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
-    `;
-
-    pool.query(sql, (err) => {
+    pool.getConnection((err, conn) => {
       if (err) throw err;
-      res.sendStatus(201);
+      let sql = `
+      SELECT * FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR
+      (userId1 = ${user2} AND userId2 = ${user1})
+      `;
+
+      conn.query(sql, (err1, results) => {
+        if (err1) throw err1;
+        if (results.length > 0) {
+          res.status(200).json({ error: 'Friendship already exists' });
+        } else {
+          sql = `
+          INSERT INTO friendships (userId1, userId2) VALUES (${user1}, ${user2})
+          `;
+
+          conn.query(sql, (err2) => {
+            if (err2) throw err2;
+            res.sendStatus(201);
+          });
+        }
+      });
     });
   });
 
@@ -283,7 +320,8 @@ module.exports = (app) => {
   app.get('/api/users/:id/friends', (req, res) => {
     const userId = req.params.id;
     let sql = `
-      SELECT * FROM friendships
+      SELECT userId, userId1, userId2, accepted, firstName, lastName, period
+      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
       WHERE (userId1 = ${userId}
       OR userId2 = ${userId})
       `;
@@ -296,15 +334,16 @@ module.exports = (app) => {
       if (err) throw err;
       const resArr = [];
       results.forEach((result) => {
-        const obj = {
-          accepted: result.accepted,
-        };
-        if (result.userId1 === userId) {
-          obj.userId = result.userId2;
-        } else {
-          obj.userId = result.userId1;
+        if (result.userId.toString() !== userId) {
+          const obj = {};
+          obj.accepted = result.accepted;
+          obj.userId = result.userId;
+          obj.firstName = result.firstName;
+          obj.lastName = result.lastName;
+          obj.period = result.period;
+          obj.points = Math.floor(Math.random() * (+500 - +100) + +100);
+          resArr.push(obj);
         }
-        resArr.push(obj);
       });
       res.json(resArr);
     });
@@ -344,45 +383,5 @@ module.exports = (app) => {
     } else {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
     }
-  });
-
-  /**
-   * GET route for getting information about a specific friend of a user
-   * Endpoint: /api/users/{id}/friends/{friendId}
-   *
-   * Response format:
-   * {
-   *   userId: 2,
-   *   firstName: "Jane",
-   *   lastName: "Smith"
-   * }
-   */
-  app.get('/api/users/:id/friends/:friendId', (req, res) => {
-    const { id, friendId } = req.params;
-
-    let sql = `
-      SELECT friendshipId
-      FROM friendships
-      WHERE ((userId1 = ${id} AND userId2 = ${friendId})
-      OR (userId1 = ${friendId} AND userId2 = ${id}))
-      AND accepted = TRUE
-    `;
-
-    pool.query(sql, (err, results) => {
-      if (err) throw err;
-      if (results.length < 1) {
-        res.sendStatus(404);
-      } else {
-        sql = `
-          SELECT userId, firstName, lastName
-          FROM users
-          WHERE userId = ${friendId}
-        `;
-        pool.query(sql, (err1, results1) => {
-          if (err1) throw err1;
-          res.json(results1[0]);
-        });
-      }
-    });
   });
 };

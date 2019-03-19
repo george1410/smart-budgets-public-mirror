@@ -12,6 +12,10 @@ export const USER_INFO_LOADING = 'USER_INFO_LOADING';
 
 export const USER_INFO_ERROR = 'USER_INFO_ERROR';
 
+export const SWITCH_PERIOD = 'SWITCH_PERIOD';
+
+export const SET_START_PERIOD = 'SET_START_PERIOD';
+
 // CATEGORIES
 
 export const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -43,8 +47,6 @@ export const SET_TEXT_FILTER = 'SET_TEXT_FITLER';
 export const SORT_BY_DATE = 'SORT_BY_DATE';
 
 export const SORT_BY_AMOUNT = 'SORT_BY_AMOUNT';
-
-export const SWITCH_PERIOD = 'SWITCH_PERIOD';
 
 export const SET_FILTER_CATEGORY = 'SET_FITLER_CATEGORY';
 
