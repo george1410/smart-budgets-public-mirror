@@ -29,6 +29,8 @@ if (store.getState().auth.uid) {
   store.dispatch(startSetCategories());
   store.dispatch(startSetUserInfo());
   store.dispatch(startSetFriends());
+  // store.dispatch(startSetReceived());
+  // store.dispatch(startSetSent());
 }
 
 ReactDOM.render(jsx, document.getElementById('root'));

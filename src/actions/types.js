@@ -66,6 +66,10 @@ export const TOGGLE_SEARCH_DRAWER = 'TOGGLE_SEARCH_DRAWER';
 
 export const SET_FRIENDS = 'SET_FRIENDS';
 
+export const SET_SENT = 'SET_SENT';
+
+export const SET_RECEIVED = 'SET_REQUESTS';
+
 export const FRIENDS_ERROR = 'FRIENDS_ERROR';
 
 export const FRIENDS_LOADING = 'FRIENDS_LOADING';
