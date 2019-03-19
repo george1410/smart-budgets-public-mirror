@@ -40,7 +40,7 @@ module.exports = (app) => {
    *    period: "WEEK" | "MONTH"
    *  }
    */
-  app.post('/api/users/:id', (req, res) => {
+  app.post('/api/users/:id/period', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
     const sql = `
