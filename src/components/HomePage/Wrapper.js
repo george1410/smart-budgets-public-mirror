@@ -1,15 +1,12 @@
 import styled from 'styled-components';
-import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
-  padding: 5rem 0 0 0;
+  padding: 10rem 0 0 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  ${media.tablet`
-    /* clears Header and bottom Navigation with fixed position */
-    padding: 5rem 0;
-  `}
+  background-color: ${props => props.theme.primaryBlue};
+  height: 100vh;
 `;
 
 export default Wrapper;

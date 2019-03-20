@@ -21,6 +21,7 @@ const Name = styled.span`
   font-size: ${props => props.theme.fontSmall};
   color: ${props => props.theme.grey};
   text-align: center;
+  margin-right: 40px;
   flex: 1;
 `;
 

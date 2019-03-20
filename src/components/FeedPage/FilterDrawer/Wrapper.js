@@ -26,7 +26,8 @@ const Wrapper = styled.div`
   max-width: 30rem;
   flex-direction: column;
   background-color: ${props => props.theme.primaryBlue};
-  box-shadow: 5px 5px 0 ${props => props.theme.shadowCol};
+  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
+  border-radius: ${props => props.theme.borderRadius};
   padding: 1rem;
   align-items: center;
   justify-content: flex-end;
@@ -38,6 +39,7 @@ const Wrapper = styled.div`
     margin-left: calc((100vw - 72rem) / 2);
   `}
   ${media.tablet`
+    border-radius: 0;
     overflow: auto;
     width: 100vw;
     right: auto;

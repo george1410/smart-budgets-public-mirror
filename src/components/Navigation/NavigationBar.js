@@ -5,7 +5,7 @@ const NavigationBar = styled.nav`
   display: flex;
   position: fixed;
   background-color: ${props => props.theme.white};
-  box-shadow: 0 0 5px ${props => props.theme.shadowCol};
+  /* box-shadow: 0 0 5px ${props => props.theme.shadowCol}; */
   align-items: ${props => (props.theme.isX ? 'flex-start' : 'center')};
   width: 100%;
   height: 5rem;

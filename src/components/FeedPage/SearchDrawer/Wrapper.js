@@ -12,7 +12,8 @@ const Wrapper = styled.div`
   margin-right: 2rem;
   align-items: center;
   background-color: ${props => props.theme.primaryBlue};
-  box-shadow: 5px 5px 0 ${props => props.theme.shadowCol};
+  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
+  border-radius: ${props => props.theme.borderRadius};
   padding: 2rem;
   justify-content: space-around;
   height: 11rem;
@@ -26,6 +27,7 @@ const Wrapper = styled.div`
     width: 20rem;
   `}
   ${media.tablet`
+    border-radius: 0;
     padding: 0;
     left: auto;
     height: ${props => (props.open ? '11' : '0')}rem;

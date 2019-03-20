@@ -5,6 +5,7 @@ import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   display: flex;
+  position: relative;
   font-size: ${props => props.theme.fontSmall};
   justify-content: space-between;
   align-items: center;
@@ -14,8 +15,7 @@ const Wrapper = styled.div`
   width: 50rem;
   min-height: 5rem;
   padding: 0 2rem;
-  /* box-shadow: 0 1px 5px ${props => props.theme.primaryBlue}; */
-  /* box-shadow: 5px 5px 0 ${props => props.theme.shadowCol}; */
+  box-shadow: 0 0 5px black;
   ${media.desktop`
     margin-right: calc((100vw - 72rem) / 2);
   `}

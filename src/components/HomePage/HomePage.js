@@ -1,15 +1,27 @@
 import React from 'react';
 import Header from '../Header/Header';
 import Wrapper from './Wrapper';
-import StyledLink from './StyledLink';
+import SocialSection from './SocialSection/SocialSection';
+import Card from './Card/Card';
 
 const Home = () => (
   <>
     <Header title="Home" />
     <Wrapper>
-      <p>This will be the social / home page</p>
-      <StyledLink to="/add">Find Friends</StyledLink>
-      <StyledLink to="/friends">Show Friends</StyledLink>
+      <SocialSection>
+        <Card
+          title="Add Friends"
+          description="Make budgeting competitive."
+          linkTo="/add"
+          action="Find friends"
+        />
+        <Card
+          title="Friendships"
+          description="Manage your friendships."
+          linkTo="/friends"
+          action="List Friends"
+        />
+      </SocialSection>
     </Wrapper>
   </>
 );
