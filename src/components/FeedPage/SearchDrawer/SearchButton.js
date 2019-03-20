@@ -7,6 +7,7 @@ const SearchButton = styled.button`
   background-color: ${props => props.theme.primaryBlue};
   color: ${props => props.theme.white};
   border: 1px solid ${props => props.theme.primaryBlue};
+  border-radius: ${props => props.theme.borderRadius};
   border-bottom: 1px solid ${props => props.theme.white};
   cursor: pointer;
   outline-color: white;

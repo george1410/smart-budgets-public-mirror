@@ -4,9 +4,10 @@ const Category = styled.div`
   background-color: ${props => props.color};
   color: ${props => props.theme[props.textCol]};
   font-size: ${props => props.theme.fontSmall};
-  padding: 2px 7px;
+  padding: 0.5rem 1rem;
   font-weight: 500;
   text-transform: capitalize;
+  border-radius: ${props => props.theme.borderRadius};
 `;
 
 export default Category;

@@ -6,7 +6,7 @@ const Wrapper = styled.header`
   position: fixed;
   width: 100vw;
   background-color: ${props => props.theme.white};
-  box-shadow: 0 0 5px ${props => props.theme.shadowCol};
+  box-shadow: ${props => props.theme.bottomShadow};
   display: none;
   justify-content: space-between;
   padding: 0 2rem;

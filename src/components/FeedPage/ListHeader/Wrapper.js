@@ -15,7 +15,6 @@ const Wrapper = styled.div`
   width: 50rem;
   min-height: 5rem;
   padding: 0 2rem;
-  box-shadow: 0 0 5px black;
   ${media.desktop`
     margin-right: calc((100vw - 72rem) / 2);
   `}

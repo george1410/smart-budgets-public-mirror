@@ -15,6 +15,7 @@ export const GlobalStyle = createGlobalStyle`
   body {
     font-family: ${props => props.theme.font};
     color: ${props => props.theme.black};
+    /* background-color: ${props => props.theme.primaryBlue}; */
 
     &::-webkit-scrollbar {
       width: 0;
@@ -43,8 +44,15 @@ export const theme = {
   fontSmall: '1.8rem',
   fontMedium: '2.5rem',
   borderRadius: '4px',
+  topCorners: '4px 4px 0 0',
+  bottomCorners: '0 0 4px 4px',
+  leftCorners: '4px 0 0 4px',
+  rightCorners: '0 4px 4px 0',
+  lastOfTypeBorder: '',
   shadowCol: 'rgba(0, 0, 0, 0.2)',
-  cardShadow: '5px 5px 5px rgba(0, 0, 0, 0.2)',
+  cardShadow: '5px 5px 0 rgba(0, 0, 0, 0.2)',
+  bottomShadow: '0 5px 5px rgba(0, 0, 0, 0.2)',
+  topShadow: '0 -5px 5px rgba(0, 0, 0, 0.2)',
   navHeight: isX ? '10rem' : '5rem',
   bottomPad: isX ? '15rem' : '10rem',
   innerHeight: isX ? 'calc(100vh - 15rem)' : 'calc(100vh - 10rem)',

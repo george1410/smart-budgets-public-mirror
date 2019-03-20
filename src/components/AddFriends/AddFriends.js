@@ -5,23 +5,25 @@ import uuid from 'uuid/v4';
 import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
-import PersonCard from './PersonCard';
+import UserCard from '../UserCard/UserCard';
 import api from '../../api/api';
 
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5rem 0 0 0;
+  padding: 5rem 0;
+  min-height: 100vh;
+  background-color: ${props => props.theme.primaryBlue};
   ${media.tablet`
-    padding-bottom: ${props => props.theme.bottomPad};
+    padding-bottom: ${props => (props.isX ? '10rem' : '5rem')};
   `}
 `;
 
 const Form = styled.form`
   display: flex;
   width: 50rem;
-  padding: 1rem 2rem;
+  margin: 1rem 0;
   ${media.phone`
     width: 100%;
   `}
@@ -32,26 +34,36 @@ const Input = styled.input`
   height: 4rem;
   font-size: ${props => props.theme.fontSmall};
   line-height: normal;
-  border-radius: 0;
   padding: 0 2rem;
   border: 1px solid ${props => props.theme.primaryBlue};
-  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
+  border-radius: ${props => props.theme.leftCorners};
+  box-shadow: ${props => props.theme.cardShadow};
+  outline-color: ${props => props.theme.white};
   ${media.phone`
+    box-shadow: ${props => props.theme.bottomShadow};
     width: 100%;
+    border-radius: 0;
   `}
 `;
 
 const Button = styled.button`
   min-width: 10rem;
-  border: none;
   font-size: ${props => props.theme.fontSmall};
-  background-color: ${props => props.theme.primaryBlue};
-  color: ${props => props.theme.white};
-  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
+  background-color: ${props => props.theme.white};
+  border: 1px solid ${props => props.theme.primaryBlue};
+  border-radius: ${props => props.theme.rightCorners};
+  color: ${props => props.theme.primaryBlue};
+  outline-color: ${props => props.theme.white};
+  box-shadow: ${props => props.theme.cardShadow};
 
   :active {
     transform: translateY(2px);
   }
+
+  ${media.phone`
+    border-radius: 0;
+    box-shadow: ${props => props.theme.bottomShadow};
+  `}
 `;
 
 const AddFriends = ({ id }) => {
@@ -103,7 +115,7 @@ const AddFriends = ({ id }) => {
         </Form>
         {
           friends && friends.map(user => (
-            <PersonCard {...user} key={uuid()} addFriend={addFriend} />
+            <UserCard {...user} key={uuid()} addFriend={addFriend} type="add" />
           ))
         }
         {

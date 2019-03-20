@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   max-width: 30rem;
   flex-direction: column;
   background-color: ${props => props.theme.primaryBlue};
-  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
+  box-shadow: ${props => props.theme.cardShadow};
   border-radius: ${props => props.theme.borderRadius};
   padding: 1rem;
   align-items: center;

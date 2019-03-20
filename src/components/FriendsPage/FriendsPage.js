@@ -11,18 +11,37 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 5rem 0 0 0;
+  min-height: 100vh;
+  background-color: ${props => props.theme.primaryBlue};
   ${media.tablet`
-    padding-bottom: ${props => props.theme.bottomPad};
+    padding-bottom: ${props => (props.isX ? '10rem' : '5rem')};
   `}
 `;
+
+const EmptyMessage = styled.span`
+  color: ${props => props.theme.white};
+  font-size: ${props => props.theme.fontSmall};
+  margin-top: 5rem;
+`;
+
 
 const FriendsPage = ({ friends, sent, received }) => (
   <>
     <Header title="Friends List" />
     <Wrapper>
-      <Section title="Received" users={received} />
-      <Section title="Sent" users={sent} />
-      <Section title="Friends" users={friends} />
+      {
+      (friends || sent || received)
+        ? (
+          <>
+            <Section title="Received" users={received} />
+            <Section title="Sent" users={sent} />
+            <Section title="Friends" users={friends} />
+          </>
+        )
+        : (
+          <EmptyMessage>Try sending some friend requests first.</EmptyMessage>
+        )
+        }
     </Wrapper>
   </>
 );
