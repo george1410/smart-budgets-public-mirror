@@ -26,6 +26,7 @@ const Wrapper = styled.div`
   max-width: 30rem;
   flex-direction: column;
   background-color: ${props => props.theme.primaryBlue};
+  box-shadow: 5px 5px 0 ${props => props.theme.shadowCol};
   padding: 1rem;
   align-items: center;
   justify-content: flex-end;

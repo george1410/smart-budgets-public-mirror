@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Label = styled.div`
-  color: ${props => props.theme.primaryBlue};
+  color: ${props => props.theme.white};
   cursor: pointer;
   display: flex;
   flex-direction: row;

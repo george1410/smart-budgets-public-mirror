@@ -12,6 +12,7 @@ const Wrapper = styled.div`
   margin-right: 2rem;
   align-items: center;
   background-color: ${props => props.theme.primaryBlue};
+  box-shadow: 5px 5px 0 ${props => props.theme.shadowCol};
   padding: 2rem;
   justify-content: space-around;
   height: 11rem;

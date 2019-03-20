@@ -35,6 +35,7 @@ const Input = styled.input`
   border-radius: 0;
   padding: 0 2rem;
   border: 1px solid ${props => props.theme.primaryBlue};
+  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
   ${media.phone`
     width: 100%;
   `}
@@ -46,6 +47,7 @@ const Button = styled.button`
   font-size: ${props => props.theme.fontSmall};
   background-color: ${props => props.theme.primaryBlue};
   color: ${props => props.theme.white};
+  box-shadow: 5px 5px 5px ${props => props.theme.shadowCol};
 
   :active {
     transform: translateY(2px);

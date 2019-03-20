@@ -18,9 +18,10 @@ const SectionHeader = styled.span`
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem 0;
-  background-color: ${props => props.theme.primaryBlue};
-  color: ${props => props.theme.white};
+  padding: 0.5rem 0;
+  background-color: ${props => props.theme.white};
+  box-shadow: 0 1px 0 ${props => props.theme.offWhite};
+  color: ${props => props.theme.black};
   font-size: ${props => props.theme.fontSmall};
   ${media.tablet`
     width: 100%;

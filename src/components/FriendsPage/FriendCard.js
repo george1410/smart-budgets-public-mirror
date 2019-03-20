@@ -19,6 +19,7 @@ const Wrapper = styled.div`
 
 const Name = styled.span`
   font-size: ${props => props.theme.fontSmall};
+  color: ${props => props.theme.grey};
   text-align: center;
   flex: 1;
 `;
@@ -27,7 +28,7 @@ const PersonCard = ({
   firstName, lastName,
 }) => (
   <Wrapper>
-    <Gravatar email={firstName} size={40} />
+    <Gravatar email={firstName} size={40} style={{ borderRadius: '50px' }} />
     <Name>
       {firstName}
       {' '}
