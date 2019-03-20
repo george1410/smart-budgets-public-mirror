@@ -7,7 +7,9 @@ const AmountPicker = styled.input`
   border: 1px solid ${props => props.theme.primaryBlue};
   margin-top: 0.5rem;
   width: 10rem;
-  border-radius: 0;
+  border-radius: ${props => props.theme.borderRadius};
+  box-shadow: ${props => props.theme.insetShadow};
+  outline-color: ${props => props.theme.white};
   ${media.tablet`
     font-size: ${props => props.theme.fontSmall};
     padding: 0.5rem 1rem;

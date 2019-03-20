@@ -7,13 +7,21 @@ const Wrapper = styled.div`
   padding: 2rem;
   width: 50rem;
   cursor: pointer;
+  transition: ${props => props.theme.transition};
+  border-radius: ${props => props.theme.borderRadius};
 
-  :hover {
+  &:hover {
+    transform: scale(1.02);
     background-color: ${props => props.theme.primaryBlueShadow};
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 
   ${media.phone`
     width: 100%;
+    border-radius: 0;
   `}
 `;
 

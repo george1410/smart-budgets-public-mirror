@@ -6,6 +6,7 @@ export const Group = styled.div`
   flex-direction: ${props => (props.col ? 'column' : 'row')};
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 1rem;
 `;
 
 export const GroupName = styled.div`

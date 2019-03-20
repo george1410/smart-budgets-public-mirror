@@ -9,15 +9,20 @@ const Button = styled.button`
   color: ${props => props.theme.white};
   background-color: ${props => props.theme.primaryBlue};
   border: none;
-  box-shadow: 0 4px 0 ${props => props.theme.primaryBlueDark};
+  border-radius: ${props => props.theme.borderRadius};
+  box-shadow: ${props => props.theme.cardShadow};
   user-select: none;
-
-  /* to make button the same height as input fields */
   border-bottom: 3px solid ${props => props.theme.primaryBlue};
   border-top: 3px solid ${props => props.theme.primaryBlue};
+  transition: ${props => props.theme.transition};
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${props => props.theme.hoverShadow};
+  }
 
   &:active {
-    transform: translateY(4px);
+    transform: scale(0.95);
     box-shadow: none;
   }
 `;

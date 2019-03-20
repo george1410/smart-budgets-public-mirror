@@ -16,11 +16,17 @@ const Wrapper = styled.div`
   justify-content: space-between;
   padding: 2rem;
   box-shadow: ${props => props.theme.cardShadow};
-  transition: all 0.2s ease-in-out;
+  transition: ${props => props.theme.transition};
   margin-bottom: 3rem;
 
   &:hover {
-    transform: scale(1.1);
+    transform: scale(1.05);
+    box-shadow: ${props => props.theme.hoverShadow};
+  }
+
+  &:active {
+    transform: scale(0.95);
+    box-shadow: none;
   }
 
   ${media.phone`

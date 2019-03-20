@@ -48,14 +48,21 @@ const Name = styled.span`
 `;
 
 const AddButton = styled.button`
-  background-color: ${props => props.theme.offWhite};
+  background-color: ${props => props.theme.primaryBlue};
   border: none;
-  color: ${props => props.theme.black};
+  color: ${props => props.theme.white};
   font-size: 1.4rem;
   padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: ${props => props.theme.transition};
+  border-radius: ${props => props.theme.borderRadius};
 
-  :active {
-    transform: translateY(2px);
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
   }
 `;
 

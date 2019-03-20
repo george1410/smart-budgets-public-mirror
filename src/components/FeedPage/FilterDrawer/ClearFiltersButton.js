@@ -5,6 +5,8 @@ const ClearFiltersButton = styled.button`
   font-size: ${props => props.theme.fontTiny};
   font-weight: 500;
   border: 1px solid ${props => props.theme.offWhite};
+  border-radius: ${props => props.theme.borderRadius};
+  box-shadow: ${props => props.theme.cardShadow};
   background-color: ${props => props.theme.primaryBlue};
   color: ${props => props.theme.offWhite};
   transition: all 0.2s ease-in-out;
@@ -22,8 +24,14 @@ const ClearFiltersButton = styled.button`
     background-color: ${props => props.theme.white};
   `}
 
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${props => props.theme.hoverShadow};
+  }
+
   &:active {
-    transform: translateY(2px);
+    transform: scale(0.95);
+    box-shadow: none;
   }
 `;
 

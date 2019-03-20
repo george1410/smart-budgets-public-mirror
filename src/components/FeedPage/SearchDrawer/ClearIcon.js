@@ -18,6 +18,15 @@ const Wrapper = styled.button`
 
 const Icon = styled.svg`
   height: 3rem;
+  transition: ${props => props.theme.transition};
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
 
   & > g {
     fill: ${props => props.theme.white};

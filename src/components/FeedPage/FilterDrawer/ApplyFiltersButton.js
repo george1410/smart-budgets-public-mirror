@@ -4,11 +4,12 @@ import media from '../../../util/mediaQueries';
 const ApplyFiltersButton = styled.button`
   font-size: ${props => props.theme.fontSmall};
   font-weight: 500;
-  border: 1px solid ${props => props.theme.primaryBlue};
+  border: 1px solid ${props => props.theme.white};
+  border-radius: ${props => props.theme.borderRadius};
   background-color: ${props => props.theme.white};
+  box-shadow: ${props => props.theme.cardShadow};
   color: ${props => props.theme.primaryBlue};
-  border-bottom: 1px solid ${props => props.theme.white};
-  transition: all 0.2s ease-in-out;
+  transition: ${props => props.theme.transition};
   cursor: pointer;
   outline-color: white;
   margin-bottom: 2rem;
@@ -27,8 +28,14 @@ const ApplyFiltersButton = styled.button`
     margin-bottom: 1rem;
   `}
 
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${props => props.theme.hoverShadow};
+  }
+
   &:active {
-    transform: translateY(2px);
+    transform: scale(0.95);
+    box-shadow: none;
   }
 `;
 

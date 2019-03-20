@@ -6,6 +6,14 @@ const Label = styled.div`
   display: flex;
   flex-direction: row;
   user-select: none;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 export default Label;

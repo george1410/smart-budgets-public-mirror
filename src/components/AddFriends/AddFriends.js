@@ -24,6 +24,15 @@ const Form = styled.form`
   display: flex;
   width: 50rem;
   margin: 1rem 0;
+  cursor: pointer;
+  transition: ${props => props.theme.transition};
+  box-shadow: ${props => props.theme.cardShadow};
+
+  &:hover {
+    transform: scale(1.01);
+    box-shadow: ${props => props.theme.hoverShadow};
+  }
+
   ${media.phone`
     width: 100%;
   `}
@@ -37,7 +46,7 @@ const Input = styled.input`
   padding: 0 2rem;
   border: 1px solid ${props => props.theme.primaryBlue};
   border-radius: ${props => props.theme.leftCorners};
-  box-shadow: ${props => props.theme.cardShadow};
+  /* box-shadow: ${props => props.theme.cardShadow}; */
   outline-color: ${props => props.theme.white};
   ${media.phone`
     box-shadow: ${props => props.theme.bottomShadow};
@@ -54,12 +63,7 @@ const Button = styled.button`
   border-radius: ${props => props.theme.rightCorners};
   color: ${props => props.theme.primaryBlue};
   outline-color: ${props => props.theme.white};
-  box-shadow: ${props => props.theme.cardShadow};
-
-  :active {
-    transform: translateY(2px);
-  }
-
+  cursor: pointer;
   ${media.phone`
     border-radius: 0;
     box-shadow: ${props => props.theme.bottomShadow};

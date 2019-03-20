@@ -13,9 +13,15 @@ const LogoutButton = styled.button`
   border: none;
   border-radius: ${props => props.theme.borderRadius};
   user-select: none;
+  transition: ${props => props.theme.transition};
+
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: ${props => props.theme.hoverShadow};
+  }
 
   &:active {
-    transform: translateY(4px);
+    transform: scale(0.95);
     box-shadow: none;
   }
 `;

@@ -51,10 +51,13 @@ export const theme = {
   lastOfTypeBorder: '',
   shadowCol: 'rgba(0, 0, 0, 0.2)',
   cardShadow: '5px 5px 0 rgba(0, 0, 0, 0.2)',
+  hoverShadow: '10px 10px 0 rgba(0, 0, 0, 0.2)',
   bottomShadow: '0 5px 5px rgba(0, 0, 0, 0.2)',
   topShadow: '0 -5px 5px rgba(0, 0, 0, 0.2)',
+  insetShadow: 'inset 2px 2px 0 rgba(0, 0, 0, 0.2)',
   navHeight: isX ? '10rem' : '5rem',
   bottomPad: isX ? '15rem' : '10rem',
   innerHeight: isX ? 'calc(100vh - 15rem)' : 'calc(100vh - 10rem)',
   isX,
+  transition: 'all 0.1s ease-in-out',
 };

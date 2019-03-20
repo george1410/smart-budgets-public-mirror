@@ -36,8 +36,7 @@ export const SettingsRow = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  height: 4rem;
+  padding: 1rem 2rem;
   border: 1px solid ${props => props.theme.offWhite};
   box-shadow: ${props => props.theme.cardShadow};
   width: 40rem;

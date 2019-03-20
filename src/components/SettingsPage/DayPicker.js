@@ -9,11 +9,10 @@ const Select = styled.select`
   padding: 4px 8px;
   font-size: 1.6rem;
   border: 1px solid ${props => props.theme.primaryBlue};
+  border-radius: ${props => props.theme.borderRadius};
   width: 5rem;
-  border-radius: 0;
   background-color: ${props => props.theme.white};
-  ${media.desktop`
-  `}
+  cursor: pointer;
   ${media.tablet`
     font-size: ${props => props.theme.fontSmall};
     padding: 0.5rem 1rem;

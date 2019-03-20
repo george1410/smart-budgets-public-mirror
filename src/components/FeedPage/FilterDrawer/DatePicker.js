@@ -12,8 +12,10 @@ const DatePicker = styled.input.attrs({
   margin-top: 0.5rem;
   min-width: 14rem;
   width: 90%;
-  border-radius: 0;
+  border-radius: ${props => props.theme.borderRadius};
   background-color: ${props => props.theme.white};
+  box-shadow: ${props => props.theme.insetShadow};
+  outline-color: ${props => props.theme.white};
   ${media.desktop`
     width: 18rem;
   `}

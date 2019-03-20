@@ -6,15 +6,27 @@ const Wrapper = styled.div`
   padding: 0.5rem 1rem;
   color: ${props => (props.show ? props.theme.primaryBlue : props.theme.white)};
   border: 1px solid ${props => props.theme.white};
+  border-radius: ${props => props.theme.borderRadius};
   font-size: ${props => props.theme.fontTiny};
   font-weight: 500;
+  outline-color: ${props => props.theme.white};
   margin: 0.5rem;
   width: max-content;
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: ${props => props.theme.transition};
   user-select: none;
   text-transform: uppercase;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+
   ${media.tablet`
+    outline-color: -webkit-focus-ring-color;;
     padding: 1rem 2rem;
     text-transform: capitalize;
     background-color: ${props => (props.show ? props.theme.primaryBlue : props.theme.white)};

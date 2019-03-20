@@ -40,7 +40,7 @@ export const Input = styled(Field)`
   width: 100%;
   padding: 1.5rem 1.5rem;
   font-size: ${props => props.theme.fontSmall};
-  border-radius: 0;
+  border-radius: ${props => props.theme.borderRadius};
   outline: none;
   background: ${props => props.theme.offWhite};
   border: none;
