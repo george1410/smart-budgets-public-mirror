@@ -6,6 +6,7 @@ const Name = styled.span`
   text-align: center;
   font-size: ${props => props.theme.fontSmall};
   margin-right: 50px;
+  font-weight: 500;
 `;
 
 export default Name;

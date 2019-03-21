@@ -1,17 +1,14 @@
 import styled from 'styled-components';
-import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-around;
   max-width: 50rem;
   width: 100%;
-  ${media.phone`
-    flex-direction: column;
-    width: 100%;
-  `}
+  padding: 2rem;
+  background-color: ${props => props.theme.white};
 `;
 
 export default Wrapper;

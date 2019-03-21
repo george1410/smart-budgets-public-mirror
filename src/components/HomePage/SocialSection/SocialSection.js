@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Wrapper from './Wrapper';
+import RowWrapper from './RowWrapper';
 import Title from './Title';
 
 const SocialSection = ({ children }) => (
   <>
-    <Title>
-      Social
-    </Title>
     <Wrapper>
-      {
-        children
-      }
+      <Title>
+      Social
+      </Title>
+      <RowWrapper>
+        {
+          children
+        }
+      </RowWrapper>
     </Wrapper>
   </>
 );
