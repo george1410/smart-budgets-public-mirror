@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   background-color: ${props => props.theme.primaryBlue};
   box-shadow: ${props => props.theme.cardShadow};
   border-radius: ${props => props.theme.borderRadius};
-  padding: 1rem;
+  padding: ${props => (props.visible ? '1rem' : '0')};
   align-items: center;
   justify-content: flex-end;
   height: auto;
@@ -45,7 +45,7 @@ const Wrapper = styled.div`
     right: auto;
     margin-left: auto;
     max-width: 100%;
-    padding: 1rem 5rem;
+    padding: ${props => (props.visible ? '1rem 5rem' : '0')};
     opacity: ${props => (props.visible ? '1' : '0')};
     background-color: ${props => props.theme.white};
     transition: all 0.3s ease-in-out;
@@ -59,7 +59,7 @@ const Wrapper = styled.div`
   `}
   ${media.phone`
     justify-content: space-around;
-    padding: 1rem;
+    padding: ${props => (props.visible ? '1rem' : '0')};
   `}
 `;
 

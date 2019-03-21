@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import Section from './Section/Section';
+import StatusMessage from '../StatusMessage/StatusMessage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -18,17 +19,9 @@ const Wrapper = styled.div`
   `}
 `;
 
-const EmptyMessage = styled.span`
-  color: ${props => props.theme.white};
-  font-size: ${props => props.theme.fontSmall};
-  margin-top: 5rem;
-  text-align: center;
-`;
-
-
 const FriendsPage = ({ friends, sent, received }) => (
   <>
-    <Header title="Friends List" />
+    <Header title="Friends List" back />
     <Wrapper>
       {
       (friends || sent || received)
@@ -40,7 +33,7 @@ const FriendsPage = ({ friends, sent, received }) => (
           </>
         )
         : (
-          <EmptyMessage>Try sending some friend requests first.</EmptyMessage>
+          <StatusMessage message="Try sending some friend requests first." />
         )
         }
     </Wrapper>

@@ -9,6 +9,7 @@ const NavigationBar = styled.nav`
   width: 100%;
   height: 5rem;
   z-index: 6;
+  font-weight: 500;
   ${media.tablet`
     position: fixed;
     background-color: ${props => props.theme.white};

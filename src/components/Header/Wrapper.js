@@ -13,6 +13,7 @@ const Wrapper = styled.header`
   ${media.tablet`
     display: flex;
     top: 0;
+    padding: 0 2rem;
   `}
 `;
 

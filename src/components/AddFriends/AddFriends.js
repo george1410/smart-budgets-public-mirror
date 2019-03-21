@@ -7,6 +7,7 @@ import Header from '../Header/Header';
 import media from '../../util/mediaQueries';
 import UserCard from '../UserCard/UserCard';
 import api from '../../api/api';
+import StatusMessage from '../StatusMessage/StatusMessage';
 
 const Wrapper = styled.div`
   display: flex;
@@ -87,13 +88,6 @@ const Button = styled.button`
   `}
 `;
 
-const Error = styled.span`
-  color: ${props => props.theme.white};
-  font-size: ${props => props.theme.fontSmall};
-  margin-top: 5rem;
-  text-align: center;
-`;
-
 const AddFriends = ({ id }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [friends, setFriends] = useState([]);
@@ -131,7 +125,7 @@ const AddFriends = ({ id }) => {
 
   return (
     <>
-      <Header title="Find Friends" />
+      <Header title="Find Friends" back />
       <Wrapper>
         <Form onSubmit={findFriends}>
           <Input
@@ -147,7 +141,7 @@ const AddFriends = ({ id }) => {
           ))
         }
         {
-          error && <Error>{error}</Error>
+          error && <StatusMessage message={error} />
         }
       </Wrapper>
     </>
