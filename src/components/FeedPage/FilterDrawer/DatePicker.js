@@ -21,6 +21,7 @@ const DatePicker = styled.input.attrs({
   `}
   ${media.tablet`
     width: auto;
+    outline-color: -webkit-focus-ring-color;
     font-size: ${props => props.theme.fontSmall};
     padding: 0.5rem 1rem;
   `}

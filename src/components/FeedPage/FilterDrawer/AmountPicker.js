@@ -11,6 +11,7 @@ const AmountPicker = styled.input`
   box-shadow: ${props => props.theme.insetShadow};
   outline-color: ${props => props.theme.white};
   ${media.tablet`
+    outline-color: -webkit-focus-ring-color;
     font-size: ${props => props.theme.fontSmall};
     padding: 0.5rem 1rem;
     :first-of-type {

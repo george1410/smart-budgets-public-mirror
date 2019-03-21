@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from '../../util/mediaQueries';
 
 const Button = styled.button`
   width: 100%;
@@ -25,6 +26,18 @@ const Button = styled.button`
     transform: scale(0.95);
     box-shadow: none;
   }
+
+  ${media.tablet`
+    &:hover {
+      transform: scale(1);
+      box-shadow: ${props => props.theme.cardShadow};
+    }
+
+    &:active {
+      transform: scale(0.95);
+      box-shadow: none;
+    }
+  `}
 `;
 
 export default Button;

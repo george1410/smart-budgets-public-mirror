@@ -16,7 +16,7 @@ import {
 export const defaultFilterState = {
   sortByDate: 'greatest',
   sortByAmount: undefined,
-  filterDrawerOpen: true,
+  filterDrawerOpen: false,
   searchDrawerOpen: false,
   shownCategories: [],
   startDate: undefined,

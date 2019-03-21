@@ -22,6 +22,7 @@ const EmptyMessage = styled.span`
   color: ${props => props.theme.white};
   font-size: ${props => props.theme.fontSmall};
   margin-top: 5rem;
+  text-align: center;
 `;
 
 

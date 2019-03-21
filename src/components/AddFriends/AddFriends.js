@@ -27,14 +27,28 @@ const Form = styled.form`
   cursor: pointer;
   transition: ${props => props.theme.transition};
   box-shadow: ${props => props.theme.cardShadow};
+  border-radius: ${props => props.theme.borderRadius};
 
   &:hover {
     transform: scale(1.01);
     box-shadow: ${props => props.theme.hoverShadow};
   }
 
+  ${media.tablet`
+    &:hover {
+      transform: scale(1);
+      box-shadow: ${props => props.theme.cardShadow};
+    }
+  `}
+
   ${media.phone`
     width: 100%;
+    box-shadow: none;
+
+    &:hover {
+      transform: scale(1);
+      box-shadow: none;
+    }
   `}
 `;
 
@@ -44,12 +58,10 @@ const Input = styled.input`
   font-size: ${props => props.theme.fontSmall};
   line-height: normal;
   padding: 0 2rem;
-  border: 1px solid ${props => props.theme.primaryBlue};
+  border: 1px solid ${props => props.theme.white};
   border-radius: ${props => props.theme.leftCorners};
-  /* box-shadow: ${props => props.theme.cardShadow}; */
   outline-color: ${props => props.theme.white};
   ${media.phone`
-    box-shadow: ${props => props.theme.bottomShadow};
     width: 100%;
     border-radius: 0;
   `}
@@ -58,16 +70,28 @@ const Input = styled.input`
 const Button = styled.button`
   min-width: 10rem;
   font-size: ${props => props.theme.fontSmall};
-  background-color: ${props => props.theme.white};
-  border: 1px solid ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.primaryBlue};
+  border: 1px solid ${props => props.theme.white};
   border-radius: ${props => props.theme.rightCorners};
-  color: ${props => props.theme.primaryBlue};
+  color: ${props => props.theme.white};
   outline-color: ${props => props.theme.white};
   cursor: pointer;
+  font-weight: 500;
+
+  &:active {
+    transform: scale(0.95);
+  }
+
   ${media.phone`
     border-radius: 0;
-    box-shadow: ${props => props.theme.bottomShadow};
   `}
+`;
+
+const Error = styled.span`
+  color: ${props => props.theme.white};
+  font-size: ${props => props.theme.fontSmall};
+  margin-top: 5rem;
+  text-align: center;
 `;
 
 const AddFriends = ({ id }) => {
@@ -97,7 +121,7 @@ const AddFriends = ({ id }) => {
       })
       .catch(() => {
         setFriends([]);
-        setError('Could not find any friends.');
+        setError('Could not find anyone by that name.');
       });
   };
 
@@ -123,7 +147,7 @@ const AddFriends = ({ id }) => {
           ))
         }
         {
-          error && <p>{error}</p>
+          error && <Error>{error}</Error>
         }
       </Wrapper>
     </>

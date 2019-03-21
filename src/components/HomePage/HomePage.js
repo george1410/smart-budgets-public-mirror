@@ -10,16 +10,12 @@ const Home = () => (
     <Wrapper>
       <SocialSection>
         <Card
-          title="Add Friends"
-          description="Make budgeting competitive."
+          title="Find Friends"
           linkTo="/add"
-          action="Find friends"
         />
         <Card
-          title="Friendships"
-          description="Manage your friendships."
+          title="Manage Friendships"
           linkTo="/friends"
-          action="List Friends"
         />
       </SocialSection>
     </Wrapper>

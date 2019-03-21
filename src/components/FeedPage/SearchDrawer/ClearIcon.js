@@ -28,6 +28,16 @@ const Icon = styled.svg`
     transform: scale(0.8);
   }
 
+  ${media.tablet`
+    &:hover {
+      transform: scale(1);
+    }
+
+    &:active {
+      transform: scale(0.8);
+    }
+  `}
+
   & > g {
     fill: ${props => props.theme.white};
     ${media.tablet`

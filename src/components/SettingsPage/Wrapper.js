@@ -18,7 +18,7 @@ const Wrapper = styled.div`
     padding-bottom: ${props => props.theme.bottomPad};
   `}
   ${media.phone`
-    padding-top: 5rem;
+    padding-top: 7rem;
   `}
 `;
 

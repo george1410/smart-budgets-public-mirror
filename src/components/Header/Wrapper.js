@@ -6,7 +6,6 @@ const Wrapper = styled.header`
   position: fixed;
   width: 100vw;
   background-color: ${props => props.theme.white};
-  box-shadow: ${props => props.theme.bottomShadow};
   display: none;
   justify-content: center;
   align-items: center;

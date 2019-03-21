@@ -11,7 +11,6 @@ const Wrapper = styled.div`
   border-radius: ${props => props.theme.borderRadius};
 
   &:hover {
-    transform: scale(1.02);
     background-color: ${props => props.theme.primaryBlueShadow};
   }
 

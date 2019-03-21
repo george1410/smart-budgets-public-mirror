@@ -15,14 +15,6 @@ const ClearFiltersButton = styled.button`
   margin-bottom: 2rem;
   padding: 0.5rem 1rem;
   user-select: none;
-  ${media.tablet`
-    font-size: ${props => props.theme.fontSmall};
-    outline-color: -webkit-focus-ring-color;
-    padding: 0.5rem 2rem;
-    color: ${props => props.theme.error};
-    border: 1px solid ${props => props.theme.error};
-    background-color: ${props => props.theme.white};
-  `}
 
   &:hover {
     transform: scale(1.05);
@@ -33,6 +25,25 @@ const ClearFiltersButton = styled.button`
     transform: scale(0.95);
     box-shadow: none;
   }
+
+  ${media.tablet`
+    font-size: ${props => props.theme.fontSmall};
+    outline-color: -webkit-focus-ring-color;
+    padding: 0.5rem 2rem;
+    color: ${props => props.theme.error};
+    border: 1px solid ${props => props.theme.error};
+    background-color: ${props => props.theme.white};
+
+    &:hover {
+      transform: scale(1);
+      box-shadow: ${props => props.theme.cardShadow};
+    }
+
+    &:active {
+      transform: scale(0.95);
+      box-shadow: none;
+    }
+  `}
 `;
 
 export default ClearFiltersButton;

@@ -64,6 +64,16 @@ const AddButton = styled.button`
   &:active {
     transform: scale(0.95);
   }
+
+  ${media.tablet`
+    &:hover {
+      transform: scale(1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  `}
 `;
 
 const UserCard = ({

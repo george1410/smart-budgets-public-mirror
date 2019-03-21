@@ -33,6 +33,14 @@ const Wrapper = styled.div`
     color: ${props => (props.show ? props.theme.white : props.theme.primaryBlue)};
     border: 1px solid ${props => (props.show ? props.theme.white : props.theme.primaryBlue)};
     font-size: ${props => props.theme.fontSmall};
+
+    &:hover {
+      transform: scale(1);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
   `}
   ${media.phone`
     padding: 5px;

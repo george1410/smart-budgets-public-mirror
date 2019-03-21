@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from '../../util/mediaQueries';
 
 const LogoutButton = styled.button`
   width: 20rem;
@@ -24,6 +25,18 @@ const LogoutButton = styled.button`
     transform: scale(0.95);
     box-shadow: none;
   }
+
+  ${media.tablet`
+    &:hover {
+      transform: scale(1);
+      box-shadow: ${props => props.theme.cardShadow};
+    }
+
+    &:active {
+      transform: scale(0.95);
+      box-shadow: none;
+    }
+  `}
 `;
 
 export default LogoutButton;

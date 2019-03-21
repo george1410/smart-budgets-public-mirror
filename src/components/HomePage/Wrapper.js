@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.white};
   height: 100vh;
 `;
 

@@ -5,16 +5,17 @@ import { withRouter } from 'react-router-dom';
 import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
-  background-color: ${props => props.theme.white};
+  background-color: ${props => props.theme.primaryBlue};
   max-height: 30rem;
-  height: 15rem;
+  height: 8rem;
   width: 20rem;
   border-radius: ${props => props.theme.borderRadius};
+  /* border: 1px solid ${props => props.theme.white}; */
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  padding: 2rem;
+  justify-content: center;
+  padding: 1.5rem;
   box-shadow: ${props => props.theme.cardShadow};
   transition: ${props => props.theme.transition};
   margin-bottom: 3rem;
@@ -29,42 +30,39 @@ const Wrapper = styled.div`
     box-shadow: none;
   }
 
+  ${media.tablet`
+    &:hover {
+      transform: scale(1);
+      box-shadow: ${props => props.theme.cardShadow};
+    }
+
+    &:active {
+      transform: scale(0.95);
+      box-shadow: none;
+    }
+  `}
   ${media.phone`
+    height: auto;
     width: 80%;
   `}
 `;
 
 const Title = styled.span`
-  color: ${props => props.theme.black};
-  font-size: ${props => props.theme.fontSmall};
-`;
-
-const Description = styled.span`
-  color: ${props => props.theme.black};
-  font-size: ${props => props.theme.fontTiny};
+  color: ${props => props.theme.white};
   font-weight: 500;
-`;
-
-const Action = styled.span`
-  color: ${props => props.theme.primaryBlue};
   font-size: ${props => props.theme.fontSmall};
-  border-bottom: 1px solid ${props => props.theme.primaryBlue};
-  align-self: flex-end;
+  text-align: center;
 `;
 
 const Card = ({
   title,
-  description,
   linkTo,
-  action,
   history,
 }) => {
   const routeTo = () => history.push(linkTo);
   return (
     <Wrapper onClick={routeTo}>
       <Title>{title}</Title>
-      <Description>{description}</Description>
-      <Action>{action}</Action>
     </Wrapper>
 
   );
@@ -73,6 +71,8 @@ const Card = ({
 Card.defaultProps = {};
 
 Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  linkTo: PropTypes.string.isRequired,
   history: PropTypes.shape({
     push: PropTypes.func.isRequired,
   }).isRequired,

@@ -14,12 +14,6 @@ const SearchButton = styled.button`
   transition: all 0.1s ease-in-out;
   user-select: none;
   box-shadow: ${props => props.theme.cardShadow};
-  ${media.tablet`
-    border: 1px solid ${props => props.theme.primaryBlue};
-    background-color: ${props => props.theme.white};
-    color: ${props => props.theme.primaryBlue};
-    outline-color: -webkit-focus-ring-color;
-  `}
 
   &:hover {
     transform: scale(1.05);
@@ -30,6 +24,23 @@ const SearchButton = styled.button`
     transform: scale(0.95);
     box-shadow: none;
   }
+
+  ${media.tablet`
+    border: 1px solid ${props => props.theme.primaryBlue};
+    background-color: ${props => props.theme.white};
+    color: ${props => props.theme.primaryBlue};
+    outline-color: -webkit-focus-ring-color;
+
+    &:hover {
+      transform: scale(1);
+      box-shadow: ${props => props.theme.cardShadow};
+    }
+
+    &:active {
+      transform: scale(0.95);
+      box-shadow: none;
+    }
+  `}
 `;
 
 export default SearchButton;
