@@ -38,6 +38,7 @@ export const theme = {
   greyDark: '#222',
   black: '#000',
   offWhite: '#eee',
+  offWhiteShadow: 'rgba(239, 239, 239, 0.7)',
   white: '#fff',
   font: 'Montserrat',
   fontTiny: '1.2rem',
@@ -60,4 +61,5 @@ export const theme = {
   innerHeight: isX ? 'calc(100vh - 15rem)' : 'calc(100vh - 10rem)',
   isX,
   transition: 'all 0.1s ease-in-out',
+  overBudget: 'repeating-linear-gradient(45deg, rgba(224, 25, 103, 0.2), rgba(224, 25, 103, 0.2) 10px, rgba(224, 25, 103, 0.1)10px, rgba(224, 25, 103, 0.1) 20px)',
 };

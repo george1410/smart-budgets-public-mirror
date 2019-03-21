@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const EndLabel = styled.span`
   font-size: ${props => props.theme.fontSmall};
-  color: ${props => props.theme.grey};
+  color: ${props => props.theme.black};
   flex: 1;
   font-weight: 500;
 

@@ -9,9 +9,11 @@ const Wrapper = styled.div`
   cursor: pointer;
   transition: ${props => props.theme.transition};
   border-radius: ${props => props.theme.borderRadius};
+  background: ${props => (props.overBudget ? props.theme.overBudget : props.theme.white)};
+  border: 2px solid ${props => props.theme.white};
 
   &:hover {
-    background-color: ${props => props.theme.primaryBlueShadow};
+    border: 2px solid ${props => props.theme.primaryBlue};
   }
 
   &:active {
