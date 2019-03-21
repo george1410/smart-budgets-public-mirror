@@ -20,7 +20,10 @@ const SocialSection = ({ children }) => (
 );
 
 SocialSection.propTypes = {
-  children: PropTypes.instanceOf(Array).isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.instanceOf(Array),
+    PropTypes.instanceOf(Object),
+  ]).isRequired,
 };
 
 export default SocialSection;

@@ -19,11 +19,13 @@ const SectionHeader = styled.span`
   align-items: center;
   justify-content: center;
   padding: 0.5rem 0;
-  background-color: ${props => props.theme.white};
+  background-color: ${props => props.theme.offWhite};
   color: ${props => props.theme.black};
   font-size: ${props => props.theme.fontSmall};
+  font-weight: 500;
   margin: 1rem 0;
   border-radius: ${props => props.theme.borderRadius};
+  border: 1px solid ${props => props.theme.offWhite};
   box-shadow: ${props => props.theme.cardShadow};
   ${media.phone`
     margin: 0;

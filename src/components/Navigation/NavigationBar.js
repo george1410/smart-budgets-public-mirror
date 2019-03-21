@@ -13,7 +13,7 @@ const NavigationBar = styled.nav`
   box-shadow: ${props => props.theme.bottomShadow};
   ${media.tablet`
     position: fixed;
-    background-color: ${props => props.theme.translucentWhite};
+    background-color: ${props => props.theme.white};
     box-shadow: ${props => props.theme.topShadow};
     justify-content: space-around;
     width: 100%;

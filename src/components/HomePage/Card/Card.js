@@ -5,12 +5,12 @@ import { withRouter } from 'react-router-dom';
 import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.white};
   max-height: 30rem;
   height: 8rem;
   width: 20rem;
   border-radius: ${props => props.theme.borderRadius};
-  /* border: 1px solid ${props => props.theme.white}; */
+  border: 2px solid ${props => props.theme.offWhite};
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -48,7 +48,7 @@ const Wrapper = styled.div`
 `;
 
 const Title = styled.span`
-  color: ${props => props.theme.white};
+  color: ${props => props.theme.black};
   font-weight: 500;
   font-size: ${props => props.theme.fontSmall};
   text-align: center;

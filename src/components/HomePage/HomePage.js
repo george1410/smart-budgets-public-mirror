@@ -6,7 +6,7 @@ import Card from './Card/Card';
 
 const Home = () => (
   <>
-    <Header title="Home" />
+    <Header title="Smart Budgets" />
     <Wrapper>
       <SocialSection>
         <Card

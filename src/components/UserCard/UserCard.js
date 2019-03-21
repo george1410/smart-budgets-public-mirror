@@ -5,7 +5,8 @@ import Gravatar from 'react-gravatar';
 import media from '../../util/mediaQueries';
 
 const Wrapper = styled.div`
-  border-bottom: 1px solid ${props => props.theme.offWhite};
+  border: 1px solid ${props => props.theme.offWhite};
+  border-bottom: none;
   background-color: ${props => props.theme.white};
   width: 50rem;
   height: 8rem;
@@ -21,6 +22,7 @@ const Wrapper = styled.div`
 
   &:last-of-type {
     border-radius: ${props => props.theme.bottomCorners};
+    border-bottom: 1px solid ${props => props.theme.offWhite};
   }
 
   ${media.phone`
@@ -33,6 +35,7 @@ const Wrapper = styled.div`
 
   &:last-of-type {
     border-radius: 0;
+    border-bottom: 1px solid ${props => props.theme.offWhite};
   }
 `}
 `;

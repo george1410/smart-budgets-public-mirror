@@ -15,9 +15,9 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 5rem 0;
   min-height: 100vh;
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.white};
   ${media.tablet`
-    padding-bottom: ${props => (props.isX ? '10rem' : '5rem')};
+    padding-bottom: ${props => props.theme.bottomPad};
   `}
 `;
 
@@ -59,9 +59,10 @@ const Input = styled.input`
   font-size: ${props => props.theme.fontSmall};
   line-height: normal;
   padding: 0 2rem;
-  border: 1px solid ${props => props.theme.white};
+  border: none;
+  border: 1px solid ${props => props.theme.grey};
   border-radius: ${props => props.theme.leftCorners};
-  outline-color: ${props => props.theme.white};
+  /* outline-color: ${props => props.theme.white}; */
   ${media.phone`
     width: 100%;
     border-radius: 0;
@@ -71,11 +72,11 @@ const Input = styled.input`
 const Button = styled.button`
   min-width: 10rem;
   font-size: ${props => props.theme.fontSmall};
-  background-color: ${props => props.theme.primaryBlue};
-  border: 1px solid ${props => props.theme.white};
+  background-color: ${props => props.theme.grey};
+  border: 1px solid ${props => props.theme.grey};
   border-radius: ${props => props.theme.rightCorners};
   color: ${props => props.theme.white};
-  outline-color: ${props => props.theme.white};
+  /* outline-color: ${props => props.theme.white}; */
   cursor: pointer;
   font-weight: 500;
 

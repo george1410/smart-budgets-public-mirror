@@ -13,7 +13,7 @@ const Icon = styled.svg`
   ${({ show }) => (show === 'smallest') && 'transform: rotate(180deg); '}
 
   & > g > g > polyline {
-    stroke: ${props => props.theme.white};
+    stroke: ${props => props.theme.black};
   }
 `;
 

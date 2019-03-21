@@ -13,7 +13,7 @@ const Button = styled.button`
     height: 3.5rem;
 
     & > g {
-      fill: ${props => props.theme.primaryBlue};
+      fill: ${props => props.theme.grey};
     }
   }
 

@@ -13,7 +13,7 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 5rem 0 0 0;
   min-height: 100vh;
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.white};
   ${media.tablet`
     padding-bottom: ${props => (props.isX ? '10rem' : '5rem')};
   `}
