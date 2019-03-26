@@ -36,10 +36,12 @@ const SectionHeader = styled.span`
   `}
 `;
 
-const Section = ({ title, users }) => (
+const Section = ({
+  title, users, type, respond, removeRequest,
+}) => (
   <Wrapper>
     {
-      !!users && (
+      users && (users.length !== 0) && (
         <>
           <SectionHeader>{title}</SectionHeader>
           {
@@ -47,7 +49,9 @@ const Section = ({ title, users }) => (
               <UserCard
                 key={user.userId}
                 {...user}
-                // type="friend"
+                type={type}
+                respond={respond}
+                removeRequest={removeRequest}
               />
             ))}
         </>
@@ -59,11 +63,17 @@ const Section = ({ title, users }) => (
 Section.defaultProps = {
   title: 'Section Title',
   users: undefined,
+  type: undefined,
+  respond: undefined,
+  removeRequest: undefined,
 };
 
 Section.propTypes = {
   users: PropTypes.instanceOf(Array),
   title: PropTypes.string,
+  type: PropTypes.string,
+  respond: PropTypes.func,
+  removeRequest: PropTypes.func,
 };
 
 export default Section;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import Gravatar from 'react-gravatar';
@@ -50,18 +50,28 @@ const Name = styled.span`
   `}
 `;
 
-const AddButton = styled.button`
-  background-color: ${props => props.theme.primaryBlue};
+const Button = styled.button`
+  background-color: ${props => (props.decline ? props.theme.error : props.theme.primaryBlue)};
   border: none;
   color: ${props => props.theme.white};
+  width: ${props => (props.wide ? '12rem' : 'auto')};
   font-size: 1.4rem;
   padding: 0.5rem 1rem;
   cursor: pointer;
   transition: ${props => props.theme.transition};
   border-radius: ${props => props.theme.borderRadius};
 
+  &:last-of-type {
+    margin-left: 1rem;
+  }
+
   &:hover {
     transform: scale(1.05);
+  }
+
+  &:disabled {
+    background-color: ${props => props.theme.grey};
+    cursor: default;
   }
 
   &:active {
@@ -80,41 +90,108 @@ const AddButton = styled.button`
 `;
 
 const UserCard = ({
-  userId, firstName, lastName, addFriend, type,
-}) => (
-  <Wrapper>
-    <Gravatar email={firstName} size={40} style={{ borderRadius: '4px' }} />
-    <Name shift={type}>
-      {firstName}
-      {' '}
-      {lastName}
-    </Name>
-    {
-      type === 'add'
+  userId, firstName, lastName, type, respond, addFriend, removeRequest,
+}) => {
+  const [btnText, setBtnText] = useState('Send Request');
+  const [btnDisabled, setBtnDisabled] = useState(false);
+  const acceptRequest = () => {
+    respond(userId, true);
+  };
+  const declineRequest = () => {
+    respond(userId, false);
+  };
+  const sendRequest = () => {
+    addFriend(userId);
+    setBtnText('Request Sent');
+    setBtnDisabled(true);
+  };
+  const cancelSent = () => {
+    removeRequest(userId);
+  };
+  return (
+    <Wrapper>
+      <Gravatar email={firstName} size={40} style={{ borderRadius: '4px' }} />
+      <Name shift={type}>
+        {firstName}
+        {' '}
+        {lastName}
+      </Name>
+      {
+      type === 'received'
       && (
-      <AddButton
-        type="button"
-        onClick={() => addFriend(userId)}
-      >
-        Add Friend
-      </AddButton>
+        <>
+          <Button
+            type="button"
+            onClick={acceptRequest}
+          >
+            Accept
+          </Button>
+          <Button
+            decline
+            type="button"
+            onClick={declineRequest}
+          >
+            Decline
+          </Button>
+        </>
       )
-    }
-  </Wrapper>
-);
+      }
+      {
+        type === 'sent'
+        && (
+        <Button
+          type="button"
+          onClick={cancelSent}
+          decline
+        >
+        Cancel request
+        </Button>
+        )
+      }
+      {
+        type === 'add'
+        && (
+        <Button
+          type="button"
+          onClick={sendRequest}
+          disabled={btnDisabled}
+          wide
+        >
+          {btnText}
+        </Button>
+        )
+      }
+      {
+        type === 'friends'
+        && (
+          <Button
+            type="button"
+            onClick={cancelSent}
+            decline
+          >
+          Remove Friend
+          </Button>
+        )
+      }
+    </Wrapper>
+  );
+};
 
 UserCard.defaultProps = {
-  addFriend: undefined,
   type: 'friend',
+  respond: undefined,
+  addFriend: undefined,
+  removeRequest: undefined,
 };
 
 UserCard.propTypes = {
   userId: PropTypes.number.isRequired,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
-  addFriend: PropTypes.func,
-  // email: PropTypes.string.isRequired,
+  respond: PropTypes.func,
   type: PropTypes.string,
+  addFriend: PropTypes.func,
+  removeRequest: PropTypes.func,
 };
 
 export default UserCard;

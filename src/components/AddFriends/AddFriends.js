@@ -62,7 +62,6 @@ const Input = styled.input`
   border: none;
   border: 1px solid ${props => props.theme.grey};
   border-radius: ${props => props.theme.leftCorners};
-  /* outline-color: ${props => props.theme.white}; */
   ${media.phone`
     width: 100%;
     border-radius: 0;
@@ -72,13 +71,16 @@ const Input = styled.input`
 const Button = styled.button`
   min-width: 10rem;
   font-size: ${props => props.theme.fontSmall};
-  background-color: ${props => props.theme.grey};
+  background-color: ${props => props.theme.primaryBlue};
   border: 1px solid ${props => props.theme.grey};
   border-radius: ${props => props.theme.rightCorners};
   color: ${props => props.theme.white};
-  /* outline-color: ${props => props.theme.white}; */
   cursor: pointer;
   font-weight: 500;
+
+  &:disabled {
+    background-color: ${props => props.theme.grey};
+  }
 
   &:active {
     transform: scale(0.95);
@@ -93,9 +95,15 @@ const AddFriends = ({ id }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(undefined);
+  const [btnDisabled, setBtnDisabled] = useState(true);
 
   const onSearchChange = (e) => {
     const text = e.target.value;
+    if (text.length !== 0) {
+      setBtnDisabled(false);
+    } else {
+      setBtnDisabled(true);
+    }
     setSearchTerm(text);
   };
 
@@ -134,7 +142,7 @@ const AddFriends = ({ id }) => {
             value={searchTerm}
             onChange={onSearchChange}
           />
-          <Button type="submit">Find</Button>
+          <Button type="submit" disabled={btnDisabled}>Find</Button>
         </Form>
         {
           friends && friends.map(user => (

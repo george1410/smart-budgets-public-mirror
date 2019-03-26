@@ -9,7 +9,6 @@ import 'sanitize.css/sanitize.css';
 import * as serviceWorker from './serviceWorker';
 import { startSetCategories } from './actions/categories';
 import { startSetUserInfo } from './actions/user';
-import { startSetFriends } from './actions/friends';
 
 // creates the store which holds the app's global state.
 const store = configureStore();
@@ -28,9 +27,6 @@ const jsx = (
 if (store.getState().auth.uid) {
   store.dispatch(startSetCategories());
   store.dispatch(startSetUserInfo());
-  store.dispatch(startSetFriends());
-  // store.dispatch(startSetReceived());
-  // store.dispatch(startSetSent());
 }
 
 ReactDOM.render(jsx, document.getElementById('root'));
