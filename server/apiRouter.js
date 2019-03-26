@@ -302,10 +302,31 @@ module.exports = (app) => {
   });
 
   /**
+   * DELETE route for deleting a friend.
+   * Endpoint: /api/users/{userid}/friends/{friendid}
+   *
+   */
+  app.delete('/api/users/:id/friends/:fid', (req, res) => {
+    const user1 = req.params.id;
+    const user2 = req.params.fid;
+    const sql = `
+    DELETE FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR
+    (userId1 = ${user2} AND userId2 = ${user1})
+    `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+
+  /**
    * GET route for getting info about a user's friends.
    * Endpoint: /api/users/{userid}/friends
    *
    * Optional Query Parameters:
+   *   status
+   *     values: sent, received
+   *     default: both sent and received (all friendships)
    *   accepted
    *    values: TRUE, FALSE
    *    default: both accepted and not accepted
@@ -314,6 +335,8 @@ module.exports = (app) => {
    *      {
    *        "userId": 2,
    *        "accepted": true
+   *        "firstName": "John"
+   *        "lastName": "Doe"
    *      }, ...
    *    ]
    */
@@ -322,12 +345,18 @@ module.exports = (app) => {
     let sql = `
       SELECT userId, userId1, userId2, accepted, firstName, lastName, period
       FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
-      WHERE (userId1 = ${userId}
-      OR userId2 = ${userId})
       `;
 
+    if (req.query.status === 'sent') {
+      sql += `WHERE userId1 = ${userId}`;
+    } else if (req.query.status === 'received') {
+      sql += `WHERE userId2 = ${userId}`;
+    } else {
+      sql += `WHERE (userId1 = ${userId} OR userId2 = ${userId})`;
+    }
+
     if (req.query.accepted) {
-      sql += `AND accepted = ${req.query.accepted}`;
+      sql += ` AND accepted = ${req.query.accepted}`;
     }
 
     pool.query(sql, (err, results) => {
