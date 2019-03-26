@@ -275,6 +275,24 @@ module.exports = (app) => {
   });
 
   /**
+   * DELETE route for deleting a friend.
+   * Endpoint: /api/users/{userid}/friends/{friendid}
+   *
+   */
+  app.delete('/api/users/:id/friends/:fid', (req, res) => {
+    const user1 = req.params.id;
+    const user2 = req.params.fid;
+    const sql = `
+    DELETE FROM friendships WHERE (userId1 = ${user1} AND userId2 = ${user2}) OR
+    (userId1 = ${user2} AND userId2 = ${user1})
+    `;
+    pool.query(sql, (err) => {
+      if (err) throw err;
+      res.sendStatus(200);
+    });
+  });
+
+  /**
    * GET route for getting info about a user's friends.
    * Endpoint: /api/users/{userid}/friends
    *
