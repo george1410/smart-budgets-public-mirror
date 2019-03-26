@@ -28,7 +28,7 @@ const Wrapper = styled.div`
   background-color: ${props => props.theme.primaryBlue};
   box-shadow: ${props => props.theme.cardShadow};
   border-radius: ${props => props.theme.borderRadius};
-  padding: ${props => (props.visible ? '1rem' : '0')};
+  padding: 1rem;
   align-items: center;
   justify-content: flex-end;
   height: auto;

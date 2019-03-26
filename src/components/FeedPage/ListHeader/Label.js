@@ -6,6 +6,7 @@ const Label = styled.div`
   display: flex;
   flex-direction: row;
   user-select: none;
+  border-bottom: 1px solid ${props => props.theme.black};
 
   &:hover {
     transform: scale(1.05);

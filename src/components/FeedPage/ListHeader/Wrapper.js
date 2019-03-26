@@ -11,10 +11,11 @@ const Wrapper = styled.div`
   align-items: center;
   align-self: flex-end;
   margin-right: calc((100vw - 50rem) / 2);
-  background-color: ${props => props.theme.offWhite};
+  background-color: ${props => props.theme.white};
   width: 50rem;
   min-height: 5rem;
   padding: 0 2rem;
+  border-bottom: 2px solid ${props => props.theme.offWhite};
   ${media.desktop`
     margin-right: calc((100vw - 72rem) / 2);
   `}

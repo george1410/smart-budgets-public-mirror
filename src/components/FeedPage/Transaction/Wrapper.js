@@ -4,8 +4,7 @@ import media from '../../../util/mediaQueries';
 // for margin-rigth calcs look at FilterDrawer
 const Wrapper = styled.div`
   display: flex;
-  background-color: rgba(245, 245, 245, 0.5);
-  box-shadow: 0 1px 0 ${props => props.theme.shadowCol};
+  background-color: ${props => props.theme.white};
   margin-right: calc((100vw - 50rem) / 2);
   float: right;
   justify-content: space-between;
@@ -13,6 +12,7 @@ const Wrapper = styled.div`
   padding: 0 2rem;
   height: 70px;
   width: 50rem;
+  border: 1px solid ${props => props.theme.offWhite};
   ${media.desktop`
     margin-right: calc((100vw - 72rem) / 2);
   `}
