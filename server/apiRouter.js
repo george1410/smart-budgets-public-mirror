@@ -294,7 +294,7 @@ module.exports = (app) => {
     const userId = req.params.id;
     let sql = `
       SELECT userId, userId1, userId2, accepted, firstName, lastName, period
-      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId 
+      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
       `;
 
     if (req.query.status === 'sent') {
@@ -306,7 +306,7 @@ module.exports = (app) => {
     }
 
     if (req.query.accepted) {
-      sql += `AND accepted = ${req.query.accepted}`;
+      sql += ` AND accepted = ${req.query.accepted}`;
     }
 
     pool.query(sql, (err, results) => {
