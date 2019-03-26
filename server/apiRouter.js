@@ -294,10 +294,16 @@ module.exports = (app) => {
     const userId = req.params.id;
     let sql = `
       SELECT userId, userId1, userId2, accepted, firstName, lastName, period
-      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
-      WHERE (userId1 = ${userId}
-      OR userId2 = ${userId})
+      FROM friendships JOIN users ON userId1 = userId OR userId2 = userId 
       `;
+
+    if (req.query.received) {
+      sql += `WHERE userId1 = ${userId}`;
+    } else if (req.query.sent) {
+      sql += `WHERE userId2 = ${userId}`;
+    } else {
+      sql += `WHERE WHERE (userId1 = ${userId} OR userId2 = ${userId})`;
+    }
 
     if (req.query.accepted) {
       sql += `AND accepted = ${req.query.accepted}`;
