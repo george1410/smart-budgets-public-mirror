@@ -279,6 +279,9 @@ module.exports = (app) => {
    * Endpoint: /api/users/{userid}/friends
    *
    * Optional Query Parameters:
+   *   status
+   *     values: sent, received
+   *     default: both sent and received (all friendships)
    *   accepted
    *    values: TRUE, FALSE
    *    default: both accepted and not accepted
@@ -287,6 +290,8 @@ module.exports = (app) => {
    *      {
    *        "userId": 2,
    *        "accepted": true
+   *        "firstName": "John"
+   *        "lastName": "Doe"
    *      }, ...
    *    ]
    */
