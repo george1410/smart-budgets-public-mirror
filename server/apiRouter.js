@@ -297,12 +297,12 @@ module.exports = (app) => {
       FROM friendships JOIN users ON userId1 = userId OR userId2 = userId 
       `;
 
-    if (req.query.received) {
+    if (req.query.status === 'sent') {
       sql += `WHERE userId1 = ${userId}`;
-    } else if (req.query.sent) {
+    } else if (req.query.status === 'received') {
       sql += `WHERE userId2 = ${userId}`;
     } else {
-      sql += `WHERE WHERE (userId1 = ${userId} OR userId2 = ${userId})`;
+      sql += `WHERE (userId1 = ${userId} OR userId2 = ${userId})`;
     }
 
     if (req.query.accepted) {
