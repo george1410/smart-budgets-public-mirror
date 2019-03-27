@@ -8,14 +8,13 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 62.5%;
     ${media.tablet`
       /* makes 1rem equal to 8px */
-      font-size: 56.25%;
+      font-size: 56.25%;ß∑
     `}
   }
 
   body {
     font-family: ${props => props.theme.font};
     color: ${props => props.theme.black};
-    /* background-color: ${props => props.theme.primaryBlue}; */
 
     &::-webkit-scrollbar {
       width: 0;
