@@ -263,7 +263,6 @@ module.exports = (app) => {
     }
   });
 
-<<<<<<< HEAD
   // a simple query dividing the sum by 4 between the two dates provided
   app.get('/api/users/:id/budget', (req, res) => {
     const querySelect = `
@@ -301,7 +300,7 @@ module.exports = (app) => {
         res.json(results);
       }
     });
-=======
+  });
   /**
    * POST route for adding a friend.
    * Endpoint: /api/users/{userid}/friends
@@ -451,6 +450,5 @@ module.exports = (app) => {
     } else {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
     }
->>>>>>> master
   });
 };
