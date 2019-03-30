@@ -40,15 +40,17 @@ const CategoryProgress = ({
     setStart();
     fetchTransactions(() => history.push('/feed'));
   };
+  const isOverBudget = () => (budget - spend) < 0;
+
   return (
-    <Wrapper onClick={fetchCategories}>
+    <Wrapper onClick={fetchCategories} overBudget={isOverBudget()}>
       <CategoryTitle
         color={color}
         textCol={textCol}
       >
         {displayName.toLowerCase()}
       </CategoryTitle>
-      <MainLabel>
+      <MainLabel overBudget={isOverBudget()}>
         {numeral(budget - spend).format('$0,0.00')}
       </MainLabel>
       <LabelWrapper>

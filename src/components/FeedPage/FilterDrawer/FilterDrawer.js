@@ -113,7 +113,7 @@ const FilterDrawer = ({
                 visible={shownCategories.includes(category.id[0])}
               />
             ))
-          }
+        }
       </Group>
       <ApplyFitlersButton type="button" onClick={onApplyFilters}>Apply Filters</ApplyFitlersButton>
       <ClearFiltersButton type="button" onClick={onClear}>Clear Filters</ClearFiltersButton>

@@ -6,14 +6,15 @@ import Header from '../Header/Header';
 import BudgetProgress from './BudgetProgress/BudgetProgress';
 import colors from '../../util/colors';
 import Wrapper from './Wrapper';
+import StatusMessage from '../StatusMessage/StatusMessage';
 
-const Overview = ({ categories }) => (
+const Overview = ({ categories, message }) => (
   <>
     <Header title="Budgets" />
     <Wrapper>
       {
         categories.length === 0 ? (
-          <p>No categories to show</p>
+          <StatusMessage message={message} dark />
         ) : (
           categories.map(
             category => (
@@ -33,10 +34,12 @@ const Overview = ({ categories }) => (
 
 Overview.defaultProps = {
   categories: [],
+  message: 'Could not fetch any categories. Try reloading the page.',
 };
 
 Overview.propTypes = {
   categories: PropTypes.instanceOf(Array),
+  message: PropTypes.string,
 };
 
 const mapStateToProps = state => ({

@@ -8,7 +8,7 @@ const UserCard = ({ user: { firstName, lastName } }) => (
   <Wrapper>
     <Gravatar
       style={{ borderRadius: '100px' }}
-      email="firstName"
+      email="sd"
       size={50}
     />
     <Name>{`${firstName} ${lastName}`}</Name>

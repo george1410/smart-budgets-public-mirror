@@ -5,15 +5,17 @@ import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   display: flex;
+  position: relative;
   font-size: ${props => props.theme.fontSmall};
   justify-content: space-between;
   align-items: center;
   align-self: flex-end;
   margin-right: calc((100vw - 50rem) / 2);
+  background-color: ${props => props.theme.white};
   width: 50rem;
   min-height: 5rem;
   padding: 0 2rem;
-  box-shadow: 0 1px 5px ${props => props.theme.primaryBlue};
+  border-bottom: 2px solid ${props => props.theme.offWhite};
   ${media.desktop`
     margin-right: calc((100vw - 72rem) / 2);
   `}

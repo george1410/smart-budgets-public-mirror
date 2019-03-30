@@ -10,6 +10,7 @@ const CategoryTitle = styled.span`
   font-weight: 500;
   text-transform: capitalize;
   margin-bottom: 1rem;
+  border-radius: ${props => props.theme.borderRadius};
 `;
 
 export default CategoryTitle;

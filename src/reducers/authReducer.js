@@ -11,7 +11,7 @@ export default (state = defaultAuthState, action) => {
     case AUTHENTICATE:
       return {
         ...state,
-        uid: action.payload.uid,
+        uid: action.payload.uid.toString(),
         authenticated: action.payload.token,
       };
     case DEAUTHENTICATE:

@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   display: flex;
@@ -12,6 +13,9 @@ const Wrapper = styled.div`
   position: relative;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  ${media.phone`
+    max-width: 15rem;
+  `}
 `;
 
 export default Wrapper;

@@ -4,8 +4,11 @@ const { generateCategorySpendSql, generateCategoryObjects } = require('./categor
 
 module.exports = (app) => {
   /**
-   * GET route for various user info.
-   * Endpoint: /api/users/{userid}
+   * GET route for returning all users based on search term.
+   * Endpoint: /api/users/
+   * Required Query Parameters:
+   *   searchTerm
+   *     'string'
    * Response format:
    *   [
    *     {
@@ -15,6 +18,30 @@ module.exports = (app) => {
    *       "period": "MONTH"
    *    }
    *  ]
+   */
+  app.get('/api/users/', (req, res) => {
+    const { id, searchTerm } = req.query;
+    const sql = `
+        SELECT userId, firstName, lastName, email, period FROM users WHERE userId <> ${id} AND (firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%')`;
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.' });
+      } else {
+        res.json(results);
+      }
+    });
+  });
+  /**
+   * GET route for various user info.
+   * Endpoint: /api/users/{userid}
+   * Response format:
+   *   {
+   *     "firstName": "John",
+   *     "lastName": "Doe",
+   *     "email": "example@email.com",
+   *     "period": "MONTH"
+   *  }
    */
   app.get('/api/users/:id', (req, res) => {
     const sql = `
@@ -297,6 +324,9 @@ module.exports = (app) => {
    * Endpoint: /api/users/{userid}/friends
    *
    * Optional Query Parameters:
+   *   status
+   *     values: sent, received
+   *     default: both sent and received (all friendships)
    *   accepted
    *    values: TRUE, FALSE
    *    default: both accepted and not accepted
@@ -305,6 +335,8 @@ module.exports = (app) => {
    *      {
    *        "userId": 2,
    *        "accepted": true
+   *        "firstName": "John"
+   *        "lastName": "Doe"
    *      }, ...
    *    ]
    */
@@ -313,12 +345,18 @@ module.exports = (app) => {
     let sql = `
       SELECT userId, userId1, userId2, accepted, firstName, lastName, period
       FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
-      WHERE (userId1 = ${userId}
-      OR userId2 = ${userId})
       `;
 
+    if (req.query.status === 'sent') {
+      sql += `WHERE userId1 = ${userId}`;
+    } else if (req.query.status === 'received') {
+      sql += `WHERE userId2 = ${userId}`;
+    } else {
+      sql += `WHERE (userId1 = ${userId} OR userId2 = ${userId})`;
+    }
+
     if (req.query.accepted) {
-      sql += `AND accepted = ${req.query.accepted}`;
+      sql += ` AND accepted = ${req.query.accepted}`;
     }
 
     pool.query(sql, (err, results) => {

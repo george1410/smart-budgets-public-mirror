@@ -13,7 +13,7 @@ const Icon = styled.svg`
   transition: all 0.2s ease-in-out;
 
   & > g {
-    fill: ${props => props.theme.primaryBlue};
+    fill: ${props => props.theme.grey};
   }
 `;
 

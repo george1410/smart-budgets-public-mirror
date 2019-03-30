@@ -6,6 +6,10 @@ export const Group = styled.div`
   flex-direction: ${props => (props.col ? 'column' : 'row')};
   flex-wrap: wrap;
   justify-content: center;
+  margin-bottom: 1rem;
+  ${media.tablet`
+    margin-bottom: 2rem;
+  `}
 `;
 
 export const GroupName = styled.div`
@@ -19,6 +23,7 @@ export const GroupName = styled.div`
   ${media.tablet`
     border-bottom: 1px solid ${props => props.theme.offWhite};
     color: ${props => props.theme.black};
+    margin-bottom: 1rem;
   `}
 `;
 

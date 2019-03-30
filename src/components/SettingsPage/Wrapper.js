@@ -5,18 +5,14 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 5rem 0;
+  padding: 10rem 0;
   height: 100vh;
-
-  & > button {
-    max-width: 41rem;
-  }
-
   ${media.tablet`
-    margin-top: 5rem;
-    height: calc(100vh - 10rem);
-    /* clears Header and bottom Navigation with fixed position */
-    padding: 0 0 5rem 0;
+    height: 100vh;
+    padding-bottom: ${props => props.theme.bottomPad};
+  `}
+  ${media.phone`
+    padding-top: 7rem;
   `}
 `;
 

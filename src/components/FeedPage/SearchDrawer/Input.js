@@ -12,7 +12,9 @@ export const Input = styled.input`
   width: 100%;
   padding: 4px 8px;
   font-size: 1.6rem;
-  border-radius: 0;
+  box-shadow: ${props => props.theme.insetShadow};
+  border-radius: ${props => props.theme.borderRadius};
+  line-height: normal;
 
   ::placeholder {
     color: ${props => props.theme.grey};

@@ -8,7 +8,7 @@ const Wrapper = styled.div`
 `;
 
 const Filter = styled.span.attrs(({ checked, theme }) => ({
-  bgColor: checked ? 'transparent' : theme.primaryBlue,
+  bgColor: checked ? 'transparent' : theme.grey,
   bRotate: checked ? 135 : 0,
   aRotate: checked ? -135 : 0,
   bTop: checked ? 0 : -0.8,
@@ -27,7 +27,7 @@ const Filter = styled.span.attrs(({ checked, theme }) => ({
   ::after {
     content: "";
     height: 2px;
-    background-color: ${props => props.theme.primaryBlue};
+    background-color: ${props => props.theme.grey};
     position: absolute;
     transition: all 0.2s;
   }

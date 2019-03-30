@@ -12,6 +12,8 @@ const Wrapper = styled.div`
   margin-right: 2rem;
   align-items: center;
   background-color: ${props => props.theme.primaryBlue};
+  box-shadow: ${props => props.theme.cardShadow};
+  border-radius: ${props => props.theme.borderRadius};
   padding: 2rem;
   justify-content: space-around;
   height: 11rem;
@@ -25,6 +27,7 @@ const Wrapper = styled.div`
     width: 20rem;
   `}
   ${media.tablet`
+    border-radius: 0;
     padding: 0;
     left: auto;
     height: ${props => (props.open ? '11' : '0')}rem;
@@ -34,7 +37,7 @@ const Wrapper = styled.div`
     top: 5rem;
     width: 100vw;
     background-color: ${props => props.theme.white};
-    box-shadow: 0 1px 5px ${props => props.theme.primaryBlue};
+    box-shadow: ${props => props.theme.bottomShadow};
     transition: all 0.3s ease-in;
     & * {
       opacity: ${props => (props.open ? '1' : '0')};

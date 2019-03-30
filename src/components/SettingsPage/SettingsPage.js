@@ -12,9 +12,9 @@ import {
 } from '../../actions/user';
 import Toggle from './Toggle/Toggle';
 import Wrapper from './Wrapper';
-import UserCard from './UserCard/UserCard';
+import ProfileCard from './ProfileCard/ProfileCard';
 import DayPicker from './DayPicker';
-import { SettingsRow, RowTitle } from './SettingsRow';
+import { SettingsGroup, SettingsRow, RowTitle } from './SettingsRow';
 
 const Settings = ({
   startLogout,
@@ -45,20 +45,22 @@ const Settings = ({
     <>
       <Header title="Settings" />
       <Wrapper>
-        <UserCard user={user} />
-        <SettingsRow>
-          <RowTitle>Budgeting Period</RowTitle>
-          <Toggle value={period} toggle={onSwitchPeriod} />
-        </SettingsRow>
-        <SettingsRow>
-          <RowTitle>Start of Period</RowTitle>
-          <DayPicker
-            onPeriodChange={onPeriodChange}
-            currentStart={periodStart}
-          />
-        </SettingsRow>
+        <ProfileCard user={user} />
+        <SettingsGroup>
+          <SettingsRow>
+            <RowTitle>Budgeting Period</RowTitle>
+            <Toggle value={period} toggle={onSwitchPeriod} />
+          </SettingsRow>
+          <SettingsRow>
+            <RowTitle>Start of Period</RowTitle>
+            <DayPicker
+              onPeriodChange={onPeriodChange}
+              currentStart={periodStart}
+            />
+          </SettingsRow>
+        </SettingsGroup>
         <div style={{ flex: 99 }} />
-        <Button title="Log Out" onClick={logout} />
+        <Button title="Log Out" onClick={logout} logout />
       </Wrapper>
     </>
   );
