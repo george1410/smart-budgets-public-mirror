@@ -24,14 +24,11 @@ function generateCategorySpendSql(req, badRequest, res) {
     SELECT SUM(transactions.amount) AS spend, categories.displayName FROM transactions
     JOIN categories ON transactions.categoryId = categories.categoryId
     WHERE transactions.userId = ${req.params.id} `;
-  let period = 'MONTH';
-  if (req.query.period) {
-    ({ period } = req.query);
-    period = period.toUpperCase();
-    if (period !== 'WEEK' && period !== 'MONTH') {
-      bad = true;
-      res.status(400).json({ error: 'Bad Request. Invalid period.' });
-    }
+  let { period } = req.query;
+  period = period.toUpperCase();
+  if (period !== 'WEEK' && period !== 'MONTH') {
+    bad = true;
+    res.status(400).json({ error: 'Bad Request. Invalid period.' });
   }
   sql += `
     AND ${period}(transactions.date) = ${period}(CURDATE()) 

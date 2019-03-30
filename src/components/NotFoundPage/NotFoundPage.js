@@ -1,70 +1,18 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import media from '../../util/mediaQueries';
+import Background from './Background';
+import Message from './Message';
+import StyledLink from './StyledLink';
 
-const Wrapper = styled.div`
-  overflow: hidden;
-`;
-
-const FourOhFour = styled.div`
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  color: #f1f1f1;
-  height: 100vh;
-  width: 100vw;
-  text-align: center;
-  font-size: 35rem;
-  ${media.tablet`font-size: 25rem;`}
-  ${media.phone`
-    flex-direction: column;
-  `}
-`;
-
-const Message = styled.p`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background-color: ${props => props.theme.primaryBlue};
-  padding: 1.5rem 2.5rem;
-  color: ${props => props.theme.white};
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  font-size: 1.8rem;
-  text-align: center;
-`;
-
-const StyledLink = styled(Link)`
-  position: absolute;
-  top: 70vh;
-  left: 50vw;
-  transform: translate(-50%, -50%);
-  padding: 1.5rem 2.5rem;
-  color: #000;
-  font-size: 1.8rem;
-  text-decoration: none;
-  border-bottom: 1px solid #000;
-  transition: background-color 0.2s ease-in-out;
-  user-select: none;
-
-  &:active {
-    transform: translate(-50%, -45%);
-  }
-`;
-
-const index = () => (
-  <Wrapper>
+const NotFoundPage = () => (
+  <>
     <Message>This is not the page you are looking for.</Message>
-    <FourOhFour>
+    <Background>
       <div>4</div>
       <div>0</div>
       <div>4</div>
-    </FourOhFour>
+    </Background>
     <StyledLink to="/home">Back Home</StyledLink>
-  </Wrapper>
+  </>
 );
 
-export default index;
+export default NotFoundPage;

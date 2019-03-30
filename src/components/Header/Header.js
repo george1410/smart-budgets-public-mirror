@@ -1,43 +1,36 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import media from '../../util/mediaQueries';
+import { withRouter } from 'react-router-dom';
+import Wrapper from './Wrapper';
+import Title from './Title';
+import BackButton from './BackButton';
 
-const Wrapper = styled.header`
-  height: 5rem;
-  position: fixed;
-  width: 100vw;
-  background-color: ${props => props.theme.white};
-  box-shadow: 0 1px 0 ${props => props.theme.shadowCol};
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
-  ${media.tablet`
-    display: flex;
-    top: 0;
-  `}
-`;
+const Header = ({ title, back, history }) => {
+  const toPreviousPage = () => history.goBack();
 
-const Title = styled.span`
-  color: ${props => props.theme.primaryBlue};
-  font-size: ${props => props.theme.fontSmall};
-`;
-
-const Header = ({ title }) => (
-  <Wrapper>
-    <Title>
-      {title}
-    </Title>
-  </Wrapper>
-);
+  return (
+    <Wrapper>
+      {
+        back && <BackButton action={toPreviousPage} />
+      }
+      <Title shift={back}>
+        {title}
+      </Title>
+    </Wrapper>
+  );
+};
 
 Header.defaultProps = {
   title: 'Title',
+  back: false,
 };
 
 Header.propTypes = {
   title: PropTypes.string,
+  history: PropTypes.shape({
+    goBack: PropTypes.func.isRequired,
+  }).isRequired,
+  back: PropTypes.bool,
 };
 
-export default Header;
+export default withRouter(Header);
