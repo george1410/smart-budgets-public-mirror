@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
+import { ModalProvider } from 'styled-react-modal';
 import configureStore from './store/configureStore';
 import { GlobalStyle, theme } from './style';
 import AppRouter from './router/AppRouter';
@@ -16,8 +17,10 @@ const store = configureStore();
 const jsx = (
   <ThemeProvider theme={theme}>
     <Provider store={store}>
-      <GlobalStyle />
-      <AppRouter />
+      <ModalProvider>
+        <GlobalStyle />
+        <AppRouter />
+      </ModalProvider>
     </Provider>
   </ThemeProvider>
 );
