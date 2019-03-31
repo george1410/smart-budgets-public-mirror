@@ -3,6 +3,7 @@ import Header from '../Header/Header';
 import Wrapper from './Wrapper';
 import SocialSection from './SocialSection/SocialSection';
 import Card from './Card/Card';
+import LeaderBoard from './LeaderBoard/LeaderBoard';
 
 const Home = () => (
   <>
@@ -18,6 +19,7 @@ const Home = () => (
           linkTo="/friends"
         />
       </SocialSection>
+      <LeaderBoard />
     </Wrapper>
   </>
 );
