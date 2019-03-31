@@ -19,6 +19,7 @@ if (!process.env.NO_JWT) {
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
+// Enable automatic budget recalculations
 budgetCalculator.initialise();
 
 // Auth Routing

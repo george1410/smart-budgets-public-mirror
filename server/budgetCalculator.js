@@ -30,7 +30,6 @@ function calculateBudgets(userId) {
   });
 }
 
-
 module.exports.initialise = () => {
   const sql = 'SELECT userId, period, periodStart FROM users';
   pool.query(sql, (error, results) => {
@@ -45,9 +44,23 @@ module.exports.initialise = () => {
 
       schedule.scheduleJob(`${result.userId}`, rule, calculateBudgets.bind(null, result.userId));
     });
+    module.exports.update(1);
   });
 };
 
 module.exports.update = (userId) => {
-  // TODO: RESCHEDULE THE CURRENT USERS JOB.
+  const sql = `SELECT userId, period, periodStart FROM users WHERE userId = ${userId}`;
+  pool.query(sql, (error, results) => {
+    if (error) throw error;
+    results.forEach((result) => {
+      let rule;
+      if (result.period === 'MONTH') {
+        rule = `0 0 0 ${result.periodStart} * *`; // 00:00 of nth day of MONTH
+      } else {
+        rule = `0 0 0 * * ${result.periodStart}`; // 00:00 of nth day of WEEK
+      }
+
+      schedule.rescheduleJob(schedule.scheduledJobs[userId], rule);
+    });
+  });
 };
