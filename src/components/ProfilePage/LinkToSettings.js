@@ -18,6 +18,7 @@ const ToSettings = styled(Link)`
   color: ${props => props.theme.black};
   font-size: 1.4rem;
   font-weight: 500;
+  transition: ${props => props.theme.transition};
 
   &:hover {
     transform: scale(1.05);
