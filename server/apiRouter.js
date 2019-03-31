@@ -16,19 +16,47 @@ module.exports = (app) => {
    *       "lastName": "Doe",
    *       "email": "example@email.com",
    *       "period": "MONTH"
+   *       "sentRequest": true,             // means that user {id} has sent a request to John Doe
+   *       "receivedRequest": false         // means that John Doe has sent a request to user {id}
    *    }
    *  ]
    */
   app.get('/api/users/', (req, res) => {
     const { id, searchTerm } = req.query;
     const sql = `
-        SELECT userId, firstName, lastName, email, period FROM users WHERE userId <> ${id} AND (firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%')`;
+      SELECT userId, firstName, lastName, email, period, userId1 AS sender, userId2 AS receiver
+      FROM users
+      LEFT JOIN friendships
+      ON userId = userId2 OR userId = userId1
+      WHERE userId NOT IN (SELECT userId
+                            FROM users
+                            JOIN friendships
+                            ON userId = userId1 OR userId = userId2
+                            WHERE accepted = 1)
+      AND userId <> ${id}
+      AND (firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%')
+    `;
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {
         res.status(404).json({ error: 'No results were found.' });
       } else {
-        res.json(results);
+        const output = [];
+        results.forEach((result) => {
+          const ob = result;
+          ob.sentRequest = false;
+          ob.receivedRequest = false;
+          if (result.sender === parseInt(id, 10)) {
+            ob.sentRequest = true;
+          }
+          if (result.receiver === parseInt(id, 10)) {
+            ob.receivedRequest = true;
+          }
+          delete ob.sender;
+          delete ob.receiver;
+          output.push(ob);
+        });
+        res.json(output);
       }
     });
   });
@@ -67,7 +95,6 @@ module.exports = (app) => {
    *    period: "WEEK" | "MONTH"
    *  }
    */
-  // TODO: TRIGGER UPDATE OF THE CRON JOBS HERE.
   app.post('/api/users/:id/period', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
@@ -80,7 +107,7 @@ module.exports = (app) => {
     });
   });
 
-  /**
+  /** !!CURRENTLY THIS ENDPOINT IS NOT IN USE!!
    * POST route for updating user period value
    * Endpoint: /api/users/{id}/periodStart
    *
@@ -89,7 +116,6 @@ module.exports = (app) => {
    *     periodStart: Number from 1 to 31
    *   }
    */
-  // TODO: TRIGGER UPDATE OF THE CRON JOBS HERE.
   app.post('/api/users/:id/periodStart', (req, res) => {
     const { periodStart } = req.body;
     const { id } = req.params;
