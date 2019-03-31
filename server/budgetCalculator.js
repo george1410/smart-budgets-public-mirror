@@ -15,15 +15,23 @@ function calculateBudgets(userId) {
     if (connErr) throw connErr;
     conn.query(query, (err, res) => {
       if (err) throw err;
-      res.forEach((budgetResult) => {
-        query = `
-          UPDATE budgets
-          SET budget = ${budgetResult.newBudget}
-          WHERE userId = ${userId}
-          AND categoryId = ${budgetResult.categoryId}
-        `;
-        conn.query(query, (qerr) => {
-          if (qerr) throw qerr;
+      query = `
+        UPDATE budgets
+        SET budget = 0
+        WHERE userId = ${userId}
+      `;
+      conn.query(query, (qerr) => {
+        if (qerr) throw qerr;
+        res.forEach((budgetResult) => {
+          query = `
+            UPDATE budgets
+            SET budget = ${budgetResult.newBudget}
+            WHERE userId = ${userId}
+            AND categoryId = ${budgetResult.categoryId}
+          `;
+          conn.query(query, (qerr1) => {
+            if (qerr1) throw qerr;
+          });
         });
       });
     });
@@ -44,7 +52,6 @@ module.exports.initialise = () => {
 
       schedule.scheduleJob(`${result.userId}`, rule, calculateBudgets.bind(null, result.userId));
     });
-    module.exports.update(1);
   });
 };
 
@@ -64,3 +71,5 @@ module.exports.update = (userId) => {
     });
   });
 };
+
+module.exports.getJobs = () => (schedule.scheduledJobs);
