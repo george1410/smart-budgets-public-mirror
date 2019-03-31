@@ -16,7 +16,7 @@ const Section = ({
             users.map(user => (
               <UserCard
                 key={user.userId}
-                {...user}
+                user={user}
                 type={type}
                 respond={respond}
                 removeRequest={removeRequest}

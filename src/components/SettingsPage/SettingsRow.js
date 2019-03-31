@@ -13,8 +13,11 @@ export const SettingsGroup = styled.div`
     }
 
     &:last-of-type {
-      border-top: none;
       border-radius: ${props => props.theme.bottomCorners};
+    }
+
+    &:only-of-type {
+      border-radius: ${props => props.theme.borderRadius};
     }
 
     ${media.phone`

@@ -11,7 +11,6 @@ const LogoutButton = styled.button`
   font-weight: 500;
   background-color: ${props => props.theme.primaryBlue};
   box-shadow: ${props => props.theme.cardShadow};
-  /* border: 1px solid ${props => props.theme.primaryBlue}; */
   border: none;
   border-radius: ${props => props.theme.borderRadius};
   user-select: none;

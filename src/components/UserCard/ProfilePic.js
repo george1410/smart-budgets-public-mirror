@@ -5,8 +5,8 @@ import media from '../../util/mediaQueries';
 const ProfilePic = styled(Gravatar)`
   border-radius: 4px;
   ${media.phone`
-    width: 30px;
-    height: 30px;
+    width: ${props => props.side || '30'}px;
+    height: ${props => props.side || '30'}px;
   `}
 `;
 
