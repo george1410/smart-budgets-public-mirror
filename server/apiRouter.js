@@ -1,6 +1,6 @@
 const pool = require('./database');
 const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
-
+const pointsCalculator = require('./pointsCalculator');
 
 module.exports = (app) => {
   /**
@@ -440,5 +440,11 @@ module.exports = (app) => {
     } else {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
     }
+  });
+
+  app.get('/api/test/points', (req, res) => {
+    pointsCalculator.calculate(1, (results) => {
+      res.send(results);
+    });
   });
 };
