@@ -5,7 +5,13 @@ import Wrapper from './Wrapper';
 import SectionHeader from './SectionHeader';
 
 const Section = ({
-  title, users, type, respond, removeRequest,
+  title,
+  users,
+  received,
+  sent,
+  respond,
+  removeRequest,
+  friend,
 }) => (
   <Wrapper>
     {
@@ -17,9 +23,11 @@ const Section = ({
               <UserCard
                 key={user.userId}
                 user={user}
-                type={type}
+                sent={sent}
+                received={received}
                 respond={respond}
                 removeRequest={removeRequest}
+                friend={friend}
               />
             ))}
         </>
@@ -31,17 +39,21 @@ const Section = ({
 Section.defaultProps = {
   title: 'Section Title',
   users: undefined,
-  type: undefined,
   respond: undefined,
   removeRequest: undefined,
+  received: false,
+  sent: false,
+  friend: false,
 };
 
 Section.propTypes = {
   users: PropTypes.instanceOf(Array),
   title: PropTypes.string,
-  type: PropTypes.string,
+  received: PropTypes.bool,
+  sent: PropTypes.bool,
   respond: PropTypes.func,
   removeRequest: PropTypes.func,
+  friend: PropTypes.bool,
 };
 
 export default Section;

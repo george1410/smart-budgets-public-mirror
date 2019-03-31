@@ -57,10 +57,6 @@ const FriendProfile = ({
       setOpacity(1);
     });
   };
-  const beforeClose = () => new Promise((resolve) => {
-    setOpacity(0);
-    setTimeout(resolve, 200);
-  });
   return (
     <div>
       <StyledModal
@@ -68,7 +64,6 @@ const FriendProfile = ({
         onBackgroundClick={toggleModal}
         onEscapeKeydown={toggleModal}
         afterOpen={afterOpen}
-        beforeClose={beforeClose}
         opacity={opacity}
       >
         <CloseModalButton close={toggleModal} />
@@ -85,13 +80,14 @@ const FriendProfile = ({
         Points:
           {
           ' '
-        }
+          }
           {points}
         </Points>
         <Button
           type="button"
           onClick={removeFriend}
           decline
+          wide
         >
         Remove Friend
         </Button>

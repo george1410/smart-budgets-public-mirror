@@ -13,12 +13,19 @@ const UserCard = ({
     firstName,
     lastName,
   },
+  sent,
+  received,
+  friend,
+  searched,
   type,
   respond,
   addFriend,
   removeRequest,
 }) => {
-  const [btnText, setBtnText] = useState('Send Request');
+  const [sendBtnText, setsendBtnText] = useState('Send Request');
+  const [cancelBtnText, setcancelBtnText] = useState('Cancel Request');
+  const [acceptBtnText, setAcceptBtnText] = useState('Accept');
+  const [declineBtnText, setDeclineBtnText] = useState('Decline');
   const [btnDisabled, setBtnDisabled] = useState(false);
   const [isModalOpen, setModalOpen] = useState(false);
   const toggleModal = () => {
@@ -26,20 +33,26 @@ const UserCard = ({
   };
   const acceptRequest = () => {
     respond(userId, true);
+    setAcceptBtnText('Accepted');
+    setBtnDisabled(true);
   };
   const declineRequest = () => {
     respond(userId, false);
+    setDeclineBtnText('Declined');
+    setBtnDisabled(true);
   };
   const sendRequest = () => {
     addFriend(userId);
-    setBtnText('Request Sent');
+    setsendBtnText('Request Sent');
     setBtnDisabled(true);
   };
   const cancelSent = () => {
     removeRequest(userId);
+    setcancelBtnText('Cancelled');
+    setBtnDisabled(true);
   };
   return (
-    <Wrapper type={type} onClick={type === 'friends' ? toggleModal : undefined}>
+    <Wrapper friend={friend} onClick={friend ? toggleModal : undefined}>
       <ProfilePic email={firstName} size={40} />
       <Name shift={type}>
         {firstName}
@@ -47,39 +60,43 @@ const UserCard = ({
         {lastName}
       </Name>
       {
-      type === 'received'
+      received
       && (
         <>
           <Button
             type="button"
             onClick={acceptRequest}
+            disabled={btnDisabled}
           >
-            Accept
+            {acceptBtnText}
           </Button>
           <Button
             decline
             type="button"
             onClick={declineRequest}
+            disabled={btnDisabled}
           >
-            Decline
+            {declineBtnText}
           </Button>
         </>
       )
       }
       {
-        type === 'sent'
+        sent
         && (
         <Button
           type="button"
           onClick={cancelSent}
           decline
+          wide
+          disabled={btnDisabled}
         >
-        Cancel request
+          {cancelBtnText}
         </Button>
         )
       }
       {
-        type === 'add'
+        !sent && !received && searched
         && (
         <Button
           type="button"
@@ -87,7 +104,7 @@ const UserCard = ({
           disabled={btnDisabled}
           wide
         >
-          {btnText}
+          {sendBtnText}
         </Button>
         )
       }
@@ -106,6 +123,8 @@ UserCard.defaultProps = {
   respond: undefined,
   addFriend: undefined,
   removeRequest: undefined,
+  searched: false,
+  friend: false,
 };
 
 UserCard.propTypes = {
@@ -118,6 +137,10 @@ UserCard.propTypes = {
   type: PropTypes.string,
   addFriend: PropTypes.func,
   removeRequest: PropTypes.func,
+  searched: PropTypes.bool,
+  sent: PropTypes.bool.isRequired,
+  received: PropTypes.bool.isRequired,
+  friend: PropTypes.bool,
 };
 
 export default UserCard;

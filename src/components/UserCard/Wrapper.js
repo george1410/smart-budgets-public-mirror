@@ -28,8 +28,8 @@ const Wrapper = styled.div`
   }
 
   &:hover {
-    border: 2px solid ${props => (props.type === 'friends' ? props.theme.primaryBlue : 'none')};
-    cursor: ${props => (props.type === 'friends' ? 'pointer' : 'default')};
+    border: 2px solid ${props => (props.friend ? props.theme.primaryBlue : 'none')};
+    cursor: ${props => (props.friend ? 'pointer' : 'default')};
   }
 
   ${media.phone`
@@ -37,9 +37,9 @@ const Wrapper = styled.div`
     box-shadow: ${props => props.theme.bottomShadow};
 
     &:hover {
-      border: 2px solid ${props => (props.type === 'friends' ? props.theme.offWhite : 'none')};
-      border-bottom: 2px solid ${props => (props.type === 'friends' ? props.theme.white : 'none')};
-      cursor: ${props => (props.type === 'friends' ? 'pointer' : 'default')};
+      border: 2px solid ${props => (props.friend ? props.theme.offWhite : 'none')};
+      border-bottom: 2px solid ${props => (props.friend ? props.theme.white : 'none')};
+      cursor: ${props => (props.friend ? 'pointer' : 'default')};
     }
 
     &:first-of-type {
