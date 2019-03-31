@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import {
-  HomeIcon, FeedIcon, SettingsIcon, BudgetsIcon,
+  HomeIcon, FeedIcon, ProfileIcon, BudgetsIcon,
 } from './Icons';
 import Icon from './Icon';
 import Logo from './Logo.png';
@@ -30,9 +30,9 @@ const Navigation = () => (
       <span>Feed</span>
       <FeedIcon style={{ transform: 'rotate(90deg)' }} />
     </NavItem>
-    <NavItem to="/settings">
-      <span>Settings</span>
-      <SettingsIcon />
+    <NavItem to="/profile">
+      <span>Profile</span>
+      <ProfileIcon />
     </NavItem>
   </NavigationBar>
 );
