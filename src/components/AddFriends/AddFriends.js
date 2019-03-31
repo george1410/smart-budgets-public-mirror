@@ -8,6 +8,9 @@ import media from '../../util/mediaQueries';
 import UserCard from '../UserCard/UserCard';
 import api from '../../api/api';
 import StatusMessage from '../StatusMessage/StatusMessage';
+import {
+  respondToRequest, removeFriend,
+} from '../../actions/friends';
 
 const Wrapper = styled.div`
   display: flex;
@@ -91,7 +94,7 @@ const Button = styled.button`
   `}
 `;
 
-const AddFriends = ({ id }) => {
+const AddFriends = ({ id, respond, remove }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [friends, setFriends] = useState([]);
   const [error, setError] = useState(undefined);
@@ -146,7 +149,16 @@ const AddFriends = ({ id }) => {
         </Form>
         {
           friends && friends.map(user => (
-            <UserCard user={user} key={uuid()} addFriend={addFriend} type="add" />
+            <UserCard
+              key={uuid()}
+              addFriend={addFriend}
+              removeRequest={remove}
+              respond={respond}
+              user={user}
+              sent={user.sentRequest}
+              received={user.receivedRequest}
+              searched
+            />
           ))
         }
         {
@@ -159,10 +171,17 @@ const AddFriends = ({ id }) => {
 
 AddFriends.propTypes = {
   id: PropTypes.string.isRequired,
+  respond: PropTypes.func.isRequired,
+  remove: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   id: state.auth.uid,
 });
 
-export default connect(mapStateToProps)(AddFriends);
+const mapDispatchToProps = dispatch => ({
+  respond: (id, accepted) => dispatch(respondToRequest(id, accepted)),
+  remove: friendId => dispatch(removeFriend(friendId)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddFriends);

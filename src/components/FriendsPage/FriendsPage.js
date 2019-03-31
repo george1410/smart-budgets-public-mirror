@@ -42,17 +42,32 @@ const FriendsPage = ({
       <Header title="Friends List" back />
       <Wrapper>
         {
-      (friends || sent || received)
-        ? (
-          <>
-            <Section title="Received" users={received} type="received" respond={respond} />
-            <Section title="Sent" users={sent} removeRequest={remove} type="sent" />
-            <Section title="Friends" users={friends} type="friends" removeRequest={remove} />
-          </>
-        )
-        : (
-          <StatusMessage message="Try sending some friend requests first." />
-        )
+          (friends || sent || received)
+            ? (
+              <>
+                <Section
+                  title="Received"
+                  users={received}
+                  respond={respond}
+                  received
+                />
+                <Section
+                  title="Sent"
+                  users={sent}
+                  removeRequest={remove}
+                  sent
+                />
+                <Section
+                  title="Friends"
+                  users={friends}
+                  friend
+                  removeRequest={remove}
+                />
+              </>
+            )
+            : (
+              <StatusMessage message="Try making some friends first." />
+            )
         }
       </Wrapper>
     </>
