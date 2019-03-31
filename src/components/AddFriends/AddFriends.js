@@ -146,7 +146,7 @@ const AddFriends = ({ id }) => {
         </Form>
         {
           friends && friends.map(user => (
-            <UserCard {...user} key={uuid()} addFriend={addFriend} type="add" />
+            <UserCard user={user} key={uuid()} addFriend={addFriend} type="add" />
           ))
         }
         {
