@@ -390,23 +390,33 @@ module.exports = (app) => {
       sql += ` AND accepted = ${req.query.accepted}`;
     }
 
-    pointsCalculator.calculate(userId, (points) => {
-      pool.query(sql, (err, results) => {
-        if (err) throw err;
-        const resArr = [];
-        results.forEach((result) => {
-          if (result.userId.toString() !== userId) {
-            const obj = {};
-            obj.accepted = result.accepted;
-            obj.userId = result.userId;
-            obj.firstName = result.firstName;
-            obj.lastName = result.lastName;
-            obj.period = result.period;
-            obj.points = points;
-            resArr.push(obj);
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      const strippedResults = [];
+      results.forEach((result) => {
+        if (result.userId.toString() !== userId) {
+          strippedResults.push(result);
+        }
+      });
+
+      const resArr = [];
+      let counter = 0;
+      strippedResults.forEach((result) => {
+        const obj = {};
+        obj.accepted = result.accepted;
+        obj.userId = result.userId;
+        obj.firstName = result.firstName;
+        obj.lastName = result.lastName;
+        obj.period = result.period;
+
+        pointsCalculator.calculate(result.userId, (points) => {
+          obj.points = points;
+          resArr.push(obj);
+          counter += 1;
+          if (counter === strippedResults.length) {
+            res.json(resArr);
           }
         });
-        res.json(resArr);
       });
     });
   });
