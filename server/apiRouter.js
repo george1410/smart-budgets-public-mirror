@@ -67,6 +67,7 @@ module.exports = (app) => {
    *    period: "WEEK" | "MONTH"
    *  }
    */
+  // TODO: TRIGGER UPDATE OF THE CRON JOBS HERE.
   app.post('/api/users/:id/period', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
@@ -88,6 +89,7 @@ module.exports = (app) => {
    *     periodStart: Number from 1 to 31
    *   }
    */
+  // TODO: TRIGGER UPDATE OF THE CRON JOBS HERE.
   app.post('/api/users/:id/periodStart', (req, res) => {
     const { periodStart } = req.body;
     const { id } = req.params;
