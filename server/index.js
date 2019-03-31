@@ -20,8 +20,6 @@ if (!process.env.NO_JWT) {
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
 
-pointsCalculator.calculate(1);
-
 // Enable automatic budget recalculations
 budgetCalculator.initialise();
 

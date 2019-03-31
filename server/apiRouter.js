@@ -72,17 +72,20 @@ module.exports = (app) => {
    *  }
    */
   app.get('/api/users/:id', (req, res) => {
-    const sql = `
-        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}`;
-    pool.query(sql, (error, results) => {
-      if (error) throw error;
-      if (results.length < 1) {
-        res.status(404).json({ error: 'No results were found.' });
-      } else {
-        const out = results[0];
-        out.points = Math.floor(Math.random() * (+500 - +100) + +100);
-        res.json(out);
-      }
+    pointsCalculator.calculate(req.params.id, (points) => {
+      const sql = `
+        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}
+      `;
+      pool.query(sql, (error, results) => {
+        if (error) throw error;
+        if (results.length < 1) {
+          res.status(404).json({ error: 'No results were found.' });
+        } else {
+          const out = results[0];
+          out.points = points;
+          res.json(out);
+        }
+      });
     });
   });
 
@@ -387,22 +390,24 @@ module.exports = (app) => {
       sql += ` AND accepted = ${req.query.accepted}`;
     }
 
-    pool.query(sql, (err, results) => {
-      if (err) throw err;
-      const resArr = [];
-      results.forEach((result) => {
-        if (result.userId.toString() !== userId) {
-          const obj = {};
-          obj.accepted = result.accepted;
-          obj.userId = result.userId;
-          obj.firstName = result.firstName;
-          obj.lastName = result.lastName;
-          obj.period = result.period;
-          obj.points = Math.floor(Math.random() * (+500 - +100) + +100);
-          resArr.push(obj);
-        }
+    pointsCalculator.calculate(userId, (points) => {
+      pool.query(sql, (err, results) => {
+        if (err) throw err;
+        const resArr = [];
+        results.forEach((result) => {
+          if (result.userId.toString() !== userId) {
+            const obj = {};
+            obj.accepted = result.accepted;
+            obj.userId = result.userId;
+            obj.firstName = result.firstName;
+            obj.lastName = result.lastName;
+            obj.period = result.period;
+            obj.points = points;
+            resArr.push(obj);
+          }
+        });
+        res.json(resArr);
       });
-      res.json(resArr);
     });
   });
 
@@ -440,11 +445,5 @@ module.exports = (app) => {
     } else {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
     }
-  });
-
-  app.get('/api/test/points', (req, res) => {
-    pointsCalculator.calculate(1, (results) => {
-      res.send(results);
-    });
   });
 };

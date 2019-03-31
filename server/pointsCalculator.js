@@ -49,7 +49,7 @@ module.exports.calculate = (userId, callback) => {
         const remainingBudget = results1[0].totalBudget - results1[0].totalSpend;
         const bonusPoints = results1[0].streak > 1 ? results1[0].streak * 5 - 5 : 0;
         const points = Math.ceil((remainingBudget / results1[0].totalBudget) * 100) + bonusPoints;
-        callback(JSON.stringify(points));
+        callback(points);
       });
     });
   });
