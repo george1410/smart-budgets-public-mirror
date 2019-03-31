@@ -22,7 +22,16 @@ module.exports = (app) => {
   app.get('/api/users/', (req, res) => {
     const { id, searchTerm } = req.query;
     const sql = `
-        SELECT userId, firstName, lastName, email, period FROM users WHERE userId <> ${id} AND (firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%')`;
+      SELECT userId, firstName, lastName, email, period
+      FROM users
+      WHERE userId NOT IN (SELECT userId
+                            FROM users
+                            JOIN friendships
+                            ON users.userId = friendships.userId1 OR users.userId = friendships.userId2
+                            WHERE userId <> ${id} AND friendships.accepted = 1)
+      AND userId <> ${id}
+      AND (firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%')
+    `;
     pool.query(sql, (error, results) => {
       if (error) throw error;
       if (results.length < 1) {
@@ -67,7 +76,6 @@ module.exports = (app) => {
    *    period: "WEEK" | "MONTH"
    *  }
    */
-  // TODO: TRIGGER UPDATE OF THE CRON JOBS HERE.
   app.post('/api/users/:id/period', (req, res) => {
     const { period } = req.body;
     const { id } = req.params;
@@ -80,7 +88,7 @@ module.exports = (app) => {
     });
   });
 
-  /**
+  /** !!CURRENTLY THIS ENDPOINT IS NOT IN USE!!
    * POST route for updating user period value
    * Endpoint: /api/users/{id}/periodStart
    *
@@ -89,7 +97,6 @@ module.exports = (app) => {
    *     periodStart: Number from 1 to 31
    *   }
    */
-  // TODO: TRIGGER UPDATE OF THE CRON JOBS HERE.
   app.post('/api/users/:id/periodStart', (req, res) => {
     const { periodStart } = req.body;
     const { id } = req.params;
