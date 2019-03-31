@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const apiRouter = require('./apiRouter');
 const authRouter = require('./authRouter');
 const idMatcher = require('./middleware/idMatcher');
+const budgetCalculator = require('./budgetCalculator');
 
 const app = express();
 app.use(bodyParser.json({ type: '*/*' }));
@@ -17,6 +18,9 @@ if (!process.env.NO_JWT) {
 }
 
 app.use(express.static(path.join(__dirname, '..', 'build')));
+
+// Enable automatic budget recalculations
+budgetCalculator.initialise();
 
 // Auth Routing
 authRouter(app);
