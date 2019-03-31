@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import uuid from 'uuid';
 import { startSetFriends } from '../../../actions/friends';
 import BoardRow from './BoardRow';
 import order from '../../../selectors/points';
@@ -48,7 +49,7 @@ const leaderBoard = ({ setFriends, ranking: { friends, user } }) => {
       <Middle>
         {
           friends && friends.map(friend => (
-            <BoardRow index={friend.index} key={friend.userId} {...friend} />
+            <BoardRow index={friend.index} key={uuid()} {...friend} />
           ))
         }
       </Middle>

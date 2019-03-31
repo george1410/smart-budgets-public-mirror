@@ -9,7 +9,8 @@ const Wrapper = styled.div`
   padding: 0 2rem;
   font-size: 1.4rem;
   min-height: 4rem;
-  background-color: ${props => (props.user ? props.theme.white : props.theme.white)};
+  background-color: ${props => (props.highlight ? props.theme.primaryBlue : props.theme.white)};
+  color: ${props => (props.highlight ? props.theme.white : props.theme.black)};
   font-weight: 500;
   box-shadow: ${props => (props.user && '0 -5px 2px rgba(0, 0, 0, 0.1)')};
   border-radius: ${props => (props.user && props.theme.bottomCorners)};
@@ -27,9 +28,9 @@ const Points = styled.span`
 `;
 
 const BoardRow = ({
-  index, firstName, lastName, points, user,
+  index, firstName, lastName, points, user, highlight,
 }) => (
-  <Wrapper user={user}>
+  <Wrapper user={user} highlight={highlight}>
     <Index>{index}</Index>
     <span>
       {firstName}
@@ -44,6 +45,7 @@ BoardRow.defaultProps = {
   user: false,
   index: 1,
   points: 0,
+  highlight: false,
 };
 
 BoardRow.propTypes = {
@@ -52,6 +54,7 @@ BoardRow.propTypes = {
   points: PropTypes.number,
   firstName: PropTypes.string.isRequired,
   lastName: PropTypes.string.isRequired,
+  highlight: PropTypes.bool,
 };
 
 export default BoardRow;
