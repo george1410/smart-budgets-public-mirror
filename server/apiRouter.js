@@ -72,7 +72,7 @@ module.exports = (app) => {
     const { period } = req.body;
     const { id } = req.params;
     const sql = `
-      UPDATE users SET period = '${period}' WHERE userId = ${id}
+      UPDATE users SET newPeriod = '${period}' WHERE userId = ${id}
       `;
     pool.query(sql, (err) => {
       if (err) throw err;

@@ -1,6 +1,23 @@
 const schedule = require('node-schedule');
 const pool = require('./database');
 
+function update(userId) {
+  const sql = `SELECT userId, period, periodStart FROM users WHERE userId = ${userId}`;
+  pool.query(sql, (error, results) => {
+    if (error) throw error;
+    results.forEach((result) => {
+      let rule;
+      if (result.period === 'MONTH') {
+        rule = `0 0 0 ${result.periodStart} * *`; // 00:00 of nth day of MONTH
+      } else {
+        rule = `0 0 0 * * ${result.periodStart}`; // 00:00 of nth day of WEEK
+      }
+
+      schedule.rescheduleJob(schedule.scheduledJobs[userId], rule);
+    });
+  });
+}
+
 function calculateBudgets(userId) {
   let query = `
     SELECT period
@@ -40,8 +57,41 @@ function calculateBudgets(userId) {
               if (qerr1) throw qerr;
             });
           });
+          update(userId);
         });
       });
+    });
+  });
+}
+
+function resetPeriod(userId) {
+  pool.getConnection((connErr, conn) => {
+    if (connErr) throw connErr;
+    let sql = `
+      SELECT period, newPeriod FROM users WHERE userId = ${userId}
+    `;
+    conn.query(sql, (err, result) => {
+      if (err) throw err;
+      if (result[0].period !== result[0].newPeriod) {
+        let resetDay;
+        if (result[0].newPeriod === 'WEEK') {
+          resetDay = (new Date()).getDay();
+        } else {
+          resetDay = (new Date()).getDate();
+        }
+        sql = `
+          UPDATE users
+          SET period = '${result[0].newPeriod}',
+              periodStart = ${resetDay} 
+          WHERE userId = ${userId}
+        `;
+        conn.query(sql, (err1) => {
+          if (err1) throw err1;
+          calculateBudgets(userId);
+        });
+      } else {
+        calculateBudgets(userId);
+      }
     });
   });
 }
@@ -58,25 +108,9 @@ module.exports.initialise = () => {
         rule = `0 0 0 * * ${result.periodStart}`; // 00:00 of nth day of WEEK
       }
 
-      schedule.scheduleJob(`${result.userId}`, rule, calculateBudgets.bind(null, result.userId));
+      schedule.scheduleJob(`${result.userId}`, rule, resetPeriod.bind(null, result.userId));
     });
-  });
-};
-
-module.exports.update = (userId) => {
-  const sql = `SELECT userId, period, periodStart FROM users WHERE userId = ${userId}`;
-  pool.query(sql, (error, results) => {
-    if (error) throw error;
-    results.forEach((result) => {
-      let rule;
-      if (result.period === 'MONTH') {
-        rule = `0 0 0 ${result.periodStart} * *`; // 00:00 of nth day of MONTH
-      } else {
-        rule = `0 0 0 * * ${result.periodStart}`; // 00:00 of nth day of WEEK
-      }
-
-      schedule.rescheduleJob(schedule.scheduledJobs[userId], rule);
-    });
+    resetPeriod(7);
   });
 };
 
