@@ -1,7 +1,53 @@
 const schedule = require('node-schedule');
+const pool = require('./database');
 
-module.exports = () => {
-  schedule.scheduleJob('job1', '30 * * * * *', () => {
-    console.log('it is 30 seconds pas the minute');
+function calculateBudgets(userId) {
+  let query = `
+    SELECT categories.categoryId, ROUND(SUM(amount)/4) AS newBudget
+    FROM transactions 
+    JOIN categories 
+    ON transactions.categoryId = categories.categoryId 
+    WHERE transactions.userId = ${userId}
+    AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 MONTH) AND CURDATE()
+    GROUP BY categoryId 
+  `;
+  pool.getConnection((connErr, conn) => {
+    if (connErr) throw connErr;
+    conn.query(query, (err, res) => {
+      if (err) throw err;
+      res.forEach((budgetResult) => {
+        query = `
+          UPDATE budgets
+          SET budget = ${budgetResult.newBudget}
+          WHERE userId = ${userId}
+          AND categoryId = ${budgetResult.categoryId}
+        `;
+        conn.query(query, (qerr) => {
+          if (qerr) throw qerr;
+        });
+      });
+    });
   });
+}
+
+
+module.exports.initialise = () => {
+  const sql = 'SELECT userId, period, periodStart FROM users';
+  pool.query(sql, (error, results) => {
+    if (error) throw error;
+    results.forEach((result) => {
+      let rule;
+      if (result.period === 'MONTH') {
+        rule = `0 0 0 ${result.periodStart} * *`; // 00:00 of nth day of MONTH
+      } else {
+        rule = `0 0 0 * * ${result.periodStart}`; // 00:00 of nth day of WEEK
+      }
+
+      schedule.scheduleJob(`${result.userId}`, rule, calculateBudgets.bind(null, result.userId));
+    });
+  });
+};
+
+module.exports.update = (userId) => {
+  // TODO: RESCHEDULE THE CURRENT USERS JOB.
 };
