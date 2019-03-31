@@ -16,19 +16,23 @@ module.exports = (app) => {
    *       "lastName": "Doe",
    *       "email": "example@email.com",
    *       "period": "MONTH"
+   *       "sentRequest": true,             // means that user {id} has sent a request to John Doe
+   *       "receivedRequest": false         // means that John Doe has sent a request to user {id}
    *    }
    *  ]
    */
   app.get('/api/users/', (req, res) => {
     const { id, searchTerm } = req.query;
     const sql = `
-      SELECT userId, firstName, lastName, email, period
+      SELECT userId, firstName, lastName, email, period, userId1 AS sender, userId2 AS receiver
       FROM users
+      LEFT JOIN friendships
+      ON userId = userId2 OR userId = userId1
       WHERE userId NOT IN (SELECT userId
                             FROM users
                             JOIN friendships
-                            ON users.userId = friendships.userId1 OR users.userId = friendships.userId2
-                            WHERE userId <> ${id} AND friendships.accepted = 1)
+                            ON userId = userId1 OR userId = userId2
+                            WHERE accepted = 1)
       AND userId <> ${id}
       AND (firstName LIKE '%${searchTerm}%' OR lastName LIKE '%${searchTerm}%')
     `;
@@ -37,7 +41,22 @@ module.exports = (app) => {
       if (results.length < 1) {
         res.status(404).json({ error: 'No results were found.' });
       } else {
-        res.json(results);
+        const output = [];
+        results.forEach((result) => {
+          const ob = result;
+          ob.sentRequest = false;
+          ob.receivedRequest = false;
+          if (result.sender === parseInt(id, 10)) {
+            ob.sentRequest = true;
+          }
+          if (result.receiver === parseInt(id, 10)) {
+            ob.receivedRequest = true;
+          }
+          delete ob.sender;
+          delete ob.receiver;
+          output.push(ob);
+        });
+        res.json(output);
       }
     });
   });
