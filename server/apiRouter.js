@@ -72,19 +72,23 @@ module.exports = (app) => {
    *  }
    */
   app.get('/api/users/:id', (req, res) => {
-    pointsCalculator.calculate(req.params.id, (points) => {
-      const sql = `
-        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}
-      `;
-      pool.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length < 1) {
-          res.status(404).json({ error: 'No results were found.' });
-        } else {
-          const out = results[0];
-          out.points = points;
-          res.json(out);
-        }
+    pool.getConnection((connErr, conn) => {
+      if (connErr) throw connErr;
+      pointsCalculator.calculate(conn, req.params.id, (points) => {
+        const sql = `
+          SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}
+        `;
+        conn.query(sql, (error, results) => {
+          if (error) throw error;
+          if (results.length < 1) {
+            res.status(404).json({ error: 'No results were found.' });
+          } else {
+            const out = results[0];
+            out.points = points;
+            res.json(out);
+            conn.destroy();
+          }
+        });
       });
     });
   });
@@ -390,32 +394,36 @@ module.exports = (app) => {
       sql += ` AND accepted = ${req.query.accepted}`;
     }
 
-    pool.query(sql, (err, results) => {
-      if (err) throw err;
-      const strippedResults = [];
-      results.forEach((result) => {
-        if (result.userId.toString() !== userId) {
-          strippedResults.push(result);
-        }
-      });
-
-      const resArr = [];
-      let counter = 0;
-      strippedResults.forEach((result) => {
-        const obj = {};
-        obj.accepted = result.accepted;
-        obj.userId = result.userId;
-        obj.firstName = result.firstName;
-        obj.lastName = result.lastName;
-        obj.period = result.period;
-
-        pointsCalculator.calculate(result.userId, (points) => {
-          obj.points = points;
-          resArr.push(obj);
-          counter += 1;
-          if (counter === strippedResults.length) {
-            res.json(resArr);
+    pool.getConnection((connErr, conn) => {
+      if (connErr) throw connErr;
+      conn.query(sql, (err, results) => {
+        if (err) throw err;
+        const strippedResults = [];
+        results.forEach((result) => {
+          if (result.userId.toString() !== userId) {
+            strippedResults.push(result);
           }
+        });
+  
+        const resArr = [];
+        let counter = 0;
+        strippedResults.forEach((result) => {
+          const obj = {};
+          obj.accepted = result.accepted;
+          obj.userId = result.userId;
+          obj.firstName = result.firstName;
+          obj.lastName = result.lastName;
+          obj.period = result.period;
+  
+          pointsCalculator.calculate(conn, result.userId, (points) => {
+            obj.points = points;
+            resArr.push(obj);
+            counter += 1;
+            if (counter === strippedResults.length) {
+              res.json(resArr);
+              conn.destroy();
+            }
+          });
         });
       });
     });
