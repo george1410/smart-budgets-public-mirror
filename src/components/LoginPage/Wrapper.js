@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${props => props.theme.primaryBlue};
+  background-color: ${props => props.theme.offWhite};
   ${media.phone`
     padding: 0;
   `}
