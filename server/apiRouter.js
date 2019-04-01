@@ -1,6 +1,6 @@
 const pool = require('./database');
 const { generateCategorySpendSql, generateCategoryObjects } = require('./categoryEndpointHelpers');
-
+const pointsCalculator = require('./pointsCalculator');
 
 module.exports = (app) => {
   /**
@@ -72,17 +72,24 @@ module.exports = (app) => {
    *  }
    */
   app.get('/api/users/:id', (req, res) => {
-    const sql = `
-        SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}`;
-    pool.query(sql, (error, results) => {
-      if (error) throw error;
-      if (results.length < 1) {
-        res.status(404).json({ error: 'No results were found.' });
-      } else {
-        const out = results[0];
-        out.points = Math.floor(Math.random() * (+500 - +100) + +100);
-        res.json(out);
-      }
+    pool.getConnection((connErr, conn) => {
+      if (connErr) throw connErr;
+      pointsCalculator.calculate(conn, req.params.id, (points) => {
+        const sql = `
+          SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}
+        `;
+        conn.query(sql, (error, results) => {
+          if (error) throw error;
+          if (results.length < 1) {
+            res.status(404).json({ error: 'No results were found.' });
+          } else {
+            const out = results[0];
+            out.points = points;
+            res.json(out);
+          }
+          conn.release();
+        });
+      });
     });
   });
 
@@ -260,32 +267,36 @@ module.exports = (app) => {
           if (error) throw error;
           if (results.length < 1) {
             res.status(404).json({ error: 'No results were found.' });
-          } else if (!req.query.period) {
-            req.query.period = results[0].period;
-            ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
-          }
+            conn.release();
+          } else {
+            if (!req.query.period) {
+              req.query.period = results[0].period;
+              ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
+            }
 
-          conn.query(sql, (error1, results1) => {
-            if (error1) throw error;
-            groups = results1;
-          });
+            conn.query(sql, (error1, results1) => {
+              if (error1) throw error;
+              groups = results1;
+            });
 
-          sql = `
+            sql = `
               SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets
               JOIN categories ON categories.categoryId = budgets.categoryId
               WHERE budgets.userId = ${req.params.id}
               GROUP BY categories.displayName `;
 
-          conn.query(sql, (error2, results2) => {
-            if (error2) throw err;
-            if (results2.length < 1) {
-              res.status(404).json({ error: 'No results were found.' });
-            } else {
-              conn.release();
-              if (error) throw error;
-              res.json(generateCategoryObjects(results2, groups));
-            }
-          });
+            conn.query(sql, (error2, results2) => {
+              if (error2) throw err;
+              if (results2.length < 1) {
+                res.status(404).json({ error: 'No results were found.' });
+                conn.release();
+              } else {
+                if (error) throw error;
+                res.json(generateCategoryObjects(results2, groups));
+                conn.release();
+              }
+            });
+          }
         });
       });
     }
@@ -325,6 +336,7 @@ module.exports = (app) => {
             res.sendStatus(201);
           });
         }
+        conn.release();
       });
     });
   });
@@ -387,22 +399,38 @@ module.exports = (app) => {
       sql += ` AND accepted = ${req.query.accepted}`;
     }
 
-    pool.query(sql, (err, results) => {
-      if (err) throw err;
-      const resArr = [];
-      results.forEach((result) => {
-        if (result.userId.toString() !== userId) {
+    pool.getConnection((connErr, conn) => {
+      if (connErr) throw connErr;
+      conn.query(sql, (err, results) => {
+        if (err) throw err;
+        const strippedResults = [];
+        results.forEach((result) => {
+          if (result.userId.toString() !== userId) {
+            strippedResults.push(result);
+          }
+        });
+
+        const resArr = [];
+        let counter = 0;
+        strippedResults.forEach((result) => {
           const obj = {};
           obj.accepted = result.accepted;
           obj.userId = result.userId;
           obj.firstName = result.firstName;
           obj.lastName = result.lastName;
           obj.period = result.period;
-          obj.points = Math.floor(Math.random() * (+500 - +100) + +100);
-          resArr.push(obj);
-        }
+
+          pointsCalculator.calculate(conn, result.userId, (points) => {
+            obj.points = points;
+            resArr.push(obj);
+            counter += 1;
+            if (counter === strippedResults.length) {
+              res.json(resArr);
+              conn.release();
+            }
+          });
+        });
       });
-      res.json(resArr);
     });
   });
 
