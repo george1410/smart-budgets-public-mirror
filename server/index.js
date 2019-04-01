@@ -6,7 +6,6 @@ const apiRouter = require('./apiRouter');
 const authRouter = require('./authRouter');
 const idMatcher = require('./middleware/idMatcher');
 const budgetCalculator = require('./budgetCalculator');
-const pointsCalculator = require('./pointsCalculator');
 
 const app = express();
 app.use(bodyParser.json({ type: '*/*' }));
