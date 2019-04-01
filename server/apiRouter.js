@@ -86,8 +86,8 @@ module.exports = (app) => {
             const out = results[0];
             out.points = points;
             res.json(out);
-            conn.destroy();
           }
+          conn.release();
         });
       });
     });
@@ -267,32 +267,36 @@ module.exports = (app) => {
           if (error) throw error;
           if (results.length < 1) {
             res.status(404).json({ error: 'No results were found.' });
-          } else if (!req.query.period) {
-            req.query.period = results[0].period;
-            ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
-          }
+            conn.release();
+          } else {
+            if (!req.query.period) {
+              req.query.period = results[0].period;
+              ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
+            }
 
-          conn.query(sql, (error1, results1) => {
-            if (error1) throw error;
-            groups = results1;
-          });
+            conn.query(sql, (error1, results1) => {
+              if (error1) throw error;
+              groups = results1;
+            });
 
-          sql = `
+            sql = `
               SELECT SUM(budgets.budget) AS budget, categories.displayName, GROUP_CONCAT(DISTINCT categories.categoryId) AS id FROM budgets
               JOIN categories ON categories.categoryId = budgets.categoryId
               WHERE budgets.userId = ${req.params.id}
               GROUP BY categories.displayName `;
 
-          conn.query(sql, (error2, results2) => {
-            if (error2) throw err;
-            if (results2.length < 1) {
-              res.status(404).json({ error: 'No results were found.' });
-            } else {
-              conn.release();
-              if (error) throw error;
-              res.json(generateCategoryObjects(results2, groups));
-            }
-          });
+            conn.query(sql, (error2, results2) => {
+              if (error2) throw err;
+              if (results2.length < 1) {
+                res.status(404).json({ error: 'No results were found.' });
+                conn.release();
+              } else {
+                if (error) throw error;
+                res.json(generateCategoryObjects(results2, groups));
+                conn.release();
+              }
+            });
+          }
         });
       });
     }
@@ -332,6 +336,7 @@ module.exports = (app) => {
             res.sendStatus(201);
           });
         }
+        conn.release();
       });
     });
   });
@@ -404,7 +409,7 @@ module.exports = (app) => {
             strippedResults.push(result);
           }
         });
-  
+
         const resArr = [];
         let counter = 0;
         strippedResults.forEach((result) => {
@@ -414,14 +419,14 @@ module.exports = (app) => {
           obj.firstName = result.firstName;
           obj.lastName = result.lastName;
           obj.period = result.period;
-  
+
           pointsCalculator.calculate(conn, result.userId, (points) => {
             obj.points = points;
             resArr.push(obj);
             counter += 1;
             if (counter === strippedResults.length) {
               res.json(resArr);
-              conn.destroy();
+              conn.release();
             }
           });
         });
