@@ -79,8 +79,6 @@ const BoardRow = ({
 BoardRow.defaultProps = {
   user: false,
   index: 1,
-  // points: 0,
-  highlight: false,
 };
 
 BoardRow.propTypes = {
@@ -90,8 +88,8 @@ BoardRow.propTypes = {
     points: PropTypes.number,
     firstName: PropTypes.string.isRequired,
     lastName: PropTypes.string.isRequired,
+    highlight: PropTypes.bool,
   }).isRequired,
-  highlight: PropTypes.bool,
 };
 
 export default BoardRow;

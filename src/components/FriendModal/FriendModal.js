@@ -6,7 +6,6 @@ import media from '../../util/mediaQueries';
 import ProfilePic from '../UserCard/ProfilePic';
 import CloseModalButton from './CloseModalButton';
 import Button from '../UserCard/Button';
-import { removeFriend } from '../../actions/friends';
 
 const StyledModal = Modal.styled`
   position: relative;
