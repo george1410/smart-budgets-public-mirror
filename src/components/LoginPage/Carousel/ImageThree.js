@@ -7,8 +7,11 @@ const Wrapper = styled.div`
   height: min-content;
 
   & > svg {
-    width: 40vw;
+    width: 35vw;
     max-width: 40rem;
+    ${media.tablet`
+      width: 24rem;
+    `}
     ${media.phone`
       width: 60vw;
     `}
