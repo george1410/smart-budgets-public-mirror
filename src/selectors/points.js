@@ -1,5 +1,5 @@
 export default (friends, user) => {
-  if (!user.points) {
+  if (user.points !== 0 && !user.points) {
     return {};
   }
 
