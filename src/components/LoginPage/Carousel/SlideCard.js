@@ -22,7 +22,7 @@ const Instruction = styled.span`
   line-height: 2.5rem;
   font-size: ${props => props.theme.fontSmall};
   margin-top: 5rem;
-  width: 50%;
+  width: 24rem;
   text-align: center;
   ${media.tablet`
     color: ${props => props.theme.grey};

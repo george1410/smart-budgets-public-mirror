@@ -1,14 +1,10 @@
 import React from 'react';
-// import styled from 'styled-components';
-// import media from '../../util/mediaQueries';
 import Wrapper from './Wrapper';
-import WideOnBoarding from './WideOnboarding/WideOnboarding';
-import OneColOnboarding from './OneColOnboarding/OneColOnboarding';
+import OnBoarding from './Onboarding';
 
 const LoginPage = () => (
   <Wrapper>
-    <WideOnBoarding />
-    {/* <OneColOnboarding /> */}
+    <OnBoarding />
   </Wrapper>
 );
 

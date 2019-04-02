@@ -9,11 +9,10 @@ const Wrapper = styled.div`
   & > svg {
     width: 40vw;
     max-width: 40rem;
+    ${media.phone`
+      width: 60vw;
+    `}
   }
-
-  ${media.tablet`
-    /* display: none; */
-  `}
 `;
 
 const color = '#fcd801';

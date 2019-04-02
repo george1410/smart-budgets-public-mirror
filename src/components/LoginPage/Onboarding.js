@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-// import PropTypes from 'prop-types';
-import media from '../../../util/mediaQueries';
-import LoginSide from '../LoginSide';
-import Carousel from '../Carousel/Carousel';
-import Button from '../../Button/Button';
+import media from '../../util/mediaQueries';
+import LoginSide from './LoginSide';
+import Carousel from './Carousel/Carousel';
+import Button from '../Button/Button';
 
 const OnboardingWrapper = styled.div`
   display: flex;
@@ -12,7 +11,7 @@ const OnboardingWrapper = styled.div`
   align-items: center;
   background: linear-gradient(97deg, rgba(0, 86, 255, 1) 0%, rgba(0, 86, 255, 1) 50%, rgba(255, 255, 255, 1) 50%, rgba(255, 255, 255, 1) 100%);
   width: 90vw;
-  max-width: 120rem;
+  max-width: 100rem;
   min-height: 70rem;
   border-radius: 4px;
   box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.3);
@@ -48,33 +47,25 @@ const LoginSideWrapper = styled.div`
 `;
 
 const WideOnboarding = () => {
-  const [showLogin, setShowLogin] = useState(!!localStorage.getItem('onboard'));
-  const [buttonTitle, setButtonTitle] = useState(showLogin ? 'Go Back' : 'Go Back to Intro');
+  const [showLogin, setShowLogin] = useState(localStorage.getItem('onboard') === 'true');
+  const [buttonTitle, setButtonTitle] = useState(showLogin ? 'Go back to Intro' : 'Go to Log In');
   const toggleLogin = () => {
-    // const toOnboard = !!localStorage.getItem('onboard');
-    localStorage.setItem('onboard', !showLogin);
     setShowLogin(!showLogin);
-    const text = !showLogin ? 'Go Back' : 'Go Back to Intro';
+    localStorage.setItem('onboard', !showLogin);
+    const text = showLogin ? 'Go to Log In' : 'Go Back to Intro';
     setButtonTitle(text);
   };
   return (
     <OnboardingWrapper>
-      {
-        console.log(showLogin)
-      }
       <>
         <Carousel show={showLogin} />
         <LoginSideWrapper show={showLogin}>
           <LoginSide />
         </LoginSideWrapper>
-        <SkipButton altbtn title={buttonTitle} onClick={toggleLogin} />
+        <SkipButton smallbtn highlight={!showLogin} title={buttonTitle} onClick={toggleLogin} />
       </>
     </OnboardingWrapper>
   );
 };
-
-WideOnboarding.defaultProps = {};
-
-WideOnboarding.propTypes = {};
 
 export default WideOnboarding;

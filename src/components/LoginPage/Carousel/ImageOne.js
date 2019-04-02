@@ -4,17 +4,15 @@ import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
   width: min-content;
-  /* max-width: 60rem; */
   height: min-content;
 
   & > svg {
     width: 40vw;
     max-width: 40rem;
+    ${media.phone`
+      width: 60vw;
+    `}
   }
-
-  ${media.tablet`
-    /* display: none; */
-  `}
 `;
 
 const color = '#fcd801';
