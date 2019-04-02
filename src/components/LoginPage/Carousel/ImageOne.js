@@ -13,11 +13,11 @@ const Wrapper = styled.div`
   }
 
   ${media.tablet`
-    display: none;
+    /* display: none; */
   `}
 `;
 
-const color = '#ffffff';
+const color = '#fcd801';
 
 const ImageOne = () => (
   <Wrapper>

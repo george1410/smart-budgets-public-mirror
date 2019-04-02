@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import media from '../../../util/mediaQueries';
-// import CardOne from './CardOne';
-// import CardTwo from './CardTwo';
 import { CarouselDot, CarouselDotRow } from './CarouselDot';
 import ImageOne from './ImageOne';
 import ImageTwo from './ImageTwo';
@@ -15,20 +14,15 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: center;
   width: 50%;
-  min-height: 70rem;
+  height: 100%;
   ${media.tablet`
-    display: none;
-  `}
-  ${media.phone`
-    width: 100vw;
-    height: 100vh;
-    min-height: auto;
-    padding: 4rem;
+    width: 100%;
+    display: ${props => (props.show ? 'none' : 'flex')};
   `}
 `;
 
 const CardOne = (
-  <SlideCard text="See where your money is going?">
+  <SlideCard text="Keep track of where your money is going.">
     <ImageOne />
   </SlideCard>
 );
@@ -40,33 +34,39 @@ const CardTwo = (
 );
 
 const CardThree = (
-  <SlideCard text="Collect points?">
+  <SlideCard text="Collect points by staying below budget.">
     <ImageThree />
   </SlideCard>
 );
 
-const Carousel = () => {
+const Carousel = ({ show }) => {
   const [slide, setSlide] = useState(0);
   const Slides = [CardOne, CardTwo, CardThree];
   const setCard = (index) => {
     setSlide(index);
   };
   return (
-    <Wrapper>
+    <Wrapper show={show}>
       {
         Slides[slide]
       }
       <CarouselDotRow>
-        <CarouselDot highlight={slide === 0} onClick={() => setCard(0)} />
-        <CarouselDot highlight={slide === 1} onClick={() => setCard(1)} />
-        <CarouselDot highlight={slide === 2} onClick={() => setCard(2)} />
+        {
+          Slides.map((card, index) => (
+            <CarouselDot
+              key={card.props.text}
+              highlight={slide === index}
+              onClick={() => setCard(index)}
+            />
+          ))
+        }
       </CarouselDotRow>
     </Wrapper>
   );
 };
 
-Carousel.defaultProps = {};
-
-Carousel.propTypes = {};
+Carousel.propTypes = {
+  show: PropTypes.bool.isRequired,
+};
 
 export default Carousel;

@@ -7,10 +7,10 @@ const AltStyledButton = styled.button`
   padding: 1.5rem;
   font-size: ${props => props.theme.fontSmall};
   font-family: inherit;
-  color: ${props => props.theme.error};
+  color: ${props => props.theme.primaryBlue};
   background-color: ${props => props.theme.white};
   box-shadow: ${props => props.theme.cardShadow};
-  border: 3px solid ${props => props.theme.error};
+  border: 3px solid ${props => props.theme.primaryBlue};
   border-radius: ${props => props.theme.borderRadius};
   user-select: none;
   transition: ${props => props.theme.transition};

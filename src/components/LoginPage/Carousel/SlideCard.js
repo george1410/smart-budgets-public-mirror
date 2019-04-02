@@ -12,7 +12,8 @@ const Wrapper = styled.div`
   width: 100%;
   min-height: 50rem;
   ${media.tablet`
-    display: none;
+    padding: 0;
+    min-height: 40rem;
   `}
 `;
 
@@ -23,6 +24,9 @@ const Instruction = styled.span`
   margin-top: 5rem;
   width: 50%;
   text-align: center;
+  ${media.tablet`
+    color: ${props => props.theme.grey};
+  `}
 `;
 
 const SlideCard = ({ children, text }) => (

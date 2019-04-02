@@ -12,7 +12,6 @@ import Label from './Label';
 import LoginCard from './LoginCard';
 import Logo from './Logo';
 import Subtitle from './Subtitle';
-// import Wrapper from './Wrapper';
 
 const LoginSide = ({
   startSignin,
@@ -32,7 +31,6 @@ const LoginSide = ({
   };
 
   return (
-  // <Wrapper>
     <LoginCard>
       <Logo />
       <Subtitle err={!!errorMsg}>
@@ -69,7 +67,6 @@ const LoginSide = ({
       </Form>
       <Button altbtn style={{ marginTop: '2rem' }} onClick={onFillFakeLogins} title="Fill with demo logins" type="button" />
     </LoginCard>
-  // </Wrapper>
   );
 };
 
