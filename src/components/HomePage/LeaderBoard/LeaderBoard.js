@@ -10,7 +10,7 @@ import order from '../../../selectors/points';
 const Board = styled.div`
   width: 100%;
   max-width: 50rem;
-  height: 31rem;
+  min-height: 31rem;
   background-color: ${props => props.theme.white};
   border-radius: ${props => props.theme.borderRadius};
   border: 2px solid ${props => props.theme.offWhite};
@@ -27,7 +27,7 @@ const BoardTitle = styled.div`
   padding: 1rem;
   font-weight: 500;
   box-shadow: 0 5px 2px rgba(0, 0, 0, 0.1);
-  z-index: 1;
+  z-index: 5;
 `;
 
 const Middle = styled.div`
@@ -49,12 +49,12 @@ const leaderBoard = ({ setFriends, ranking: { friends, user } }) => {
       <Middle>
         {
           friends && friends.map(friend => (
-            <BoardRow index={friend.index} key={uuid()} {...friend} />
+            <BoardRow index={friend.index} key={uuid()} person={friend} />
           ))
         }
       </Middle>
       {
-        user && (<BoardRow user index={user.index} {...user} />)
+        user && (<BoardRow user index={user.index} person={user} />)
       }
     </Board>
   );
