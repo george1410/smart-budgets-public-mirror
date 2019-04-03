@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import media from '../../../util/mediaQueries';
-import { CarouselDot, CarouselDotRow, Arrow } from './CarouselDot';
+import {
+  CarouselDot, CarouselDotRow, Arrow, ArrowWrapper,
+} from './CarouselDot';
 import ImageOne from './ImageOne';
 import ImageTwo from './ImageTwo';
 import ImageThree from './ImageThree';
@@ -56,9 +58,9 @@ const Carousel = ({ show }) => {
         ))
       }
       <CarouselDotRow>
-        <div tabIndex="0" role="button" onClick={decrement} onKeyPress={decrement}>
+        <ArrowWrapper tabIndex="0" role="button" onClick={decrement} onKeyPress={decrement}>
           <Arrow left />
-        </div>
+        </ArrowWrapper>
         {
           Cards.map((card, index) => (
             <CarouselDot
@@ -70,9 +72,9 @@ const Carousel = ({ show }) => {
             />
           ))
         }
-        <div tabIndex="0" role="button" onClick={increment} onKeyPress={increment}>
+        <ArrowWrapper tabIndex="0" role="button" onClick={increment} onKeyPress={increment}>
           <Arrow />
-        </div>
+        </ArrowWrapper>
       </CarouselDotRow>
     </Wrapper>
   );

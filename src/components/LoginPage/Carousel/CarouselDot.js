@@ -9,6 +9,17 @@ export const CarouselDot = styled.div`
   background-color: ${props => (props.highlight ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0.5)')};
   border-radius: 20px;
   transition: ${props => props.theme.transition};
+  outline: none;
+
+  &:hover,
+  &:focus {
+    transform: scale(1.4);
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
+
   ${media.tablet`
     background-color: ${props => (props.highlight ? props.theme.primaryBlue : 'rgba(0, 0, 0, 0.3)')};
   `}
@@ -21,6 +32,20 @@ export const CarouselDotRow = styled.div`
   width: 200px;
 `;
 
+export const ArrowWrapper = styled.div`
+  transition: ${props => props.theme.transition};
+  outline: none;
+
+  &:hover,
+  &:focus {
+    transform: scale(1.4);
+  }
+
+  &:active {
+    transform: scale(0.8);
+  }
+`;
+
 const Icon = styled.svg`
   align-self: center;
   height: 1.8rem;
@@ -28,6 +53,7 @@ const Icon = styled.svg`
   margin: 0 2px;
   transition: all 0.2s ease-in-out;
   transform: rotate(${({ left }) => (left ? '90deg' : '270deg')});
+  outline: none;
 
   & > g > g > polyline {
     stroke: ${props => props.theme.white};
