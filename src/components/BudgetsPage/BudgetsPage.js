@@ -1,5 +1,4 @@
 import React from 'react';
-import 'react-sweet-progress/lib/style.css';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../Header/Header';

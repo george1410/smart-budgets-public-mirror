@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
+import { useSpring, animated } from 'react-spring';
 import media from '../../../util/mediaQueries';
 
 const Wrapper = styled.div`
@@ -29,16 +30,45 @@ const Instruction = styled.span`
   `}
 `;
 
-const SlideCard = ({ children, text }) => (
-  <Wrapper>
-    {children}
-    <Instruction>{text}</Instruction>
-  </Wrapper>
-);
+const AnimatedWrapper = animated(Wrapper);
+
+const SlideCard = ({ children, text, show }) => {
+  const [props, set] = useSpring(() => ({ config: { duration: 0 }, opacity: show ? 1 : 0, display: show ? 'none' : 'flex' }));
+  useEffect(() => {
+    set({
+      config: { duration: 500 },
+      to: async (next) => {
+        await next({ display: show ? 'flex' : 'none' });
+        await next({ opacity: show ? 1 : 0 });
+      },
+      from: { display: 'none', opacity: 0 },
+    });
+    return () => (
+      set({
+        display: 'none',
+        opacity: 0,
+      })
+    );
+  });
+  return (
+    <>
+      {
+      true
+      && (
+      <AnimatedWrapper style={props}>
+        {children}
+        <Instruction>{text}</Instruction>
+      </AnimatedWrapper>
+      )
+    }
+    </>
+  );
+};
 
 SlideCard.propTypes = {
   children: PropTypes.instanceOf(Object).isRequired,
   text: PropTypes.string.isRequired,
+  show: PropTypes.bool.isRequired,
 };
 
 export default SlideCard;
