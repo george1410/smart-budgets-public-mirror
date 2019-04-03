@@ -14,6 +14,7 @@ const AltStyledButton = styled.button`
   border-radius: ${props => props.theme.borderRadius};
   user-select: none;
   transition: ${props => props.theme.transition};
+  font-weight: 500;
 
   &:hover {
     transform: scale(1.05);

@@ -16,6 +16,7 @@ const Button = styled.button`
   border-bottom: 3px solid ${props => props.theme.primaryBlue};
   border-top: 3px solid ${props => props.theme.primaryBlue};
   transition: ${props => props.theme.transition};
+  font-weight: 500;
 
   &:hover {
     transform: scale(1.05);
