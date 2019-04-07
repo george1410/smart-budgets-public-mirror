@@ -76,7 +76,7 @@ module.exports = (app) => {
       if (connErr) throw connErr;
       pointsCalculator.calculate(conn, req.params.id, (points) => {
         const sql = `
-          SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}
+          SELECT firstName, lastName, email, period, periodStart, streak FROM users WHERE userId = ${req.params.id}
         `;
         conn.query(sql, (error, results) => {
           if (error) throw error;
@@ -384,7 +384,7 @@ module.exports = (app) => {
   app.get('/api/users/:id/friends', (req, res) => {
     const userId = req.params.id;
     let sql = `
-      SELECT userId, userId1, userId2, accepted, firstName, lastName, period
+      SELECT userId, userId1, userId2, accepted, firstName, lastName, period, streak
       FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
       `;
 
@@ -424,6 +424,7 @@ module.exports = (app) => {
             obj.firstName = result.firstName;
             obj.lastName = result.lastName;
             obj.period = result.period;
+            obj.streak = result.streak;
 
             pointsCalculator.calculate(conn, result.userId, (points) => {
               obj.points = points;
