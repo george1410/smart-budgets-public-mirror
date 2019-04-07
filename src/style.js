@@ -37,7 +37,7 @@ export const theme = {
   grey: '#555',
   greyDark: '#222',
   black: '#000',
-  offWhite: '#eee',
+  offWhite: 'rgba(245, 245, 245, 1)',
   offWhiteShadow: 'rgba(239, 239, 239, 0.7)',
   white: '#fff',
   translucentWhite: 'rgba(255, 255, 255, 0.95)',

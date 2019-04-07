@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import StyledButton from './StyledButton';
 import AltStyledButton from './AltStyledButton';
+import SmallButton from './SmallButton';
 import LogoutButton from './LogoutButton';
 
 const ActionButton = ({
-  title, type, altbtn, logout, ...rest
+  title, type, altbtn, logout, smallbtn, ...rest
 }) => {
   if (altbtn) {
     return (
@@ -18,6 +19,12 @@ const ActionButton = ({
       <LogoutButton type={type} {...rest}>
         {title}
       </LogoutButton>
+    );
+  } if (smallbtn) {
+    return (
+      <SmallButton type={type} {...rest}>
+        {title}
+      </SmallButton>
     );
   }
   return (
@@ -32,6 +39,7 @@ ActionButton.defaultProps = {
   type: 'button',
   altbtn: false,
   logout: false,
+  smallbtn: false,
 };
 
 ActionButton.propTypes = {
@@ -39,6 +47,7 @@ ActionButton.propTypes = {
   type: PropTypes.string,
   altbtn: PropTypes.bool,
   logout: PropTypes.bool,
+  smallbtn: PropTypes.bool,
 };
 
 export default ActionButton;
