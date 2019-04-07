@@ -46,6 +46,7 @@ function calculateBudgets(userId) {
         `;
         conn.query(query, (qerr) => {
           if (qerr) throw qerr;
+          let count = 0;
           res1.forEach((budgetResult) => {
             query = `
               UPDATE budgets
@@ -55,6 +56,10 @@ function calculateBudgets(userId) {
             `;
             conn.query(query, (qerr1) => {
               if (qerr1) throw qerr;
+              count += 1;
+              if (count === res1.length) {
+                conn.release();
+              }
             });
           });
           update(userId);
@@ -87,9 +92,11 @@ function resetPeriod(userId) {
         `;
         conn.query(sql, (err1) => {
           if (err1) throw err1;
+          conn.release();
           calculateBudgets(userId);
         });
       } else {
+        conn.release();
         calculateBudgets(userId);
       }
     });
@@ -110,7 +117,6 @@ module.exports.initialise = () => {
 
       schedule.scheduleJob(`${result.userId}`, rule, resetPeriod.bind(null, result.userId));
     });
-    resetPeriod(7);
   });
 };
 

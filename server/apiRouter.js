@@ -325,6 +325,7 @@ module.exports = (app) => {
       conn.query(sql, (err1, results) => {
         if (err1) throw err1;
         if (results.length > 0) {
+          conn.release();
           res.status(200).json({ error: 'Friendship already exists' });
         } else {
           sql = `
@@ -333,10 +334,10 @@ module.exports = (app) => {
 
           conn.query(sql, (err2) => {
             if (err2) throw err2;
+            conn.release();
             res.sendStatus(201);
           });
         }
-        conn.release();
       });
     });
   });
@@ -410,26 +411,31 @@ module.exports = (app) => {
           }
         });
 
-        const resArr = [];
-        let counter = 0;
-        strippedResults.forEach((result) => {
-          const obj = {};
-          obj.accepted = result.accepted;
-          obj.userId = result.userId;
-          obj.firstName = result.firstName;
-          obj.lastName = result.lastName;
-          obj.period = result.period;
+        if (strippedResults.length === 0) {
+          res.json([]);
+          conn.release();
+        } else {
+          const resArr = [];
+          let counter = 0;
+          strippedResults.forEach((result) => {
+            const obj = {};
+            obj.accepted = result.accepted;
+            obj.userId = result.userId;
+            obj.firstName = result.firstName;
+            obj.lastName = result.lastName;
+            obj.period = result.period;
 
-          pointsCalculator.calculate(conn, result.userId, (points) => {
-            obj.points = points;
-            resArr.push(obj);
-            counter += 1;
-            if (counter === strippedResults.length) {
-              res.json(resArr);
-              conn.release();
-            }
+            pointsCalculator.calculate(conn, result.userId, (points) => {
+              obj.points = points;
+              resArr.push(obj);
+              counter += 1;
+              if (counter === strippedResults.length) {
+                res.json(resArr);
+                conn.release();
+              }
+            });
           });
-        });
+        }
       });
     });
   });
