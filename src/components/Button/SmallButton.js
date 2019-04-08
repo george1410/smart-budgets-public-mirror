@@ -12,6 +12,7 @@ const Button = styled.button`
   user-select: none;
   border: 3px solid ${props => (props.highlight ? props.theme.primaryBlue : props.theme.white)};
   transition: ${props => props.theme.transition};
+  font-weight: 500;
 `;
 
 export default Button;

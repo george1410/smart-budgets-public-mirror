@@ -1,19 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import media from '../../../util/mediaQueries';
-
-const Wrapper = styled.div`
-  width: min-content;
-  height: min-content;
-
-  & > svg {
-    width: 40vw;
-    max-width: 40rem;
-    ${media.phone`
-      width: 60vw;
-    `}
-  }
-`;
+import Wrapper from './ImageWrapper';
 
 const color = '#fcd801';
 

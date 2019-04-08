@@ -7,6 +7,11 @@ const Wrapper = styled.div`
   align-items: center;
   background-color: ${props => props.theme.white};
   height: 100vh;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    width: 0;
+  }
 `;
 
 export default Wrapper;

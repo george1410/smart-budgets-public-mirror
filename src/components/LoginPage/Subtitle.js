@@ -5,6 +5,7 @@ const Subtitle = styled.span`
   font-size: ${props => props.theme.fontSmall};
   color: ${props => (props.err ? props.theme.error : props.theme.grey)};
   margin: 3rem 0;
+  user-select: none;
 `;
 
 export default Subtitle;

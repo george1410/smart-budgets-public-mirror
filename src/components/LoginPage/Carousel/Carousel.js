@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import media from '../../../util/mediaQueries';
-import { CarouselDot, CarouselDotRow, Arrow } from './CarouselDot';
+import {
+  CarouselDot, CarouselDotRow, Arrow, ArrowWrapper,
+} from './CarouselDot';
 import ImageOne from './ImageOne';
 import ImageTwo from './ImageTwo';
 import ImageThree from './ImageThree';
@@ -21,27 +23,22 @@ const Wrapper = styled.div`
   `}
 `;
 
-const CardOne = (
-  <SlideCard text="Keep track of where your money is going.">
-    <ImageOne />
-  </SlideCard>
-);
-
-const CardTwo = (
-  <SlideCard text="See how well your friends manage their budgets.">
-    <ImageTwo />
-  </SlideCard>
-);
-
-const CardThree = (
-  <SlideCard text="Collect points by staying below budget.">
-    <ImageThree />
-  </SlideCard>
-);
+const CardOne = {
+  text: 'Keep track of where your money is going.',
+  image: ImageOne,
+};
+const CardTwo = {
+  text: 'See how well your friends manage their budgets.',
+  image: ImageTwo,
+};
+const CardThree = {
+  text: 'Collect points by staying below budget.',
+  image: ImageThree,
+};
 
 const Carousel = ({ show }) => {
   const [slide, setSlide] = useState(0);
-  const Slides = [CardOne, CardTwo, CardThree];
+  const Cards = [CardOne, CardTwo, CardThree];
   const setCard = (index) => {
     setSlide(index);
   };
@@ -49,31 +46,35 @@ const Carousel = ({ show }) => {
     if (slide !== 0) setSlide(slide - 1);
   };
   const increment = () => {
-    if (slide !== Slides.length - 1) setSlide(slide + 1);
+    if (slide !== Cards.length - 1) setSlide(slide + 1);
   };
   return (
     <Wrapper show={show}>
       {
-        Slides[slide]
+        Cards.map((card, index) => (
+          <SlideCard key={card.text} show={slide === index} text={card.text}>
+            <card.image />
+          </SlideCard>
+        ))
       }
       <CarouselDotRow>
-        <div tabIndex="0" role="button" onClick={decrement} onKeyPress={decrement}>
+        <ArrowWrapper tabIndex="0" role="button" onClick={decrement} onKeyPress={decrement}>
           <Arrow left />
-        </div>
+        </ArrowWrapper>
         {
-          Slides.map((card, index) => (
+          Cards.map((card, index) => (
             <CarouselDot
               tabIndex="0"
-              key={card.props.text}
+              key={card.text}
               highlight={slide === index}
               onClick={() => setCard(index)}
               onKeyPress={() => setCard(index)}
             />
           ))
         }
-        <div tabIndex="0" role="button" onClick={increment} onKeyPress={increment}>
+        <ArrowWrapper tabIndex="0" role="button" onClick={increment} onKeyPress={increment}>
           <Arrow />
-        </div>
+        </ArrowWrapper>
       </CarouselDotRow>
     </Wrapper>
   );

@@ -41,7 +41,7 @@ const Points = styled.span`
   text-align: center;
 `;
 
-const FriendProfile = ({
+const FriendModal = ({
   isOpen,
   toggleModal,
   friend: {
@@ -83,20 +83,29 @@ const FriendProfile = ({
           }
           {points}
         </Points>
-        <Button
-          type="button"
-          onClick={removeFriend}
-          decline
-          wide
-        >
-        Remove Friend
-        </Button>
+        {
+          removeFriend
+          && (
+            <Button
+              type="button"
+              onClick={removeFriend}
+              decline
+              wide
+            >
+              Remove Friend
+            </Button>
+          )
+        }
       </StyledModal>
     </div>
   );
 };
 
-FriendProfile.propTypes = {
+FriendModal.defaultProps = {
+  removeFriend: undefined,
+};
+
+FriendModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   toggleModal: PropTypes.func.isRequired,
   friend: PropTypes.shape({
@@ -104,7 +113,7 @@ FriendProfile.propTypes = {
     lastName: PropTypes.string,
     points: PropTypes.number,
   }).isRequired,
-  removeFriend: PropTypes.func.isRequired,
+  removeFriend: PropTypes.func,
 };
 
-export default FriendProfile;
+export default FriendModal;

@@ -5,6 +5,7 @@ import Logo from './Logo.png';
 const StyledIcon = styled.div`
   display: flex;
   align-items: center;
+  user-select: none;
 
   & > img {
     width: 15rem;

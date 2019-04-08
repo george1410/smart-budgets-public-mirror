@@ -61,7 +61,7 @@ const Card = ({
 }) => {
   const routeTo = () => history.push(linkTo);
   return (
-    <Wrapper onClick={routeTo}>
+    <Wrapper onClick={routeTo} onKeyPress={routeTo} tabIndex="0">
       <Title>{title}</Title>
     </Wrapper>
 
