@@ -139,9 +139,6 @@ module.exports = (app) => {
    * GET route for transaction info for a user.
    * Endpoint: /api/users/{userid}/transactions
    * Optional Query Parameters:
-   *   period
-   *    values: WEEK, MONTH
-   *    default: All transactions
    *   startDate
    *     yyyy-mm-dd
    *   endDate
@@ -170,25 +167,11 @@ module.exports = (app) => {
    */
 
   app.get('/api/users/:id/transactions', (req, res) => {
-    let badRequest = false;
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
         WHERE t.userId = ${req.params.id}
         AND t.date <= CURDATE() `;
-
-    if (req.query.period) {
-      let { period } = req.query;
-      period = period.toUpperCase();
-      if (period === 'WEEK' || period === 'MONTH') {
-        sql += `
-            AND ${period}(t.date) = ${period}(CURDATE()) AND
-            YEAR(t.date) = YEAR(CURDATE()) `;
-      } else {
-        badRequest = true;
-        res.status(400).json({ error: 'Bad Request. Invalid period.' });
-      }
-    }
 
     if (req.query.startDate && req.query.endDate) {
       const { startDate, endDate } = req.query;
