@@ -139,9 +139,6 @@ module.exports = (app) => {
    * GET route for transaction info for a user.
    * Endpoint: /api/users/{userid}/transactions
    * Optional Query Parameters:
-   *   period
-   *    values: WEEK, MONTH
-   *    default: All transactions
    *   startDate
    *     yyyy-mm-dd
    *   endDate
@@ -170,25 +167,11 @@ module.exports = (app) => {
    */
 
   app.get('/api/users/:id/transactions', (req, res) => {
-    let badRequest = false;
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
         WHERE t.userId = ${req.params.id}
         AND t.date <= CURDATE() `;
-
-    if (req.query.period) {
-      let { period } = req.query;
-      period = period.toUpperCase();
-      if (period === 'WEEK' || period === 'MONTH') {
-        sql += `
-            AND ${period}(t.date) = ${period}(CURDATE()) AND
-            YEAR(t.date) = YEAR(CURDATE()) `;
-      } else {
-        badRequest = true;
-        res.status(400).json({ error: 'Bad Request. Invalid period.' });
-      }
-    }
 
     if (req.query.startDate && req.query.endDate) {
       const { startDate, endDate } = req.query;
@@ -218,18 +201,16 @@ module.exports = (app) => {
     // if query params not present, for some reason, then default to first 50
     sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
 
-    if (!badRequest) {
-      pool.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length < 1) {
-          res.status(404).json({ error: 'No results were found.', hasMore: false });
-        } else if (results.length < req.query.count) {
-          res.json({ transactions: results, hasMore: false });
-        } else {
-          res.json({ transactions: results, hasMore: true });
-        }
-      });
-    }
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.', hasMore: false });
+      } else if (results.length < req.query.count) {
+        res.json({ transactions: results, hasMore: false });
+      } else {
+        res.json({ transactions: results, hasMore: true });
+      }
+    });
   });
 
   /**
@@ -262,7 +243,7 @@ module.exports = (app) => {
       pool.getConnection((err, conn) => {
         if (err) throw err;
 
-        sql = `SELECT period FROM users WHERE userId = ${req.params.id}`;
+        sql = `SELECT period, periodStart FROM users WHERE userId = ${req.params.id}`;
         conn.query(sql, (error, results) => {
           if (error) throw error;
           if (results.length < 1) {
@@ -271,8 +252,10 @@ module.exports = (app) => {
           } else {
             if (!req.query.period) {
               req.query.period = results[0].period;
-              ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
             }
+            req.query.periodStart = results[0].periodStart;
+
+            ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
 
             conn.query(sql, (error1, results1) => {
               if (error1) throw error;
