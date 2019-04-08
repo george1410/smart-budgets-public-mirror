@@ -76,7 +76,7 @@ module.exports = (app) => {
       if (connErr) throw connErr;
       pointsCalculator.calculate(conn, req.params.id, (points) => {
         const sql = `
-          SELECT firstName, lastName, email, period, periodStart FROM users WHERE userId = ${req.params.id}
+          SELECT firstName, lastName, email, period, periodStart, streak FROM users WHERE userId = ${req.params.id}
         `;
         conn.query(sql, (error, results) => {
           if (error) throw error;
@@ -139,9 +139,6 @@ module.exports = (app) => {
    * GET route for transaction info for a user.
    * Endpoint: /api/users/{userid}/transactions
    * Optional Query Parameters:
-   *   period
-   *    values: WEEK, MONTH
-   *    default: All transactions
    *   startDate
    *     yyyy-mm-dd
    *   endDate
@@ -170,25 +167,11 @@ module.exports = (app) => {
    */
 
   app.get('/api/users/:id/transactions', (req, res) => {
-    let badRequest = false;
     let sql = `
         SELECT * FROM transactions AS t
         JOIN categories AS c ON c.categoryId = t.categoryId
         WHERE t.userId = ${req.params.id}
         AND t.date <= CURDATE() `;
-
-    if (req.query.period) {
-      let { period } = req.query;
-      period = period.toUpperCase();
-      if (period === 'WEEK' || period === 'MONTH') {
-        sql += `
-            AND ${period}(t.date) = ${period}(CURDATE()) AND
-            YEAR(t.date) = YEAR(CURDATE()) `;
-      } else {
-        badRequest = true;
-        res.status(400).json({ error: 'Bad Request. Invalid period.' });
-      }
-    }
 
     if (req.query.startDate && req.query.endDate) {
       const { startDate, endDate } = req.query;
@@ -218,18 +201,16 @@ module.exports = (app) => {
     // if query params not present, for some reason, then default to first 50
     sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
 
-    if (!badRequest) {
-      pool.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length < 1) {
-          res.status(404).json({ error: 'No results were found.', hasMore: false });
-        } else if (results.length < req.query.count) {
-          res.json({ transactions: results, hasMore: false });
-        } else {
-          res.json({ transactions: results, hasMore: true });
-        }
-      });
-    }
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.', hasMore: false });
+      } else if (results.length < req.query.count) {
+        res.json({ transactions: results, hasMore: false });
+      } else {
+        res.json({ transactions: results, hasMore: true });
+      }
+    });
   });
 
   /**
@@ -262,7 +243,7 @@ module.exports = (app) => {
       pool.getConnection((err, conn) => {
         if (err) throw err;
 
-        sql = `SELECT period FROM users WHERE userId = ${req.params.id}`;
+        sql = `SELECT period, periodStart FROM users WHERE userId = ${req.params.id}`;
         conn.query(sql, (error, results) => {
           if (error) throw error;
           if (results.length < 1) {
@@ -271,8 +252,10 @@ module.exports = (app) => {
           } else {
             if (!req.query.period) {
               req.query.period = results[0].period;
-              ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
             }
+            req.query.periodStart = results[0].periodStart;
+
+            ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
 
             conn.query(sql, (error1, results1) => {
               if (error1) throw error;
@@ -325,6 +308,7 @@ module.exports = (app) => {
       conn.query(sql, (err1, results) => {
         if (err1) throw err1;
         if (results.length > 0) {
+          conn.release();
           res.status(200).json({ error: 'Friendship already exists' });
         } else {
           sql = `
@@ -333,10 +317,10 @@ module.exports = (app) => {
 
           conn.query(sql, (err2) => {
             if (err2) throw err2;
+            conn.release();
             res.sendStatus(201);
           });
         }
-        conn.release();
       });
     });
   });
@@ -383,7 +367,7 @@ module.exports = (app) => {
   app.get('/api/users/:id/friends', (req, res) => {
     const userId = req.params.id;
     let sql = `
-      SELECT userId, userId1, userId2, accepted, firstName, lastName, period
+      SELECT userId, userId1, userId2, accepted, firstName, lastName, period, streak
       FROM friendships JOIN users ON userId1 = userId OR userId2 = userId
       `;
 
@@ -410,26 +394,32 @@ module.exports = (app) => {
           }
         });
 
-        const resArr = [];
-        let counter = 0;
-        strippedResults.forEach((result) => {
-          const obj = {};
-          obj.accepted = result.accepted;
-          obj.userId = result.userId;
-          obj.firstName = result.firstName;
-          obj.lastName = result.lastName;
-          obj.period = result.period;
+        if (strippedResults.length === 0) {
+          res.json([]);
+          conn.release();
+        } else {
+          const resArr = [];
+          let counter = 0;
+          strippedResults.forEach((result) => {
+            const obj = {};
+            obj.accepted = result.accepted;
+            obj.userId = result.userId;
+            obj.firstName = result.firstName;
+            obj.lastName = result.lastName;
+            obj.period = result.period;
+            obj.streak = result.streak;
 
-          pointsCalculator.calculate(conn, result.userId, (points) => {
-            obj.points = points;
-            resArr.push(obj);
-            counter += 1;
-            if (counter === strippedResults.length) {
-              res.json(resArr);
-              conn.release();
-            }
+            pointsCalculator.calculate(conn, result.userId, (points) => {
+              obj.points = points;
+              resArr.push(obj);
+              counter += 1;
+              if (counter === strippedResults.length) {
+                res.json(resArr);
+                conn.release();
+              }
+            });
           });
-        });
+        }
       });
     });
   });

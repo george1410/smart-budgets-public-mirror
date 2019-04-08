@@ -25,15 +25,37 @@ function generateCategorySpendSql(req, badRequest, res) {
     JOIN categories ON transactions.categoryId = categories.categoryId
     WHERE transactions.userId = ${req.params.id} `;
   let { period } = req.query;
+  const { periodStart } = req.query;
   period = period.toUpperCase();
   if (period !== 'WEEK' && period !== 'MONTH') {
     bad = true;
     res.status(400).json({ error: 'Bad Request. Invalid period.' });
   }
+
+  const startDate = new Date();
+  startDate.setHours(0, 0, 0, 0);
+  if (period === 'MONTH') {
+    const currentDate = (new Date()).getDate();
+    if (currentDate >= periodStart) {
+      startDate.setDate(periodStart);
+    } else {
+      startDate.setDate(periodStart);
+      startDate.setMonth(new Date().getMonth() - 1);
+    }
+  } else {
+    const currentDay = (new Date()).getDay();
+    if (currentDay >= periodStart) {
+      const diff = currentDay - periodStart;
+      startDate.setDate(new Date().getDate() - diff);
+    } else {
+      const diff = periodStart;
+      startDate.setDate(new Date().getDate() + diff);
+    }
+  }
+
   sql += `
-    AND ${period}(transactions.date) = ${period}(CURDATE()) 
-    AND YEAR(transactions.date) = YEAR(CURDATE())  
-    AND transactions.date <= CURDATE()
+    AND date BETWEEN '${startDate.getFullYear()}-${(startDate.getMonth() + 1) < 10 ? `0${startDate.getMonth() + 1}` : (startDate.getMonth() + 1)}-${startDate.getDate() < 10 ? `0${startDate.getDate()}` : startDate.getDate()}'
+    AND CURDATE()
     GROUP BY categories.displayName `;
   return { sql, bad };
 }

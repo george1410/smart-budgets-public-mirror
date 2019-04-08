@@ -37,27 +37,46 @@ function calculateBudgets(userId) {
         AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 ${period}) AND CURDATE()
         GROUP BY categoryId 
       `;
-      conn.query(query, (err1, res1) => {
-        if (err1) throw err1;
-        query = `
-          UPDATE budgets
-          SET budget = 0
-          WHERE userId = ${userId}
-        `;
-        conn.query(query, (qerr) => {
-          if (qerr) throw qerr;
-          res1.forEach((budgetResult) => {
-            query = `
-              UPDATE budgets
-              SET budget = ${budgetResult.newBudget}
-              WHERE userId = ${userId}
-              AND categoryId = ${budgetResult.categoryId}
-            `;
-            conn.query(query, (qerr1) => {
-              if (qerr1) throw qerr;
+      query = `
+        UPDATE users SET streak =
+        CASE WHEN (SELECT SUM(budget) AS totalBudget
+              FROM budgets
+              WHERE userId = ${userId}) > (SELECT SUM(amount) AS totalSpend 
+                          FROM transactions 
+                          WHERE userId = ${userId}
+                          AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 ${period})
+                          AND CURDATE()) THEN streak + 1 ELSE 0 END
+        WHERE userId = ${userId}
+      `;
+      conn.query(query, (er) => {
+        if (er) throw er;
+        conn.query(query, (err1, res1) => {
+          if (err1) throw err1;
+          query = `
+            UPDATE budgets
+            SET budget = 0
+            WHERE userId = ${userId}
+          `;
+          conn.query(query, (qerr) => {
+            if (qerr) throw qerr;
+            let count = 0;
+            res1.forEach((budgetResult) => {
+              query = `
+                UPDATE budgets
+                SET budget = ${budgetResult.newBudget}
+                WHERE userId = ${userId}
+                AND categoryId = ${budgetResult.categoryId}
+              `;
+              conn.query(query, (qerr1) => {
+                if (qerr1) throw qerr;
+                count += 1;
+                if (count === res1.length) {
+                  conn.release();
+                }
+              });
             });
+            update(userId);
           });
-          update(userId);
         });
       });
     });
@@ -87,9 +106,11 @@ function resetPeriod(userId) {
         `;
         conn.query(sql, (err1) => {
           if (err1) throw err1;
+          conn.release();
           calculateBudgets(userId);
         });
       } else {
+        conn.release();
         calculateBudgets(userId);
       }
     });
@@ -110,7 +131,6 @@ module.exports.initialise = () => {
 
       schedule.scheduleJob(`${result.userId}`, rule, resetPeriod.bind(null, result.userId));
     });
-    resetPeriod(7);
   });
 };
 
