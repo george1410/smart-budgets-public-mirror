@@ -262,7 +262,7 @@ module.exports = (app) => {
       pool.getConnection((err, conn) => {
         if (err) throw err;
 
-        sql = `SELECT period FROM users WHERE userId = ${req.params.id}`;
+        sql = `SELECT period, periodStart FROM users WHERE userId = ${req.params.id}`;
         conn.query(sql, (error, results) => {
           if (error) throw error;
           if (results.length < 1) {
@@ -271,8 +271,10 @@ module.exports = (app) => {
           } else {
             if (!req.query.period) {
               req.query.period = results[0].period;
-              ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
             }
+            req.query.periodStart = results[0].periodStart;
+
+            ({ sql, badRequest } = generateCategorySpendSql(req, badRequest, res));
 
             conn.query(sql, (error1, results1) => {
               if (error1) throw error;
