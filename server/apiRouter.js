@@ -201,18 +201,16 @@ module.exports = (app) => {
     // if query params not present, for some reason, then default to first 50
     sql += ` LIMIT ${req.query.start || 0}, ${req.query.count || 50}`;
 
-    if (!badRequest) {
-      pool.query(sql, (error, results) => {
-        if (error) throw error;
-        if (results.length < 1) {
-          res.status(404).json({ error: 'No results were found.', hasMore: false });
-        } else if (results.length < req.query.count) {
-          res.json({ transactions: results, hasMore: false });
-        } else {
-          res.json({ transactions: results, hasMore: true });
-        }
-      });
-    }
+    pool.query(sql, (error, results) => {
+      if (error) throw error;
+      if (results.length < 1) {
+        res.status(404).json({ error: 'No results were found.', hasMore: false });
+      } else if (results.length < req.query.count) {
+        res.json({ transactions: results, hasMore: false });
+      } else {
+        res.json({ transactions: results, hasMore: true });
+      }
+    });
   });
 
   /**

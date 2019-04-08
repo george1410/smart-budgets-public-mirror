@@ -24,7 +24,8 @@ function generateCategorySpendSql(req, badRequest, res) {
     SELECT SUM(transactions.amount) AS spend, categories.displayName FROM transactions
     JOIN categories ON transactions.categoryId = categories.categoryId
     WHERE transactions.userId = ${req.params.id} `;
-  let { period, periodStart } = req.query;
+  let { period } = req.query;
+  const { periodStart } = req.query;
   period = period.toUpperCase();
   if (period !== 'WEEK' && period !== 'MONTH') {
     bad = true;
