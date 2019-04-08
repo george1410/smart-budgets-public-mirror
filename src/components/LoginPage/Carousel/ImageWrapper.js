@@ -6,7 +6,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 28vw;
+  height: 28rem;
   ${media.tablet`
     height: 18rem;
   `}
