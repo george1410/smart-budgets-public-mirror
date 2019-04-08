@@ -1,5 +1,6 @@
 const schedule = require('node-schedule');
 const pool = require('./database');
+const pointsCalculator = require('./pointsCalculator');
 
 function update(userId) {
   const sql = `SELECT userId, period, periodStart FROM users WHERE userId = ${userId}`;
@@ -86,33 +87,47 @@ function calculateBudgets(userId) {
 function resetPeriod(userId) {
   pool.getConnection((connErr, conn) => {
     if (connErr) throw connErr;
-    let sql = `
+    pointsCalculator.calculate(conn, userId, (points) => {
+      let sql = `
+        UPDATE users SET highScore =
+        CASE WHEN (SELECT highScore
+              FROM (SELECT * FROM users) AS a
+              WHERE userId = ${userId}) < (${points}) THEN ${points} ELSE (SELECT highScore
+                FROM (SELECT * FROM users) AS b
+                WHERE userId = ${userId}) END
+        WHERE userId = ${userId}
+      `;
+      conn.query(sql, (qerr) => {
+        if (qerr) throw qerr;
+        sql = `
       SELECT period, newPeriod FROM users WHERE userId = ${userId}
     `;
-    conn.query(sql, (err, result) => {
-      if (err) throw err;
-      if (result[0].period !== result[0].newPeriod) {
-        let resetDay;
-        if (result[0].newPeriod === 'WEEK') {
-          resetDay = (new Date()).getDay();
-        } else {
-          resetDay = (new Date()).getDate();
-        }
-        sql = `
+        conn.query(sql, (err, result) => {
+          if (err) throw err;
+          if (result[0].period !== result[0].newPeriod) {
+            let resetDay;
+            if (result[0].newPeriod === 'WEEK') {
+              resetDay = (new Date()).getDay();
+            } else {
+              resetDay = (new Date()).getDate();
+            }
+            sql = `
           UPDATE users
           SET period = '${result[0].newPeriod}',
               periodStart = ${resetDay} 
           WHERE userId = ${userId}
         `;
-        conn.query(sql, (err1) => {
-          if (err1) throw err1;
-          conn.release();
-          calculateBudgets(userId);
+            conn.query(sql, (err1) => {
+              if (err1) throw err1;
+              conn.release();
+              calculateBudgets(userId);
+            });
+          } else {
+            conn.release();
+            calculateBudgets(userId);
+          }
         });
-      } else {
-        conn.release();
-        calculateBudgets(userId);
-      }
+      });
     });
   });
 }
