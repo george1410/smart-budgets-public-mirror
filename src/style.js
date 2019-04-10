@@ -8,7 +8,7 @@ export const GlobalStyle = createGlobalStyle`
     font-size: 62.5%;
     ${media.tablet`
       /* makes 1rem equal to 8px */
-      font-size: 56.25%;ß∑
+      font-size: 56.25%;
     `}
   }
 

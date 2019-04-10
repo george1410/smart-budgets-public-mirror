@@ -1,12 +1,12 @@
-export default (friends, user) => {
+export default (friends, user, tab) => {
   if (user.points !== 0 && !user.points) {
     return {};
   }
-
+  const points = tab;
   let userIndex = -1;
   const sorted = friends.concat(user)
-    .sort((a, b) => (a.points < b.points ? 1 : -1)).map((friend, index) => {
-      if (friend.points === user.points && userIndex === -1) {
+    .sort((a, b) => (a[points] < b[points] ? 1 : -1)).map((friend, index) => {
+      if (friend[points] === user[points] && userIndex === -1) {
         userIndex = index + 1;
         return {
           ...friend,
