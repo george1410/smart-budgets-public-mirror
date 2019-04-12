@@ -4,6 +4,7 @@ import {
   FRIENDS_LOADING,
   SET_SENT,
   SET_RECEIVED,
+  SET_LEADERBOARD_TAB,
 } from '../actions/types';
 
 export const defaultFriendsState = {
@@ -12,6 +13,7 @@ export const defaultFriendsState = {
   received: undefined,
   isLoading: false,
   error: false,
+  tab: 'points',
 };
 
 export default (state = defaultFriendsState, {
@@ -20,6 +22,7 @@ export default (state = defaultFriendsState, {
   status,
   received,
   sent,
+  tab,
 }) => {
   switch (type) {
     case SET_FRIENDS:
@@ -36,6 +39,11 @@ export default (state = defaultFriendsState, {
       return {
         ...state,
         received,
+      };
+    case SET_LEADERBOARD_TAB:
+      return {
+        ...state,
+        tab,
       };
     case FRIENDS_ERROR:
       return {
