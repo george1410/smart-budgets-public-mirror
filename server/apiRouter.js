@@ -75,7 +75,7 @@ module.exports = (app) => {
     pool.getConnection((connErr, conn) => {
       if (connErr) throw connErr;
       pointsCalculator.calculate(conn, req.params.id, (points) => {
-        const sql = `
+        let sql = `
           SELECT firstName, lastName, email, period, periodStart, streak, highScore FROM users WHERE userId = ${req.params.id}
         `;
         conn.query(sql, (error, results) => {
@@ -85,9 +85,16 @@ module.exports = (app) => {
           } else {
             const out = results[0];
             out.points = points;
-            res.json(out);
+            sql = `
+              SELECT badges.id, badges.name, badges.description FROM badges
+              JOIN badgesAwarded ON badges.id = badgeId WHERE userId = ${req.params.id}
+            `;
+            conn.query(sql, (err, results1) => {
+              out.badges = results1;
+              res.json(out);
+              conn.release();
+            });
           }
-          conn.release();
         });
       });
     });
