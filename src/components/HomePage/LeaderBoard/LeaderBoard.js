@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import uuid from 'uuid';
-import { startSetFriends } from '../../../actions/friends';
+import { startSetFriends, setLeaderboardTab } from '../../../actions/friends';
 import BoardRow from './BoardRow';
 import order from '../../../selectors/points';
 
@@ -20,14 +20,24 @@ const Board = styled.div`
 `;
 
 const BoardTitle = styled.div`
+  display: flex;
+  align-items: center;
   background-color: ${props => props.theme.white};
   font-size: ${props => props.theme.fontSmall};
   border-radius: ${props => props.theme.topCorners};
   text-align: center;
-  padding: 1rem;
-  font-weight: 500;
   box-shadow: 0 5px 2px rgba(0, 0, 0, 0.1);
   z-index: 5;
+  height: 5rem;
+  overflow: hidden;
+`;
+
+const Tab = styled.div`
+  padding: 1rem;
+  width: 50%;
+  color: ${props => (props.highlight ? props.theme.black : props.theme.greyLight)};
+  background-color: ${props => (props.highlight ? props.theme.white : props.theme.offWhite)};
+  transition: ${props => props.theme.transition};
 `;
 
 const Middle = styled.div`
@@ -39,22 +49,37 @@ const Middle = styled.div`
   }
 `;
 
-const leaderBoard = ({ setFriends, ranking: { friends, user } }) => {
+const leaderBoard = ({
+  setTab, setFriends, tab, ranking: { friends, user },
+}) => {
+  const setTabPoints = () => {
+    setTab('points');
+  };
+  const setTabHighScore = () => {
+    setTab('highScore');
+  };
   useEffect(() => {
     setFriends();
   }, []);
   return (
     <Board>
-      <BoardTitle>Current Rankings</BoardTitle>
+      <BoardTitle>
+        <Tab onClick={setTabPoints} highlight={tab === 'points'}>
+          Current Period
+        </Tab>
+        <Tab onClick={setTabHighScore} highlight={tab === 'highScore'}>
+          Overall
+        </Tab>
+      </BoardTitle>
       <Middle>
         {
           friends && friends.map(friend => (
-            <BoardRow index={friend.index} key={uuid()} person={friend} />
+            <BoardRow tab={tab} index={friend.index} key={uuid()} person={friend} />
           ))
         }
       </Middle>
       {
-        user && (<BoardRow user index={user.index} person={user} />)
+        user && (<BoardRow tab={tab} user index={user.index} person={user} />)
       }
     </Board>
   );
@@ -62,18 +87,22 @@ const leaderBoard = ({ setFriends, ranking: { friends, user } }) => {
 
 leaderBoard.propTypes = {
   setFriends: PropTypes.func.isRequired,
+  setTab: PropTypes.func.isRequired,
   ranking: PropTypes.shape({
     friends: PropTypes.instanceOf(Array),
     user: PropTypes.instanceOf(Object),
   }).isRequired,
+  tab: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  ranking: order(state.friends.friends, state.user),
+  tab: state.friends.tab,
+  ranking: order(state.friends.friends, state.user, state.friends.tab),
 });
 
 const mapDispatchToProps = dispatch => ({
   setFriends: () => dispatch(startSetFriends()),
+  setTab: tab => dispatch(setLeaderboardTab(tab)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(leaderBoard);
