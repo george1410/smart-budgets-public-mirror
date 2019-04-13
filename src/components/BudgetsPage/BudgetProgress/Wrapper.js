@@ -4,12 +4,15 @@ import media from '../../../util/mediaQueries';
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   padding: 2rem;
   width: 50rem;
+  height: 20rem;
   cursor: pointer;
+  position: relative;
   transition: ${props => props.theme.transition};
   border-radius: ${props => props.theme.borderRadius};
-  background: ${props => (props.overBudget ? props.theme.overBudget : props.theme.white)};
+  background: ${props => (props.overBudget ? props.theme.overBudget : props.color)};
   border: 2px solid ${props => props.theme.white};
 
   &:hover {

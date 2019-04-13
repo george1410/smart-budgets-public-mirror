@@ -10,12 +10,36 @@ import {
 import {
   clearTransactions, setTransactionStart, setHasMore, startSetTransactions,
 } from '../../../actions/transactions';
-import CategoryTitle from './CategoryTitle';
+import { CategoryTitle, TitleWrapper } from './CategoryTitle';
 import EndLabel from './EndLabel';
 import LabelWrapper from './LabelWrapper';
 import MainLabel from './MainLabel';
 import { ProgressBorder, Progress } from './ProgressBar';
 import Wrapper from './Wrapper';
+
+import {
+  BillsImage,
+  CashImage,
+  EatingOutImage,
+  GroceriesImage,
+  HealthImage,
+  LeisureImage,
+  MiscellaneousImage,
+  ShoppingImage,
+  TravelImage,
+} from './Illustrations';
+
+const illustrations = [
+  <BillsImage />,
+  <CashImage />,
+  <EatingOutImage />,
+  <GroceriesImage />,
+  <HealthImage />,
+  <LeisureImage />,
+  <MiscellaneousImage />,
+  <ShoppingImage />,
+  <TravelImage />,
+];
 
 const CategoryProgress = ({
   displayName,
@@ -31,6 +55,7 @@ const CategoryProgress = ({
   fetchTransactions,
   setStart,
   history,
+  index,
 }) => {
   const fetchCategories = () => {
     clearFeed();
@@ -43,27 +68,37 @@ const CategoryProgress = ({
   const isOverBudget = () => (budget - spend) < 0;
 
   return (
-    <Wrapper onClick={fetchCategories} overBudget={isOverBudget()}>
-      <CategoryTitle
-        color={color}
-        textCol={textCol}
-      >
-        {displayName.toLowerCase()}
-      </CategoryTitle>
-      <MainLabel overBudget={isOverBudget()}>
-        {numeral(budget - spend).format('$0,0.00')}
-      </MainLabel>
-      <LabelWrapper>
-        <EndLabel>
-          {numeral(spend).format('$0,0.00')}
-        </EndLabel>
-        <EndLabel>
-          {numeral(budget).format('$0,0.00')}
-        </EndLabel>
-      </LabelWrapper>
-      <ProgressBorder color={color}>
-        <Progress color={color} spend={spend} budget={budget} />
-      </ProgressBorder>
+    <Wrapper
+      onClick={fetchCategories}
+      overBudget={isOverBudget()}
+      color={color}
+    >
+      <TitleWrapper>
+        <CategoryTitle
+          textCol={textCol}
+        >
+          {displayName.toLowerCase()}
+        </CategoryTitle>
+        <MainLabel overBudget={isOverBudget()}>
+          {numeral(budget - spend).format('$0,0.00')}
+        </MainLabel>
+        {
+          illustrations[index]
+        }
+      </TitleWrapper>
+      <div>
+        <LabelWrapper>
+          <EndLabel>
+            {numeral(spend).format('$0,0.00')}
+          </EndLabel>
+          <EndLabel>
+            {numeral(budget).format('$0,0.00')}
+          </EndLabel>
+        </LabelWrapper>
+        <ProgressBorder>
+          <Progress spend={spend} budget={budget} />
+        </ProgressBorder>
+      </div>
     </Wrapper>
   );
 };
@@ -84,6 +119,7 @@ CategoryProgress.propTypes = {
   }).isRequired,
   color: PropTypes.string.isRequired,
   textCol: PropTypes.string.isRequired,
+  index: PropTypes.number.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
