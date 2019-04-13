@@ -407,6 +407,7 @@ module.exports = (app) => {
         } else {
           const resArr = [];
           let counter = 0;
+
           strippedResults.forEach((result) => {
             const obj = {};
             obj.accepted = result.accepted;
@@ -419,12 +420,21 @@ module.exports = (app) => {
 
             pointsCalculator.calculate(conn, result.userId, (points) => {
               obj.points = points;
-              resArr.push(obj);
-              counter += 1;
-              if (counter === strippedResults.length) {
-                res.json(resArr);
-                conn.release();
-              }
+              sql = `
+              SELECT badges.id, badges.name, badges.description FROM badges
+              JOIN badgesAwarded ON badges.id = badgeId WHERE userId = ${result.userId}
+              `;
+
+              conn.query(sql, (err1, result1) => {
+                if (err1) throw err1;
+                obj.badges = result1;
+                resArr.push(obj);
+                counter += 1;
+                if (counter === strippedResults.length) {
+                  res.json(resArr);
+                  conn.release();
+                }
+              });
             });
           });
         }
