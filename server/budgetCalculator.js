@@ -13,7 +13,7 @@ function update(userId) {
         const currentYear = new Date().getFullYear();
         const currentMonth = new Date().getMonth();
         const nextMonth = currentMonth + 1;
-        
+
         switch (nextMonth) {
           case 3: // April
           case 5: // June
@@ -22,7 +22,9 @@ function update(userId) {
             day = day > 30 ? 30 : day;
             break;
           case 1: // February
-            if (((currentYear % 4 === 0) && (currentYear % 100 !== 0)) || (currentYear % 400 === 0)) {
+            if (
+              ((currentYear % 4 === 0) && (currentYear % 100 !== 0)) || (currentYear % 400 === 0)
+            ) {
               // is leap year - feb has 29 days
               day = day > 29 ? 29 : day;
             } else {
@@ -57,8 +59,8 @@ function calculateBudgets(userId) {
         UPDATE users SET streak =
         CASE WHEN (SELECT SUM(budget) AS totalBudget
               FROM budgets
-              WHERE userId = ${userId}) > (SELECT SUM(amount) AS totalSpend 
-                          FROM transactions 
+              WHERE userId = ${userId}) > (SELECT SUM(amount) AS totalSpend
+                          FROM transactions
                           WHERE userId = ${userId}
                           AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 ${period})
                           AND CURDATE()) THEN streak + 1 ELSE 0 END
@@ -68,12 +70,12 @@ function calculateBudgets(userId) {
         if (er) throw er;
         query = `
           SELECT categories.categoryId, ROUND(SUM(amount)/4) AS newBudget
-          FROM transactions 
-          JOIN categories 
-          ON transactions.categoryId = categories.categoryId 
+          FROM transactions
+          JOIN categories
+          ON transactions.categoryId = categories.categoryId
           WHERE transactions.userId = ${userId}
           AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 ${period}) AND CURDATE()
-          GROUP BY categoryId 
+          GROUP BY categoryId
         `;
         conn.query(query, (err1, res1) => {
           if (err1) throw err1;
@@ -126,7 +128,7 @@ function resetPeriod(userId) {
         sql = `
           UPDATE users
           SET period = '${result[0].newPeriod}',
-              periodStart = ${resetDay} 
+              periodStart = ${resetDay}
           WHERE userId = ${userId}
         `;
         conn.query(sql, (err1) => {
