@@ -1,6 +1,5 @@
 const schedule = require('node-schedule');
 const pool = require('./database');
-const pointsCalculator = require('./pointsCalculator');
 
 function update(userId) {
   const sql = `SELECT userId, period, periodStart FROM users WHERE userId = ${userId}`;
@@ -30,15 +29,6 @@ function calculateBudgets(userId) {
     conn.query(query, (err, res) => {
       const { period } = res[0];
       query = `
-        SELECT categories.categoryId, ROUND(SUM(amount)/4) AS newBudget
-        FROM transactions 
-        JOIN categories 
-        ON transactions.categoryId = categories.categoryId 
-        WHERE transactions.userId = ${userId}
-        AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 ${period}) AND CURDATE()
-        GROUP BY categoryId 
-      `;
-      query = `
         UPDATE users SET streak =
         CASE WHEN (SELECT SUM(budget) AS totalBudget
               FROM budgets
@@ -51,6 +41,15 @@ function calculateBudgets(userId) {
       `;
       conn.query(query, (er) => {
         if (er) throw er;
+        query = `
+          SELECT categories.categoryId, ROUND(SUM(amount)/4) AS newBudget
+          FROM transactions 
+          JOIN categories 
+          ON transactions.categoryId = categories.categoryId 
+          WHERE transactions.userId = ${userId}
+          AND date BETWEEN DATE_SUB(CURDATE(), INTERVAL 4 ${period}) AND CURDATE()
+          GROUP BY categoryId 
+        `;
         conn.query(query, (err1, res1) => {
           if (err1) throw err1;
           query = `
@@ -87,47 +86,33 @@ function calculateBudgets(userId) {
 function resetPeriod(userId) {
   pool.getConnection((connErr, conn) => {
     if (connErr) throw connErr;
-    pointsCalculator.calculate(conn, userId, (points) => {
-      let sql = `
-        UPDATE users SET highScore =
-        CASE WHEN (SELECT highScore
-              FROM (SELECT * FROM users) AS a
-              WHERE userId = ${userId}) < (${points}) THEN ${points} ELSE (SELECT highScore
-                FROM (SELECT * FROM users) AS b
-                WHERE userId = ${userId}) END
-        WHERE userId = ${userId}
-      `;
-      conn.query(sql, (qerr) => {
-        if (qerr) throw qerr;
-        sql = `
+    let sql = `
       SELECT period, newPeriod FROM users WHERE userId = ${userId}
     `;
-        conn.query(sql, (err, result) => {
-          if (err) throw err;
-          if (result[0].period !== result[0].newPeriod) {
-            let resetDay;
-            if (result[0].newPeriod === 'WEEK') {
-              resetDay = (new Date()).getDay();
-            } else {
-              resetDay = (new Date()).getDate();
-            }
-            sql = `
+    conn.query(sql, (err, result) => {
+      if (err) throw err;
+      if (result[0].period !== result[0].newPeriod) {
+        let resetDay;
+        if (result[0].newPeriod === 'WEEK') {
+          resetDay = (new Date()).getDay();
+        } else {
+          resetDay = (new Date()).getDate();
+        }
+        sql = `
           UPDATE users
           SET period = '${result[0].newPeriod}',
               periodStart = ${resetDay} 
           WHERE userId = ${userId}
         `;
-            conn.query(sql, (err1) => {
-              if (err1) throw err1;
-              conn.release();
-              calculateBudgets(userId);
-            });
-          } else {
-            conn.release();
-            calculateBudgets(userId);
-          }
+        conn.query(sql, (err1) => {
+          if (err1) throw err1;
+          conn.release();
+          calculateBudgets(userId);
         });
-      });
+      } else {
+        conn.release();
+        calculateBudgets(userId);
+      }
     });
   });
 }
