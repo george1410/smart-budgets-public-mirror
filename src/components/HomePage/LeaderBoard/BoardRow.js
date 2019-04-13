@@ -46,9 +46,9 @@ const BoardRow = ({
   person: {
     firstName,
     lastName,
-    points,
     highlight,
   },
+  tab,
   person,
   user,
 }) => {
@@ -65,7 +65,11 @@ const BoardRow = ({
           {' '}
           {lastName}
         </span>
-        <Points>{points}</Points>
+        <Points>
+          {
+            person[tab]
+          }
+        </Points>
       </Wrapper>
       <FriendModal
         isOpen={isModalOpen}
@@ -79,6 +83,7 @@ const BoardRow = ({
 BoardRow.defaultProps = {
   user: false,
   index: 1,
+  tab: 'points',
 };
 
 BoardRow.propTypes = {
@@ -90,6 +95,7 @@ BoardRow.propTypes = {
     lastName: PropTypes.string.isRequired,
     highlight: PropTypes.bool,
   }).isRequired,
+  tab: PropTypes.string,
 };
 
 export default BoardRow;

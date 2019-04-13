@@ -4,6 +4,7 @@ import {
   FRIENDS_LOADING,
   SET_SENT,
   SET_RECEIVED,
+  SET_LEADERBOARD_TAB,
 } from './types';
 import api from '../api/api';
 
@@ -30,6 +31,11 @@ export const setSent = sent => ({
 export const setReceived = received => ({
   type: SET_RECEIVED,
   received,
+});
+
+export const setLeaderboardTab = tab => ({
+  type: SET_LEADERBOARD_TAB,
+  tab,
 });
 
 // gets friends who have accepted the request
