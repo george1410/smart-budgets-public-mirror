@@ -16,8 +16,9 @@ const Overview = ({ categories, message }) => (
           <StatusMessage message={message} dark />
         ) : (
           categories.map(
-            category => (
+            (category, index) => (
               <BudgetProgress
+                index={index}
                 key={category.id[0]}
                 {...category}
                 color={colors[category.displayName].color}
