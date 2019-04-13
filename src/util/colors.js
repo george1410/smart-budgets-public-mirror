@@ -1,38 +1,38 @@
 const colors = {
   BILLS: {
-    color: '#4500FF',
+    color: 'rgba(69, 0, 255, 0.9)',
     text: 'white',
   },
   CASH: {
-    color: '#6500FF',
+    color: 'rgba(101, 0, 255, 0.9)',
     text: 'white',
   },
   'EATING OUT': {
-    color: '#8B00FF',
+    color: 'rgba(139, 0, 255, 0.9)',
     text: 'white',
   },
   GROCERIES: {
-    color: '#B700FF',
+    color: 'rgba(283, 0, 255, 0.9)',
     text: 'white',
   },
   HEALTH: {
-    color: '#E900FF',
+    color: 'rgba(233, 0, 255, 0.9)',
     text: 'white',
   },
   LEISURE: {
-    color: '#FF00DF',
+    color: 'rgba(255, 0, 223, 0.9)',
     text: 'white',
   },
   MISCELLANEOUS: {
-    color: '#FF00A7',
+    color: 'rgba(255, 0, 167, 0.9)',
     text: 'white',
   },
   SHOPPING: {
-    color: '#FF006E',
+    color: 'rgba(255, 0, 110, 0.9)',
     text: 'white',
   },
   TRAVEL: {
-    color: '#FF0038',
+    color: 'rgba(255, 34, 56, 0.9)',
     text: 'white',
   },
 };

@@ -8,24 +8,37 @@ const Wrapper = styled.div`
   padding: 2rem;
   width: 50rem;
   height: 20rem;
+  margin-bottom: 1rem;
   cursor: pointer;
   position: relative;
   transition: ${props => props.theme.transition};
   border-radius: ${props => props.theme.borderRadius};
-  background: ${props => (props.overBudget ? props.theme.overBudget : props.color)};
-  border: 2px solid ${props => props.theme.white};
+  background: ${props => props.color};
 
   &:hover {
-    border: 2px solid ${props => props.theme.primaryBlue};
+    transform: translateX(20px);
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: translateX(20px) scale(0.98);
   }
+
+  ${media.tablet`
+    &:hover {
+      transform: translate(0,0);
+    }
+    &:active {
+      transform: translateX(0px) scale(1);
+    }
+  `}
 
   ${media.phone`
     width: 100%;
     border-radius: 0;
+
+    &::after {
+      border-radius: 0;
+    }
   `}
 `;
 

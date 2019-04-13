@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const MainLabel = styled.span`
-  color: ${props => (props.overBudget ? props.theme.error : props.theme.white)};
+  color: ${props => props.theme.white};
   font-size: ${props => props.theme.fontMedium};
   text-align: center;
   align-self: center;

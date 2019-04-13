@@ -14,6 +14,7 @@ import { CategoryTitle, TitleWrapper } from './CategoryTitle';
 import EndLabel from './EndLabel';
 import LabelWrapper from './LabelWrapper';
 import MainLabel from './MainLabel';
+import OverBudget from './OverBudget';
 import { ProgressBorder, Progress } from './ProgressBar';
 import Wrapper from './Wrapper';
 
@@ -70,23 +71,27 @@ const CategoryProgress = ({
   return (
     <Wrapper
       onClick={fetchCategories}
-      overBudget={isOverBudget()}
       color={color}
     >
-      <TitleWrapper>
+      {
+        isOverBudget() && (
+          <OverBudget />
+        )
+      }
+      <TitleWrapper style={{ zIndex: 1 }}>
         <CategoryTitle
           textCol={textCol}
         >
           {displayName.toLowerCase()}
         </CategoryTitle>
-        <MainLabel overBudget={isOverBudget()}>
+        <MainLabel>
           {numeral(budget - spend).format('$0,0.00')}
         </MainLabel>
         {
           illustrations[index]
         }
       </TitleWrapper>
-      <div>
+      <div style={{ zIndex: 1 }}>
         <LabelWrapper>
           <EndLabel>
             {numeral(spend).format('$0,0.00')}
@@ -96,7 +101,10 @@ const CategoryProgress = ({
           </EndLabel>
         </LabelWrapper>
         <ProgressBorder>
-          <Progress spend={spend} budget={budget} />
+          <Progress
+            spend={spend}
+            budget={budget}
+          />
         </ProgressBorder>
       </div>
     </Wrapper>
