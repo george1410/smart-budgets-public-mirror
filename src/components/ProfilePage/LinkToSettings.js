@@ -16,7 +16,7 @@ const ToSettings = styled(Link)`
   border-radius: ${props => props.theme.borderRadius};
   text-decoration: none;
   color: ${props => props.theme.black};
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
   transition: ${props => props.theme.transition};
 
