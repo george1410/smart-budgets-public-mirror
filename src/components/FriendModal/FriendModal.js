@@ -14,9 +14,10 @@ const StyledModal = Modal.styled`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-around;
+  padding: 2rem;
   background-color: white;
   transition: opacity ease 500ms;
+  color: ${props => props.theme.grey};
   opacity: ${props => props.opacity};
   border-radius: ${props => props.theme.borderRadius};
   ${media.phone`
@@ -31,14 +32,42 @@ export const FadingBackground = styled(BaseModalBackground)`
   transition: opacity ease 200ms;
 `;
 
+const Points = styled.div`
+  font-size: ${props => props.theme.fontSmall};
+  text-align: center;
+  padding: 1rem 0;
+  width: 20rem;
+  display: flex;
+  justify-content: space-between;
+
+  :last-of-type {
+    margin-bottom: 2rem;
+  }
+`;
+
 const Name = styled.span`
   font-size: ${props => props.theme.fontSmall};
   text-align: center;
+  margin: 2rem 0;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid ${props => props.theme.offWhite};
+
+  & > span {
+    :first-of-type {
+      margin-right: 5px;
+    }
+  }
 `;
 
-const Points = styled.span`
+const Streak = styled.div`
   font-size: ${props => props.theme.fontSmall};
+  padding: 1rem 0;
+  width: 20rem;
+  display: flex;
+  justify-content: space-between;
   text-align: center;
+  border-radius: 4px;
+  flex: 1;
 `;
 
 const FriendModal = ({
@@ -48,6 +77,8 @@ const FriendModal = ({
     firstName,
     lastName,
     points,
+    highScore,
+    streak,
   },
   removeFriend,
 }) => {
@@ -58,7 +89,7 @@ const FriendModal = ({
     });
   };
   return (
-    <div>
+    <>
       <StyledModal
         isOpen={isOpen}
         onBackgroundClick={toggleModal}
@@ -69,19 +100,38 @@ const FriendModal = ({
         <CloseModalButton close={toggleModal} />
         <ProfilePic email={firstName} size={100} side={100} />
         <Name>
-          <div>
+          <span>
             {firstName}
-          </div>
-          <div>
+          </span>
+          <span>
             {lastName}
-          </div>
+          </span>
         </Name>
-        <Points>
-        Points:
+        <Streak>
+          <span>
+            Streak:
+          </span>
+          {' '}
+          {streak}
           {
-          ' '
+            streak === 0
+              ? ('❄️')
+              : ('🔥')
           }
+        </Streak>
+        <Points>
+          <span>
+            Current Score:
+          </span>
+          {' '}
           {points}
+        </Points>
+        <Points>
+          <span>
+            Overall Score:
+          </span>
+          {' '}
+          {highScore}
         </Points>
         {
           removeFriend
@@ -97,7 +147,7 @@ const FriendModal = ({
           )
         }
       </StyledModal>
-    </div>
+    </>
   );
 };
 
@@ -112,6 +162,8 @@ FriendModal.propTypes = {
     firstName: PropTypes.string,
     lastName: PropTypes.string,
     points: PropTypes.number,
+    highScore: PropTypes.number,
+    streak: PropTypes.number,
   }).isRequired,
   removeFriend: PropTypes.func,
 };

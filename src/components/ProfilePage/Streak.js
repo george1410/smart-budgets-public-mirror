@@ -71,6 +71,8 @@ const StreakInfo = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-align: center;
+  line-height: 2rem;
   width: 40rem;
   ${media.phone`
     width: 100%;
@@ -103,7 +105,7 @@ const Streak = ({ streak, info }) => {
         infoOpen
         && (
           <StreakInfo>
-            {'ℹ️Don\'t go over any of your budgets during the budgeting period to increase your streak.'}
+            {'ℹ️ To increase your streak, don\'t go over any of your budgets during the budgeting period.'}
           </StreakInfo>
         )
       }

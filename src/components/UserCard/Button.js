@@ -12,10 +12,6 @@ const Button = styled.button`
   transition: ${props => props.theme.transition};
   border-radius: ${props => props.theme.borderRadius};
 
-  &:last-of-type {
-    margin-left: 1rem;
-  }
-
   &:hover {
     transform: scale(1.05);
   }
