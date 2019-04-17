@@ -27,6 +27,7 @@ const Wrapper = styled.div`
   ${media.tablet`
     &:hover {
       background-color: ${props => (props.highlight ? props.theme.primaryBlue : props.theme.white)};
+      color: ${props => (props.highlight ? props.theme.white : props.theme.black)};
     }
   `}
 `;
