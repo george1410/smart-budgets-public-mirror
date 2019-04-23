@@ -26,7 +26,6 @@ const Settings = ({
         <Streak streak={user.streak} info />
         <Achievements badges={user.badges} />
         <LinkToSettings />
-        <div style={{ flex: 99 }} />
         <Button title="Log Out" onClick={logout} logout />
       </Wrapper>
     </>

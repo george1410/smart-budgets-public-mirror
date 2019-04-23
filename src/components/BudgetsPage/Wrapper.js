@@ -5,7 +5,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 10rem 0 5rem 0;
+  padding: 10rem 2rem 5rem 2rem;
   ${media.tablet`
     padding-bottom: ${props => props.theme.bottomPad};
   `}

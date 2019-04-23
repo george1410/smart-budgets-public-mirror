@@ -29,6 +29,7 @@ const BoardTitle = styled.div`
   box-shadow: 0 5px 2px rgba(0, 0, 0, 0.1);
   z-index: 5;
   height: 5rem;
+  font-weight: 500;
   overflow: hidden;
 `;
 

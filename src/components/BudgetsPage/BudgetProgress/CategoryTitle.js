@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import media from '../../../util/mediaQueries';
 
 export const CategoryTitle = styled.span`
   text-align: left;
@@ -12,6 +13,9 @@ export const CategoryTitle = styled.span`
   text-transform: capitalize;
   margin-bottom: 1rem;
   border-radius: ${props => props.theme.borderRadius};
+  ${media.phone`
+    width: 25%;
+  `}
 `;
 
 export const TitleWrapper = styled.div`
