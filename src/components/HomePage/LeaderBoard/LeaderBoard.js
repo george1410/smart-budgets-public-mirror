@@ -38,6 +38,12 @@ const Tab = styled.div`
   color: ${props => (props.highlight ? props.theme.black : props.theme.greyLight)};
   background-color: ${props => (props.highlight ? props.theme.white : props.theme.offWhite)};
   transition: ${props => props.theme.transition};
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.theme.white};
+    color: ${props => props.theme.primaryBlue};
+  }
 `;
 
 const Middle = styled.div`

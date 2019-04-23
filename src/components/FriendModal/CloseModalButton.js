@@ -9,8 +9,8 @@ const Icon = styled.svg`
   width: 4rem;
   transition: all 0.2s ease-in-out;
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 1rem;
+  top: 1rem;
   cursor: pointer;
 
   & > g {

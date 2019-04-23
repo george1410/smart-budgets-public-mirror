@@ -6,14 +6,14 @@ export const ProgressBorder = styled.div`
   vertical-align: middle;
   display: flex;
   align-items: center;
-  border: 2px solid ${props => props.color};
+  border: 2px solid ${props => props.theme.white};
   border-radius: ${props => props.theme.borderRadius};
 `;
 
 export const Progress = styled.div`
   height: 1.5rem;
   width: calc(${props => props.spend} / ${props => props.budget} * 100%);
-  background-color: ${props => props.color};
+  background-color: ${props => props.theme.white};
   transition: width 0.3s ease-in-out;
   border-radius: ${props => props.theme.borderRadius};
 `;

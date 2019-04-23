@@ -62,5 +62,5 @@ export const theme = {
   innerHeight: isX ? 'calc(100vh - 15rem)' : 'calc(100vh - 10rem)',
   isX,
   transition: 'all 0.1s ease-in-out',
-  overBudget: 'repeating-linear-gradient(45deg, rgba(224, 25, 103, 0.2), rgba(224, 25, 103, 0.2) 10px, rgba(224, 25, 103, 0.1)10px, rgba(224, 25, 103, 0.1) 20px)',
+  overBudget: 'repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.1) 0, rgba(0, 0, 0, 0.1) 10px, rgba(0, 0, 0, 0.2) 10px, rgba(0, 0, 0, 0.2) 20px)',
 };

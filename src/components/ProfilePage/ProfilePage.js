@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Header from '../Header/Header';
-import Button from '../Button/Button';
 import { signout } from '../../actions/auth';
-import Wrapper from './Wrapper';
-import ProfileCard from './ProfileCard/ProfileCard';
+import Button from '../Button/Button';
+import Header from '../Header/Header';
 import LinkToSettings from './LinkToSettings';
+import ProfileCard from './ProfileCard/ProfileCard';
+import Streak from './Streak';
+import Wrapper from './Wrapper';
 
 const Settings = ({
   startLogout,
@@ -21,6 +22,7 @@ const Settings = ({
       <Header title="You" />
       <Wrapper>
         <ProfileCard user={user} />
+        <Streak streak={user.streak} info />
         <LinkToSettings />
         <div style={{ flex: 99 }} />
         <Button title="Log Out" onClick={logout} logout />

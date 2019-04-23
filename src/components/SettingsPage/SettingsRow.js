@@ -41,7 +41,6 @@ export const SettingsRow = styled.div`
   justify-content: space-between;
   padding: 1rem 2rem;
   border: 1px solid ${props => props.theme.offWhite};
-  box-shadow: ${props => props.theme.cardShadow};
   width: 40rem;
   background-color: ${props => props.theme.white};
   ${media.phone`
@@ -52,7 +51,7 @@ export const SettingsRow = styled.div`
 
 export const RowTitle = styled.span`
   color: ${props => props.theme.black};
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 500;
 `;
 
