@@ -121,6 +121,29 @@ module.exports = (app) => {
     });
   });
 
+  /**
+   * GET route for all badges info
+   * Endpoint: /api/badges
+   * Response format:
+   *   [
+   *     {
+   *       "id": Number,
+   *       "name": "Marathon",
+   *       "description": "Maintain a streak for 5 periods.",
+   *    }
+   *  ]
+   */
+
+  app.get('/api/badges', (req, res) => {
+    const sql = `
+      SElECT * from badges
+    `;
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      res.json(results);
+    });
+  });
+
   /** !!CURRENTLY THIS ENDPOINT IS NOT IN USE!!
    * POST route for updating user period value
    * Endpoint: /api/users/{id}/periodStart

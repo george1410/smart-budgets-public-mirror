@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { signout } from '../../actions/auth';
+import Achievements from './Achievements/Achievements';
 import Button from '../Button/Button';
 import Header from '../Header/Header';
 import LinkToSettings from './LinkToSettings';
@@ -23,6 +24,7 @@ const Settings = ({
       <Wrapper>
         <ProfileCard user={user} />
         <Streak streak={user.streak} info />
+        <Achievements badges={user.badges} />
         <LinkToSettings />
         <div style={{ flex: 99 }} />
         <Button title="Log Out" onClick={logout} logout />

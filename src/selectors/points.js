@@ -1,3 +1,4 @@
+// creates the data for the leaderboard
 export default (friends, user, tab) => {
   if (user.points !== 0 && !user.points) {
     return {};
