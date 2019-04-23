@@ -10,10 +10,6 @@ const LoginCard = styled.div`
   ${media.tablet`
     width: 100%;
   `}
-  ${media.phone`
-    width: 100%;
-    height: 90%;
-  `}
 `;
 
 export default LoginCard;

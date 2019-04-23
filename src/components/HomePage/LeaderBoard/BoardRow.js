@@ -37,6 +37,11 @@ const Index = styled.span`
   text-align: start;
 `;
 
+const Name = styled.div`
+  width: 100%;
+  text-align: center;
+`;
+
 const Points = styled.span`
   width: 10rem;
   text-align: end;
@@ -61,11 +66,11 @@ const BoardRow = ({
     <>
       <Wrapper user={user} highlight={highlight} onClick={toggleModal}>
         <Index>{index}</Index>
-        <span>
+        <Name>
           {firstName}
           {' '}
           {lastName}
-        </span>
+        </Name>
         <Points>
           {
             person[tab]

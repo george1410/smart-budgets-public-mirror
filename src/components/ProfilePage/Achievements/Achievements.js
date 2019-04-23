@@ -62,6 +62,7 @@ const Name = styled.div`
 
 const Description = styled.div`
   text-align: center;
+  width: 20rem;
 `;
 
 
@@ -69,12 +70,9 @@ const Achievements = ({ badges }) => {
   const [finalBadges, setFinalBadges] = useState([]);
 
   useEffect(() => {
-    console.log('fetched');
     api.get('/api/badges')
       .then(payload => payload.data)
       .then((allBadges) => {
-        // console.log('badges :', badges);
-        // console.log('allBadges :', allBadges);
         setFinalBadges(createBadgeDisplay(badges, allBadges));
       });
   }, [badges]);
