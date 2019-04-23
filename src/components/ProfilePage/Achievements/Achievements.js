@@ -41,9 +41,18 @@ const Display = styled.div`
   padding-left: calc((40rem - 4px - (3*10rem)) / 4);
 `;
 
+const Loading = styled.div`
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: ${props => props.theme.fontSmall};
+  margin-right: calc((40rem - 4px - (3*10rem)) / 4);
+`;
+
 const Badge = styled.img`
   width: 10rem;
-  position: relative;
   border-radius: 10rem;
   margin-top: calc((40rem - 4px - (3*10rem)) / 4);
   margin-right: calc((40rem - 4px - (3*10rem)) / 4);
@@ -68,12 +77,16 @@ const Description = styled.div`
 
 const Achievements = ({ badges }) => {
   const [finalBadges, setFinalBadges] = useState([]);
+  const [message, setMessage] = useState('Loading...');
 
   useEffect(() => {
     api.get('/api/badges')
       .then(payload => payload.data)
       .then((allBadges) => {
         setFinalBadges(createBadgeDisplay(badges, allBadges));
+      })
+      .catch(() => {
+        setMessage('Unable to fetch achievements.');
       });
   }, [badges]);
 
@@ -82,22 +95,24 @@ const Achievements = ({ badges }) => {
       <Title>Achievements</Title>
       <Display>
         {
-        finalBadges.map(badge => (
-          <div key={badge.id}>
-            <Badge
-              data-tip
-              data-for={badge.id}
+        finalBadges.length === 0
+          ? (<Loading>{message}</Loading>)
+          : finalBadges.map(badge => (
+            <div key={badge.id}>
+              <Badge
+                data-tip
+                data-for={badge.id}
             // eslint-disable-next-line global-require
-              src={require(`${badge.src}`)}
-              alt={badge.name}
-            />
-            <ReactTooltip id={badge.id.toString()} type="dark">
-              <Name>{badge.name}</Name>
-              <br />
-              <Description>{badge.description}</Description>
-            </ReactTooltip>
-          </div>
-        ))
+                src={require(`${badge.src}`)}
+                alt={badge.name}
+              />
+              <ReactTooltip id={badge.id.toString()} type="dark">
+                <Name>{badge.name}</Name>
+                <br />
+                <Description>{badge.description}</Description>
+              </ReactTooltip>
+            </div>
+          ))
       }
       </Display>
     </Wrapper>
