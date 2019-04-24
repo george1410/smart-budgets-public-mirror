@@ -13,14 +13,13 @@ const UserCard = ({
     firstName,
     lastName,
   },
-  sent,
-  received,
-  friend,
   searched,
-  type,
   respond,
   addFriend,
   removeRequest,
+  received,
+  sent,
+  friend,
 }) => {
   const [sendBtnText, setsendBtnText] = useState('Send Request');
   const [cancelBtnText, setcancelBtnText] = useState('Cancel Request');
@@ -54,7 +53,7 @@ const UserCard = ({
   return (
     <Wrapper friend={friend} onClick={friend ? toggleModal : undefined}>
       <ProfilePic email={firstName} size={40} />
-      <Name shift={type}>
+      <Name shift={friend}>
         {firstName}
         {' '}
         {lastName}
@@ -108,18 +107,22 @@ const UserCard = ({
         </Button>
         )
       }
-      <FriendModal
-        isOpen={isModalOpen}
-        toggleModal={toggleModal}
-        friend={user}
-        removeFriend={cancelSent}
-      />
+      {
+        friend
+        && (
+        <FriendModal
+          isOpen={isModalOpen}
+          toggleModal={toggleModal}
+          friend={user}
+          removeFriend={cancelSent}
+        />
+        )
+      }
     </Wrapper>
   );
 };
 
 UserCard.defaultProps = {
-  type: 'friend',
   respond: undefined,
   addFriend: undefined,
   removeRequest: undefined,
@@ -134,7 +137,6 @@ UserCard.propTypes = {
     lastName: PropTypes.string,
   }).isRequired,
   respond: PropTypes.func,
-  type: PropTypes.string,
   addFriend: PropTypes.func,
   removeRequest: PropTypes.func,
   searched: PropTypes.bool,
