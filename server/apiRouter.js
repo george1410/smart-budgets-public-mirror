@@ -347,8 +347,29 @@ module.exports = (app) => {
 
           conn.query(sql, (err2) => {
             if (err2) throw err2;
-            conn.release();
-            res.sendStatus(201);
+            sql = `SELECT COUNT(friendshipId) AS count FROM friendships WHERE userId1 = ${user1} OR userId2 = ${user1}`;
+
+            conn.query(sql, (err3, countRes) => {
+              if (err3) throw err3;
+              if (countRes[0].count === 1) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${user1}, 1)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(201);
+                });
+              } else if (countRes[0].count === 5) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${user1}, 2)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(201);
+                });
+              } else {
+                conn.release();
+                res.sendStatus(201);
+              }
+            });
           });
         }
       });
@@ -492,9 +513,40 @@ module.exports = (app) => {
           AND userId2 = ${req.params.id}
         `;
       }
-      pool.query(sql, (err) => {
-        if (err) throw err;
-        res.sendStatus(200);
+      pool.getConnection((connErr, conn) => {
+        if (connErr) throw connErr;
+
+        conn.query(sql, (err) => {
+          if (err) throw err;
+          if (accepted) {
+            sql = `SELECT COUNT(friendshipId) AS count FROM friendships WHERE userId1 = ${req.params.id} OR userId2 = ${req.params.id}`;
+
+            conn.query(sql, (err3, countRes) => {
+              if (err3) throw err3;
+              if (countRes[0].count === 1) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${req.params.id}, 1)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(201);
+                });
+              } else if (countRes[0].count === 5) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${req.params.id}, 2)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(200);
+                });
+              } else {
+                conn.release();
+                res.sendStatus(200);
+              }
+            });
+          } else {
+            conn.release();
+            res.sendStatus(200);
+          }
+        });
       });
     } else {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });
