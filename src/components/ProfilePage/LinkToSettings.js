@@ -19,6 +19,7 @@ const ToSettings = styled(Link)`
   font-size: 1.6rem;
   font-weight: 500;
   transition: ${props => props.theme.transition};
+  margin-bottom: 2rem;
 
   &:hover {
     transform: scale(1.05);
@@ -43,19 +44,6 @@ const ToSettings = styled(Link)`
   `}
   ${media.phone`
     width: 100%;
-    box-shadow: ${props => props.theme.bottomShadow};
-    border-radius: 0;
-    ${media.tablet`
-      &:hover {
-        transform: scale(1);
-        box-shadow: ${props => props.theme.bottomShadow};
-      }
-
-      &:active {
-        transform: scale(0.95);
-        box-shadow: none;
-      }
-    `}
   `}
 `;
 

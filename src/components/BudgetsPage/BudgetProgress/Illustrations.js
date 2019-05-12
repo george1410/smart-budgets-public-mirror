@@ -1,13 +1,18 @@
 import React from 'react';
 import styled from 'styled-components';
+import media from '../../../util/mediaQueries';
 
 const Image = styled.div`
   width: 33.3%;
   display: flex;
   justify-content: flex-end;
+  ${media.phone`
+    width: 25%;
+  `}
 
   & > svg {
-    width: 12rem;
+    max-width: 12rem;
+    width: 100%;
     height: 80%;
   }
 `;

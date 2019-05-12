@@ -9,7 +9,7 @@ const StreakWrapper = styled.div`
   justify-content: space-between;
   padding: 1rem 2rem;
   height: 5rem;
-  border: 1px solid ${props => props.theme.offWhite};
+  border: 2px solid ${props => props.theme.offWhite};
   width: 40rem;
   background-color: ${props => props.theme.white};
   border-radius: ${props => props.theme.borderRadius};
@@ -47,19 +47,6 @@ const StreakWrapper = styled.div`
   `}
   ${media.phone`
     width: 100%;
-    box-shadow: ${props => props.theme.bottomShadow};
-    border-radius: 0;
-    ${media.tablet`
-      &:hover {
-        transform: scale(1);
-        box-shadow: ${props => props.theme.bottomShadow};
-      }
-
-      &:active {
-        transform: scale(0.95);
-        box-shadow: none;
-      }
-    `}
   `}
 `;
 

@@ -7,10 +7,10 @@ import SectionHeader from './SectionHeader';
 const Section = ({
   title,
   users,
+  removeRequest,
+  respond,
   received,
   sent,
-  respond,
-  removeRequest,
   friend,
 }) => (
   <Wrapper>
@@ -23,10 +23,10 @@ const Section = ({
               <UserCard
                 key={user.userId}
                 user={user}
-                sent={sent}
-                received={received}
                 respond={respond}
                 removeRequest={removeRequest}
+                received={received}
+                sent={sent}
                 friend={friend}
               />
             ))}

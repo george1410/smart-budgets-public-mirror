@@ -14,6 +14,7 @@ const Wrapper = styled.div`
   transition: ${props => props.theme.transition};
   border-radius: ${props => props.theme.borderRadius};
   background: ${props => props.color};
+  box-shadow: ${props => props.theme.cardShadow};
 
   &:hover {
     transform: translateX(20px);
@@ -34,11 +35,6 @@ const Wrapper = styled.div`
 
   ${media.phone`
     width: 100%;
-    border-radius: 0;
-
-    &::after {
-      border-radius: 0;
-    }
   `}
 `;
 

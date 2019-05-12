@@ -75,7 +75,7 @@ module.exports = (app) => {
     pool.getConnection((connErr, conn) => {
       if (connErr) throw connErr;
       pointsCalculator.calculate(conn, req.params.id, (points) => {
-        const sql = `
+        let sql = `
           SELECT firstName, lastName, email, period, periodStart, streak, highScore FROM users WHERE userId = ${req.params.id}
         `;
         conn.query(sql, (error, results) => {
@@ -85,9 +85,16 @@ module.exports = (app) => {
           } else {
             const out = results[0];
             out.points = points;
-            res.json(out);
+            sql = `
+              SELECT badges.id, badges.name, badges.description FROM badges
+              JOIN badgesAwarded ON badges.id = badgeId WHERE userId = ${req.params.id}
+            `;
+            conn.query(sql, (err, results1) => {
+              out.badges = results1;
+              res.json(out);
+              conn.release();
+            });
           }
-          conn.release();
         });
       });
     });
@@ -111,6 +118,29 @@ module.exports = (app) => {
     pool.query(sql, (err) => {
       if (err) throw err;
       res.sendStatus(200);
+    });
+  });
+
+  /**
+   * GET route for all badges info
+   * Endpoint: /api/badges
+   * Response format:
+   *   [
+   *     {
+   *       "id": Number,
+   *       "name": "Marathon",
+   *       "description": "Maintain a streak for 5 periods.",
+   *    }
+   *  ]
+   */
+
+  app.get('/api/badges', (req, res) => {
+    const sql = `
+      SElECT * from badges
+    `;
+    pool.query(sql, (err, results) => {
+      if (err) throw err;
+      res.json(results);
     });
   });
 
@@ -317,8 +347,29 @@ module.exports = (app) => {
 
           conn.query(sql, (err2) => {
             if (err2) throw err2;
-            conn.release();
-            res.sendStatus(201);
+            sql = `SELECT COUNT(friendshipId) AS count FROM friendships WHERE userId1 = ${user1} OR userId2 = ${user1}`;
+
+            conn.query(sql, (err3, countRes) => {
+              if (err3) throw err3;
+              if (countRes[0].count === 1) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${user1}, 1)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(201);
+                });
+              } else if (countRes[0].count === 5) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${user1}, 2)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(201);
+                });
+              } else {
+                conn.release();
+                res.sendStatus(201);
+              }
+            });
           });
         }
       });
@@ -400,6 +451,7 @@ module.exports = (app) => {
         } else {
           const resArr = [];
           let counter = 0;
+
           strippedResults.forEach((result) => {
             const obj = {};
             obj.accepted = result.accepted;
@@ -412,12 +464,21 @@ module.exports = (app) => {
 
             pointsCalculator.calculate(conn, result.userId, (points) => {
               obj.points = points;
-              resArr.push(obj);
-              counter += 1;
-              if (counter === strippedResults.length) {
-                res.json(resArr);
-                conn.release();
-              }
+              sql = `
+              SELECT badges.id, badges.name, badges.description FROM badges
+              JOIN badgesAwarded ON badges.id = badgeId WHERE userId = ${result.userId}
+              `;
+
+              conn.query(sql, (err1, result1) => {
+                if (err1) throw err1;
+                obj.badges = result1;
+                resArr.push(obj);
+                counter += 1;
+                if (counter === strippedResults.length) {
+                  res.json(resArr);
+                  conn.release();
+                }
+              });
             });
           });
         }
@@ -452,9 +513,40 @@ module.exports = (app) => {
           AND userId2 = ${req.params.id}
         `;
       }
-      pool.query(sql, (err) => {
-        if (err) throw err;
-        res.sendStatus(200);
+      pool.getConnection((connErr, conn) => {
+        if (connErr) throw connErr;
+
+        conn.query(sql, (err) => {
+          if (err) throw err;
+          if (accepted) {
+            sql = `SELECT COUNT(friendshipId) AS count FROM friendships WHERE userId1 = ${req.params.id} OR userId2 = ${req.params.id}`;
+
+            conn.query(sql, (err3, countRes) => {
+              if (err3) throw err3;
+              if (countRes[0].count === 1) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${req.params.id}, 1)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(201);
+                });
+              } else if (countRes[0].count === 5) {
+                sql = `INSERT INTO badgesAwarded (userId, badgeId) VALUES (${req.params.id}, 2)`;
+                conn.query(sql, (err4) => {
+                  if (err4) throw err4;
+                  conn.release();
+                  res.sendStatus(200);
+                });
+              } else {
+                conn.release();
+                res.sendStatus(200);
+              }
+            });
+          } else {
+            conn.release();
+            res.sendStatus(200);
+          }
+        });
       });
     } else {
       res.status(400).json({ error: 'Bad Request. Body must include value for accepted.' });

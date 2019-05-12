@@ -1,3 +1,4 @@
+/* eslint-disable import/no-dynamic-require */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Modal, { BaseModalBackground } from 'styled-react-modal';
@@ -10,7 +11,7 @@ import Button from '../UserCard/Button';
 const StyledModal = Modal.styled`
   position: relative;
   width: 40rem;
-  height: 50rem;
+  height: min-content;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,7 +23,6 @@ const StyledModal = Modal.styled`
   border-radius: ${props => props.theme.borderRadius};
   ${media.phone`
     width: 90vw;
-    height: 60vh;
   `}
 `;
 
@@ -59,6 +59,23 @@ const Name = styled.span`
   }
 `;
 
+const Badges = styled.div`
+  width: 20rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+const Title = styled.span`
+  font-size: ${props => props.theme.fontSmall};
+  padding: 1rem 0;
+`;
+
+const Badge = styled.img`
+  width: 6rem;
+  margin-right: 0.5rem;
+`;
+
 const Streak = styled.div`
   font-size: ${props => props.theme.fontSmall};
   padding: 1rem 0;
@@ -67,7 +84,6 @@ const Streak = styled.div`
   justify-content: space-between;
   text-align: center;
   border-radius: 4px;
-  flex: 1;
 `;
 
 const FriendModal = ({
@@ -79,6 +95,7 @@ const FriendModal = ({
     points,
     highScore,
     streak,
+    badges,
   },
   removeFriend,
 }) => {
@@ -119,6 +136,20 @@ const FriendModal = ({
               : ('🔥')
           }
         </Streak>
+        <Title>Achievements</Title>
+        <Badges>
+          {
+            badges.map(badge => (
+              <Badge
+                key={badge.id}
+                // eslint-disable-next-line global-require
+                src={require(`../ProfilePage/Achievements/badges/${badge.id}.png`)}
+                alt={badge.name}
+              />
+            ))
+          }
+        </Badges>
+        <div style={{ flex: 1 }} />
         <Points>
           <span>
             Current Score:
@@ -164,6 +195,7 @@ FriendModal.propTypes = {
     points: PropTypes.number,
     highScore: PropTypes.number,
     streak: PropTypes.number,
+    badges: PropTypes.instanceOf(Array),
   }).isRequired,
   removeFriend: PropTypes.func,
 };

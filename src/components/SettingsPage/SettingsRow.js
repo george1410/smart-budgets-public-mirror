@@ -40,7 +40,7 @@ export const SettingsRow = styled.div`
   align-items: center;
   justify-content: space-between;
   padding: 1rem 2rem;
-  border: 1px solid ${props => props.theme.offWhite};
+  border: 2px solid ${props => props.theme.offWhite};
   width: 40rem;
   background-color: ${props => props.theme.white};
   ${media.phone`

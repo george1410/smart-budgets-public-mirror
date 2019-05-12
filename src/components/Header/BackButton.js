@@ -5,7 +5,7 @@ import media from '../../util/mediaQueries';
 
 const Button = styled.button`
   border: none;
-  background-color: none;
+  background-color: ${props => props.theme.white};
   padding: 0;
 
   & > svg {
